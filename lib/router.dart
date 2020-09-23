@@ -1,6 +1,6 @@
-import 'package:dms_admin/Pages/Home/components/dashboard.dart';
-import 'package:dms_admin/Pages/Home/components/product_page.dart';
-import 'package:dms_admin/Pages/Home/home_page.dart';
+import 'package:dms_admin/Pages/Product/product_page.dart';
+
+import 'package:dms_admin/Pages/Stock/stock_page.dart';
 import 'package:fluro/fluro.dart' as ModularRouter;
 import 'package:flutter/material.dart';
 import 'package:dms_admin/Pages/Login/login_page.dart';
@@ -8,8 +8,8 @@ import 'package:dms_admin/Pages/Signup/signup_page.dart';
 import 'package:dms_admin/Pages/Welcome/welcome_page.dart';
 
 class FluroRouter {
-  static const String dashboard = Dashboard.routeName;
   static const String product = ProductPage.routeName;
+  static const String stock = StockPage.routeName;
 
   static ModularRouter.Router router = ModularRouter.Router();
 
@@ -24,13 +24,7 @@ class FluroRouter {
   static ModularRouter.Handler _signupHandler = ModularRouter.Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           SignUpPage());
-  static ModularRouter.Handler _homeHandler = ModularRouter.Handler(
-      handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
-          HomePage());
 
-  static ModularRouter.Handler _dashboardHandler = ModularRouter.Handler(
-      handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
-          Dashboard());
   static ModularRouter.Handler _productHandler = ModularRouter.Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           ProductPage());
@@ -51,12 +45,6 @@ class FluroRouter {
         handler: _signupHandler,
         transitionType: ModularRouter.TransitionType.inFromBottom);
 
-    router.define('home',
-        handler: _homeHandler,
-        transitionType: ModularRouter.TransitionType.inFromBottom);
-    router.define('dashboard',
-        handler: _dashboardHandler,
-        transitionType: ModularRouter.TransitionType.inFromBottom);
     router.define('product',
         handler: _productHandler,
         transitionType: ModularRouter.TransitionType.inFromBottom);

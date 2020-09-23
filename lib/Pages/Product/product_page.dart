@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/product.dart';
-import 'package:dms_admin/Pages/ProductDetail/product_detail_page.dart';
-
+import 'package:dms_admin/Pages/Product/product_detail_page.dart';
+import 'package:dms_admin/components/drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'drawer.dart';
 
 class ProductPage extends StatefulWidget {
   static const String routeName = "/product";
@@ -40,35 +37,17 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  Future<List<Product>> _fetchProducts() async {
-    final jobsListAPIUrl = 'http://localhost/api/product';
-    Map<String, String> headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
-    };
-
-    final response = await http.get(jobsListAPIUrl, headers: headers);
-
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((product) => new Product.fromJson(product))
-          .toList();
-    } else {
-      throw Exception('Failed to load jobs from API');
-    }
-  }
-
-  void search(String query) {
-    // searchList.addAll(products);
+  _getRequests() async {
+    log("refresh page");
+    setState(() {
+      products = API_HELPER.fetchProduct();
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    products = _fetchProducts();
+    products = API_HELPER.fetchProduct();
   }
 
   @override
@@ -83,16 +62,20 @@ class _ProductPageState extends State<ProductPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               original_products = snapshot.data;
-
+              if (editingController.text.isEmpty) {
+                search_products = original_products;
+              } else {
+                search_products = original_products
+                    .where((element) => element.name
+                        .toLowerCase()
+                        .contains(editingController.text.toLowerCase()))
+                    .toList();
+              }
               return Container(
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
                   _searchSection,
-                  Expanded(
-                      child: (search_products.length > 0 ||
-                              editingController.text.isNotEmpty)
-                          ? _buildRowSearch(search_products)
-                          : _buildRowInit(original_products))
+                  Expanded(child: _buildRowSearch(search_products))
                 ]),
               );
             } else if (snapshot.hasError) {
@@ -119,7 +102,7 @@ class _ProductPageState extends State<ProductPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ProductDetailPage(data[index])),
-                );
+                ).then((value) => _getRequests());
               },
               child: Container(
                 child: Row(
@@ -182,7 +165,7 @@ class _ProductPageState extends State<ProductPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ProductDetailPage(data[index])),
-                );
+                ).then((value) => _getRequests());
               },
               child: Container(
                 child: Row(

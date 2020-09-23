@@ -35,8 +35,7 @@ class _ImagePickerState extends State<ImagePicker> {
             onPressed: () async {
               final _image = await FlutterWebImagePicker.getImage;
               setState(() {
-                path =
-                    "https://miro.medium.com/max/700/1*BzcKF4qdbLIFFB6XL8x-9A.png";
+                path = "https://i.ytimg.com/vi/0h0oNEwupUA/maxresdefault.jpg";
               });
             })
       ],

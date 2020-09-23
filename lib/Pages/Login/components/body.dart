@@ -1,4 +1,4 @@
-import 'package:dms_admin/Pages/Home/components/product_page.dart';
+import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

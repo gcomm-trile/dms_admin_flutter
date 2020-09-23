@@ -1,3 +1,5 @@
+import 'package:dms_admin/Pages/Product/product_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_page.dart';
 import 'package:dms_admin/router.dart';
 import 'package:flutter/material.dart';
 
@@ -10,25 +12,19 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
-            icon: Icons.dashboard,
-            text: 'Dashboard',
-            onTap: () {
-              Navigator.pushReplacementNamed(context, FluroRouter.dashboard);
-            },
-          ),
-          _createDrawerItem(
             icon: Icons.add_box,
             text: 'product',
             onTap: () {
-              Navigator.pushReplacementNamed(context, FluroRouter.product);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => ProductPage()));
             },
           ),
           _createDrawerItem(
             icon: Icons.inventory,
             text: 'Kho',
             onTap: () {
-           
-              Navigator.pushReplacementNamed(context, FluroRouter.product);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => StockPage()));
             },
           ),
           Divider(),
