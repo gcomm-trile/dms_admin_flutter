@@ -63,8 +63,14 @@ class _StockPageState extends State<StockPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => StockDetailPage(data[index])),
-          ).then((value) {});
+          ).then((value) => _getSource());
         },
         child: Row(children: [Text(data[index].name)]));
+  }
+
+  _getSource() async {
+    setState(() {
+      stocks = API_HELPER.fetchStock();
+    });
   }
 }
