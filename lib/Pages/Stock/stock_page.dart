@@ -1,13 +1,13 @@
 import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/product.dart';
+
 import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/Pages/Stock/stock_detail_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_info_page.dart';
 import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 
 class StockPage extends StatefulWidget {
   static const String routeName = "/stock";
@@ -73,23 +73,7 @@ class _StockPageState extends State<StockPage> {
                                             no: "",
                                             name: "",
                                             is_active: true,
-                                            id: Uuid().toString())),
-                                        Positioned(
-                                          right: 5.0,
-                                          top: 5.0,
-                                          child: Container(
-                                            width: 50,
-                                            height: 50,
-                                            child: RaisedButton(
-                                              onPressed: () {},
-                                              color: Colors.red,
-                                              child: Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                            id: Guid.newGuid.toString())),
                                       ],
                                     ),
                                   ),
