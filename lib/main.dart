@@ -22,14 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: "",
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '': (context) => ProductPage(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/product': (context) => ProductPage(),
-        '/stock': (context) => StockPage(),
-      },
+      home: StockPage(),
     );
   }
 }

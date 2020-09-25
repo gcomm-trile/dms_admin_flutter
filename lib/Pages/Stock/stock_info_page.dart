@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dms_admin/Data/api_helper.dart';
+import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/components/my_checkbox.dart';
 import 'package:dms_admin/components/my_textfield.dart';
@@ -9,13 +10,11 @@ import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
-class StockDetailPage extends StatelessWidget {
-  StockDetailPage(this.data, {Key key}) : super(key: key);
+class StockInfoPage extends StatelessWidget {
+  StockInfoPage(this.data, {Key key}) : super(key: key);
   final Stock data;
   TextEditingController _noController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-
-  FToast fToast;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class StockDetailPage extends StatelessWidget {
 
     return Scaffold(
         body: Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: Column(
               children: [
                 _headerSection,
@@ -57,45 +56,15 @@ class StockDetailPage extends StatelessWidget {
                   log("no: " + data.name);
 
                   if (await API_HELPER.updateStock(data) == true) {
-                    _showToast(context);
-                    Navigator.pop(context);
+                    UI.showSuccess(context, "Đã cập nhật thành công");
+                    // Navigator.pop(context);
+                  } else {
+                    UI.showError(
+                        context, "Có lỗi trong quá trình cập nhật dữ liệu");
                   }
                 }))
       ],
     );
-  }
-
-  void _showToast(BuildContext context) {
-    fToast = FToast();
-    fToast.init(context);
-    Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: Colors.greenAccent,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.check),
-          SizedBox(
-            width: 12.0,
-          ),
-          Text("Đã lưu thành công"),
-        ],
-      ),
-    );
-    fToast.showToast(
-        child: toast,
-        toastDuration: Duration(seconds: 2),
-        positionedToastBuilder: (context, child) {
-          return Positioned(
-            child: child,
-            bottom: 16.0,
-            right: 16.0,
-          );
-        });
-    log("print test");
   }
 
   Widget get _activeSection {

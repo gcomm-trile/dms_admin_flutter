@@ -1,3 +1,5 @@
+import 'package:dms_admin/Data/api_helper.dart';
+import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +17,8 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _username = "";
+    String _password = "";
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -30,22 +34,35 @@ class Body extends StatelessWidget {
             RoundedInputField(
               hintText: "Tên tài khoản",
               icon: Icons.person,
-            ),
-            RoundedPasswordField(),
-            RoundedButton(
-                text: "ĐĂNG NHẬP",
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProductPage()),
-                  );
-                }),
-            SizedBox(height: 30),
-            AlreadyHaveAnAccountCheck(
-              press: () {
-                Navigator.pushNamed(context, 'signup');
+              onChanged: (value) {
+                _username = value;
               },
             ),
+            RoundedPasswordField(
+              onChanged: (value) {
+                _password = value;
+              },
+            ),
+            RoundedButton(
+                text: "ĐĂNG NHẬP",
+                press: () async {
+                  if (_username.isNotEmpty && _password.isNotEmpty) {
+                    var result = await API_HELPER.login(_username, _password);
+                    if (result.isEmpty) {
+                      UI.showError(
+                          context, "Xảy ra lỗi trong quá trình đăng nhập");
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProductPage()),
+                      );
+                    }
+                  } else {
+                    UI.showError(
+                        context, "Xảy ra lỗi trong quá trình đăng nhập");
+                  }
+                }),
+            SizedBox(height: 30),
           ],
         ),
       ),
