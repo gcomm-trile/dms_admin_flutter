@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dms_admin/Models/inventory.dart';
+import 'package:dms_admin/Models/phieu_nhap.dart';
+import 'package:dms_admin/Models/phieu_nhap_detail.dart';
 import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Models/stock.dart';
 import 'package:http/http.dart' as http;
@@ -97,6 +99,42 @@ class API_HELPER {
     } else {
       sessionID = "";
       return "";
+    }
+  }
+
+  static Future<List<PhieuNhapDetail>> fetchPhieuNhapDetail(
+      String phieuNhapId) async {
+    final jobsListAPIUrl =
+        SERVER_URL + '/phieunhapdetail?phieuNhapId=$phieuNhapId';
+    log("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(
+      jobsListAPIUrl,
+      headers: getHeaders(),
+    );
+    if (response.statusCode == 200) {
+      log(response.body);
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((item) => new PhieuNhapDetail.fromJson(item))
+          .toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<List<PhieuNhap>> fetchPhieuNhap(String stockId) async {
+    final jobsListAPIUrl = SERVER_URL + '/phieunhap?stockId=$stockId ';
+    log("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(
+      jobsListAPIUrl,
+      headers: getHeaders(),
+    );
+    if (response.statusCode == 200) {
+      log(response.body);
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((item) => new PhieuNhap.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
     }
   }
 }

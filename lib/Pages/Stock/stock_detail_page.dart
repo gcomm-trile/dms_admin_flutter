@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_info_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class StockDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Thông tin kho"),
@@ -26,6 +28,14 @@ class StockDetailPage extends StatelessWidget {
                 icon: Icon(Icons.inventory),
                 text: "Tồn kho",
               ),
+              Tab(
+                icon: Icon(Icons.add),
+                text: "Phiếu nhập",
+              ),
+              Tab(
+                icon: Icon(Icons.outbond),
+                text: "Phiếu xuất",
+              ),
             ],
           ),
         ),
@@ -34,7 +44,9 @@ class StockDetailPage extends StatelessWidget {
             StockInfoPage(data),
             StockCountProductPage(
               stock_id: data.id,
-            )
+            ),
+            StockIncreasePage(stock_id: data.id),
+            StockDecreasePage(stock_id: data.id),
           ],
         ),
       ),
