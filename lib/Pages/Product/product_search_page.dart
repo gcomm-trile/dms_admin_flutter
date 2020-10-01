@@ -5,7 +5,8 @@ import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProductSearchPage extends StatefulWidget {
-  ProductSearchPage({Key key}) : super(key: key);
+  final Function(Set<Product> selectedProducts) savedData;
+  ProductSearchPage({Key key, this.savedData}) : super(key: key);
 
   @override
   _ProductSearchPageState createState() => _ProductSearchPageState();
@@ -56,7 +57,12 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
             RaisedButton(
               child: Icon(Icons.save),
               color: kPrimaryColor,
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  widget.savedData(_checkedProduct);
+                  Navigator.pop(context);
+                });
+              },
             )
           ],
         ));

@@ -2,6 +2,7 @@ import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:dms_admin/Pages/Login/login_page.dart';
 import 'package:dms_admin/Pages/Product/product_detail_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_page.dart';
+import 'package:dms_admin/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dms_admin/router.dart';
 
