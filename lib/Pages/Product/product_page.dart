@@ -40,14 +40,14 @@ class _ProductPageState extends State<ProductPage> {
   _getRequests() async {
     log("refresh page");
     setState(() {
-      products = API_HELPER.fetchProduct();
+      products = API_HELPER.getProduct();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    products = API_HELPER.fetchProduct();
+    products = API_HELPER.getProduct();
   }
 
   @override

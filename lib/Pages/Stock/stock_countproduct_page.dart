@@ -22,7 +22,7 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
   @override
   void initState() {
     super.initState();
-    inventory = API_HELPER.fetchInventory(widget.stock_id);
+    inventory = API_HELPER.getInventory(widget.stock_id);
   }
 
   @override
@@ -104,7 +104,7 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
                     onPressed: () {
                       setState(() {
                         log("refresh inventory count product data");
-                        inventory = API_HELPER.fetchInventory(widget.stock_id);
+                        inventory = API_HELPER.getInventory(widget.stock_id);
                         UI.showSuccess(
                             context, "Đã load lại danh sách thành công");
                       });

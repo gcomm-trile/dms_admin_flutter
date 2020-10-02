@@ -1,4 +1,4 @@
-class PhieuNhap {
+class PhieuXuat {
   String id;
   String status;
   String stockId;
@@ -8,7 +8,7 @@ class PhieuNhap {
   String createdOn;
   String approvedOn;
 
-  PhieuNhap(
+  PhieuXuat(
       {this.id,
       this.stockId,
       this.seq,
@@ -18,7 +18,7 @@ class PhieuNhap {
       this.approvedOn,
       this.status});
 
-  PhieuNhap.fromJson(Map<String, dynamic> json) {
+  PhieuXuat.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     stockId = json['stock_id'];
     seq = json['seq'];

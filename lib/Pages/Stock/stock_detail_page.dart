@@ -45,8 +45,8 @@ class StockDetailPage extends StatelessWidget {
             StockCountProductPage(
               stock_id: data.id,
             ),
-            StockIncreasePage(stock_id: data.id),
-            StockDecreasePage(stock_id: data.id),
+            StockIncreasePage(stockId: data.id),
+            StockDecreasePage(stockId: data.id),
           ],
         ),
       ),

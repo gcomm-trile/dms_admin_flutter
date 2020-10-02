@@ -5,7 +5,9 @@ class QtyTextField extends StatefulWidget {
   int value;
   final int maxValue;
   final int minValue;
-  QtyTextField({Key key, this.value, this.maxValue, this.minValue})
+  final Function(int value) onChangedValue;
+  QtyTextField(
+      {Key key, this.value, this.maxValue, this.minValue, this.onChangedValue})
       : super(key: key);
 
   @override
@@ -28,32 +30,35 @@ class _QtyTextFieldState extends State<QtyTextField> {
       child: Row(
         children: [
           Container(
-            width: 50,
+            width: 40,
             child: RaisedButton(
+              color: Colors.transparent,
               onPressed: () {
                 _decreaseValue();
               },
               child: Icon(
                 Icons.remove,
-                color: Colors.deepOrange,
               ),
             ),
           ),
           Expanded(
-              child: TextField(
-            maxLength: widget.maxValue.toString().length,
-            textAlign: TextAlign.center,
-            onChanged: (value) {},
-            controller: textEditingController,
-            decoration: new InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                widget.onChangedValue(int.parse(value));
+              },
+              controller: textEditingController,
+              keyboardType:
+                  TextInputType.numberWithOptions(signed: true, decimal: false),
+              decoration: new InputDecoration(
+                border: OutlineInputBorder(),
               ),
             ),
-          )),
+          ),
           Container(
-            width: 50,
+            width: 40,
             child: RaisedButton(
+              color: Colors.transparent,
               onPressed: () {
                 _increaseValue();
               },
@@ -70,6 +75,7 @@ class _QtyTextFieldState extends State<QtyTextField> {
       setState(() {
         textEditingController.text =
             (int.parse(textEditingController.text) + 1).toString();
+        widget.onChangedValue(int.parse(textEditingController.text));
       });
     }
   }
@@ -79,6 +85,7 @@ class _QtyTextFieldState extends State<QtyTextField> {
       setState(() {
         textEditingController.text =
             (int.parse(textEditingController.text) - 1).toString();
+        widget.onChangedValue(int.parse(textEditingController.text));
       });
     }
   }

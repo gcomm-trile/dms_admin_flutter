@@ -1,33 +1,36 @@
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/product.dart';
-import 'package:dms_admin/components/my_textfield.dart';
+import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProductSearchPage extends StatefulWidget {
-  final Function(Set<Product> selectedProducts) savedData;
-  ProductSearchPage({Key key, this.savedData}) : super(key: key);
+  final String stock_id;
+  final Function(Set<Inventory> selectedProducts) savedData;
+  ProductSearchPage({Key key, this.savedData, this.stock_id}) : super(key: key);
 
   @override
   _ProductSearchPageState createState() => _ProductSearchPageState();
 }
 
 class _ProductSearchPageState extends State<ProductSearchPage> {
-  final _checkedProduct = new Set<Product>();
-  Future<List<Product>> products;
+  final _checkedProduct = new Set<Inventory>();
+  Future<List<Inventory>> products;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    products = API_HELPER.fetchProduct();
+    products = API_HELPER.getInventory(widget.stock_id);
   }
 
   Widget get _buildAPI {
-    return FutureBuilder<List<Product>>(
+    return FutureBuilder<List<Inventory>>(
       future: products,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
+          return ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
               shrinkWrap: true,
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
@@ -44,8 +47,8 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.maxFinite,
-        height: 400.0,
+        width: 300.0,
+        height: double.infinity,
         child: Column(
           children: [
             // MyTextField(
@@ -53,6 +56,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
             //   title: "Tìm sản phẩm",
             //   onChangedText: (textValue) {},
             // ),
+            _buildHeader,
             Expanded(child: _buildAPI),
             RaisedButton(
               child: Icon(Icons.save),
@@ -68,26 +72,60 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
         ));
   }
 
-  Widget _buildRow(BuildContext context, int index, Product product) {
+  Widget get _buildHeader {
+    return Row(
+      children: [
+        Container(
+          width: 40,
+        ),
+        Expanded(
+          child: Text("Tên SP"),
+        ),
+        Container(
+          width: 40.0,
+          child: Text("Tồn"),
+        )
+      ],
+    );
+  }
+
+  Widget _buildRow(BuildContext context, int index, Inventory product) {
     final color = index % 2 == 0 ? Colors.red : Colors.blue;
     final isChecked = _checkedProduct.contains(product);
-    return ListTile(
-        onTap: () {
-          setState(() {
-            if (isChecked)
-              _checkedProduct.remove(product);
-            else {
-              _checkedProduct.add(product);
-            }
-          });
-        },
-        leading: Icon(
-          isChecked ? Icons.check_box : Icons.check_box_outline_blank,
-          color: color,
-        ),
-        title: Text(
-          product.name,
-          style: TextStyle(color: color),
-        ));
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isChecked)
+            _checkedProduct.remove(product);
+          else {
+            _checkedProduct.add(product);
+          }
+        });
+      },
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            child: Icon(
+              isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+              color: color,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              product.productName,
+              style: TextStyle(color: color),
+            ),
+          ),
+          Container(
+            width: 40.0,
+            child: Text(
+              product.currentQty.toString(),
+              style: TextStyle(color: color),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

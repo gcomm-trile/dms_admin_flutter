@@ -3,20 +3,24 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
+import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
-class StockRequestImportPage extends StatefulWidget {
+class StockDecreaseExportPage extends StatefulWidget {
   final String phieuNhapId;
-  StockRequestImportPage({Key key, this.phieuNhapId}) : super(key: key);
+  final String stockId;
+  StockDecreaseExportPage({Key key, this.phieuNhapId, this.stockId})
+      : super(key: key);
 
   @override
-  _StockRequestImportPageState createState() => _StockRequestImportPageState();
+  _StockDecreaseExportPageState createState() =>
+      _StockDecreaseExportPageState();
 }
 
-class _StockRequestImportPageState extends State<StockRequestImportPage> {
+class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
+  final double widthQuantibox = 80.0;
   Future<List<PhieuNhapDetail>> phieuNhapDetails;
   List<PhieuNhapDetail> products;
   @override
@@ -36,22 +40,23 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             content: ProductSearchPage(
+              stock_id: widget.stockId,
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
                   for (var selectedProduct in selectedProducts) {
                     if (products
                             .where((element) =>
-                                element.productId == selectedProduct.id)
+                                element.productId == selectedProduct.productId)
                             .length ==
                         0) {
-                      log("Đã chọn ${selectedProduct.id.toString()}");
-                      log("Đã chọn ${selectedProduct.name.toString()}");
+                      log("Đã chọn ${selectedProduct.productId.toString()}");
+                      log("Đã chọn ${selectedProduct.productName.toString()}");
                       products.add(new PhieuNhapDetail(
-                          productId: selectedProduct.id,
-                          productNo: selectedProduct.no,
-                          productName: selectedProduct.name,
-                          productPrice: selectedProduct.price,
+                          productId: selectedProduct.productId,
+                          productNo: selectedProduct.productNo,
+                          productName: selectedProduct.productName,
+                          productPrice: selectedProduct.productPrice,
                           qty: 0));
                     }
                   }
@@ -64,13 +69,26 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
 
   Widget _buildAppbarSection(BuildContext context) {
     return AppBar(
-      title: Text("Chi tiết phiếu nhập"),
+      title: Text("Chi tiết phiếu xuất"),
       actions: [
         RaisedButton(
           color: Colors.transparent,
           onPressed: () {
-            UI.showSuccess(context, "Đã cập nhật thành công");
-            Navigator.pop(context);
+            API_HELPER
+                .postPhieuNhapDetail(
+                    widget.stockId,
+                    widget.phieuNhapId,
+                    '00000000-0000-0000-0000-000000000000',
+                    '00000000-0000-0000-0000-000000000000',
+                    products.where((element) => element.qty > 0).toList())
+                .then((value) {
+              if (value.isEmpty) {
+                UI.showSuccess(context, "Đã cập nhật thành công");
+                Navigator.pop(context);
+              } else {
+                UI.showError(context, value);
+              }
+            });
           },
           child: Icon(
             Icons.done,
@@ -84,6 +102,16 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
   Widget get _buildListViewHeaderSection {
     return ListTile(
       title: Row(children: <Widget>[
+        SizedBox(
+          child: Text(
+            "",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          width: 40,
+        ),
+        SizedBox(
+          width: 10,
+        ),
         SizedBox(
           child: Text(
             "Mã",
@@ -109,7 +137,6 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
     );
   }
 
-  final double widthQuantibox = 80.0;
   Widget get _buildAddProductSection {
     return Positioned(
         right: 20,
@@ -124,9 +151,31 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
         ));
   }
 
+  void _removeProduct(PhieuNhapDetail product) {
+    setState(() {
+      products.remove(product);
+    });
+  }
+
   Widget _buildListViewRowSection(PhieuNhapDetail product) {
     return ListTile(
       title: Row(children: <Widget>[
+        SizedBox(
+          child: RaisedButton(
+            color: Colors.transparent,
+            child: Icon(
+              Icons.delete,
+              color: kPrimaryColor,
+            ),
+            onPressed: () {
+              _removeProduct(product);
+            },
+          ),
+          width: 40,
+        ),
+        SizedBox(
+          width: 10,
+        ),
         SizedBox(
           child: Text(product.productNo),
           width: 80,
@@ -137,7 +186,14 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
         Expanded(
           child: Text(product.productName),
         ),
-        QtyTextField(value: product.qty, minValue: 0, maxValue: 10)
+        QtyTextField(
+          value: product.qty,
+          minValue: 0,
+          maxValue: 10,
+          onChangedValue: (value) {
+            product.qty = value;
+          },
+        )
       ]),
     );
   }
@@ -154,14 +210,17 @@ class _StockRequestImportPageState extends State<StockRequestImportPage> {
                   ? Center(
                       child: Text("No data"),
                     )
-                  : ListView.builder(
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return _buildListViewHeaderSection;
-                        } else
-                          return _buildListViewRowSection(products[index - 1]);
-                      },
-                      itemCount: products.length + 1),
+                  : Column(children: [
+                      _buildListViewHeaderSection,
+                      Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return _buildListViewRowSection(
+                                    products[index]);
+                              },
+                              itemCount: products.length))
+                    ]),
               _buildAddProductSection
             ],
           );
