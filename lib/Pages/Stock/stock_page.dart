@@ -23,7 +23,7 @@ class _StockPageState extends State<StockPage> {
   @override
   void initState() {
     super.initState();
-    stocks = API_HELPER.fetchStock();
+    stocks = API_HELPER.listStocks();
   }
 
   @override
@@ -109,7 +109,7 @@ class _StockPageState extends State<StockPage> {
   _getSource() async {
     setState(() {
       log("refresh stock list");
-      stocks = API_HELPER.fetchStock();
+      stocks = API_HELPER.listStocks();
     });
   }
 }

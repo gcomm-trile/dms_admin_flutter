@@ -1,6 +1,5 @@
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_image_picker/flutter_web_image_picker.dart';
 
 class ImagePicker extends StatefulWidget {
   final double width;
@@ -33,10 +32,10 @@ class _ImagePickerState extends State<ImagePicker> {
             textColor: Colors.white,
             child: Text("Upload hình"),
             onPressed: () async {
-              final _image = await FlutterWebImagePicker.getImage;
-              setState(() {
-                path = "https://i.ytimg.com/vi/0h0oNEwupUA/maxresdefault.jpg";
-              });
+              // final _image = await FlutterWebImagePicker.getImage;
+              // setState(() {
+              //   path = "https://i.ytimg.com/vi/0h0oNEwupUA/maxresdefault.jpg";
+              // });
             })
       ],
     );

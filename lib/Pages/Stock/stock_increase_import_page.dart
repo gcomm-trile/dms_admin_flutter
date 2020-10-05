@@ -25,7 +25,7 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
   @override
   void initState() {
     super.initState();
-    phieuNhapDetails = API_HELPER.fetchPhieuNhapDetail(widget.phieuNhapId);
+    phieuNhapDetails = API_HELPER.listPhieuNhapDetail(widget.phieuNhapId);
   }
 
   Widget build(BuildContext context) {
@@ -43,7 +43,9 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
+                  log("Đang có ${products.length.toString()}");
                   for (var selectedProduct in selectedProducts) {
+                    print("check ${selectedProduct.productId}");
                     if (products
                             .where((element) =>
                                 element.productId == selectedProduct.productId)
@@ -76,8 +78,8 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
             API_HELPER
                 .postPhieuNhapDetail(
                     widget.stockId,
-                    widget.phieuNhapId,
                     '00000000-0000-0000-0000-000000000000',
+                    widget.phieuNhapId,
                     '00000000-0000-0000-0000-000000000000',
                     products.where((element) => element.qty > 0).toList())
                 .then((value) {

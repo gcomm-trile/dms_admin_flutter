@@ -111,7 +111,7 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
 
   Widget _buildRowListViewSection(PhieuXuat item) {
     return InkWell(
-      onDoubleTap: () {
+      onTap: () {
         log("mở lại  đơn cũ");
         goToDetailPage(item.id);
       },
@@ -139,7 +139,7 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
             padding: EdgeInsets.only(left: 10),
             width: 120,
             child: Text(
-              item.approvedBy,
+              item.approvedBy != null ? item.approvedBy : "",
               textAlign: TextAlign.center,
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -150,7 +150,7 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
           padding: EdgeInsets.only(left: 10),
           width: 120,
           child: Text(
-            item.approvedOn,
+            item.approvedOn != null ? item.approvedOn : "",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
@@ -159,12 +159,12 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     );
   }
 
-  void goToDetailPage(String phieuNhapId) {
+  void goToDetailPage(String phieuXuatId) {
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => StockDecreaseExportPage(
-              phieuNhapId: phieuNhapId, stockId: widget.stockId),
+              phieuXuatId: phieuXuatId, stockId: widget.stockId),
         )).then((value) {
       setState(() {
         phieuXuat = API_HELPER.getPhieuXuat(widget.stockId);

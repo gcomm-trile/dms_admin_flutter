@@ -5,14 +5,16 @@ import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
+import 'package:dms_admin/Models/phieu_xuat_detail.dart';
 import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Models/stock.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 
+// ignore: camel_case_types
 class API_HELPER {
-  static String sessionID = "751a2769-aa03-4840-9bf5-bde97e11c378";
+  static String sessionID = "D51C8585-C2F3-4424-A746-08044712D0A3";
   static Map<String, String> getHeaders() {
     return {
       'Content-type': 'application/json',
@@ -48,7 +50,7 @@ class API_HELPER {
     }
   }
 
-  static Future<List<Stock>> fetchStock() async {
+  static Future<List<Stock>> listStocks() async {
     final jobsListAPIUrl = SERVER_URL + '/stock';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(jobsListAPIUrl, headers: getHeaders());
@@ -104,10 +106,10 @@ class API_HELPER {
     }
   }
 
-  static Future<List<PhieuNhapDetail>> fetchPhieuNhapDetail(
+  static Future<List<PhieuNhapDetail>> listPhieuNhapDetail(
       String phieuNhapId) async {
     final jobsListAPIUrl =
-        SERVER_URL + '/phieunhapdetail?phieuNhapId=$phieuNhapId';
+        SERVER_URL + '/PhieuNhapDetail?phieuNhapId=$phieuNhapId';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(
       jobsListAPIUrl,
@@ -119,6 +121,23 @@ class API_HELPER {
       return jsonResponse
           .map((item) => new PhieuNhapDetail.fromJson(item))
           .toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<PhieuXuatDetail> listPhieuXuatDetail(String phieuXuatId) async {
+    final jobsListAPIUrl =
+        SERVER_URL + '/PhieuXuatDetail?phieu_xuat_id=$phieuXuatId';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(
+      jobsListAPIUrl,
+      headers: getHeaders(),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+      final Map parsed = json.decode(response.body);
+      return PhieuXuatDetail.fromJson(parsed);
     } else {
       throw Exception('Failed to load jobs from API');
     }
@@ -141,8 +160,9 @@ class API_HELPER {
     }
   }
 
-  static Future<List<PhieuXuat>> getPhieuXuat(String stockId) async {
-    final jobsListAPIUrl = SERVER_URL + '/phieuxuat?stock_id=$stockId ';
+  static Future<List<PhieuXuat>> getPhieuXuat(String exportStockId) async {
+    final jobsListAPIUrl =
+        SERVER_URL + '/phieuxuat?export_stock_id=$exportStockId ';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(
       jobsListAPIUrl,
@@ -159,13 +179,33 @@ class API_HELPER {
   }
 
   static Future<String> postPhieuNhapDetail(
-      String stock_id,
+      String import_stock_id,
+      String export_stock_id,
       String phieu_nhap_id,
-      String from_stock_id,
       String phieu_xuat_id,
       List<PhieuNhapDetail> items) async {
     final jobsListAPIUrl = SERVER_URL +
-        '/PhieuNhapDetail?stock_id=${stock_id}&phieu_nhap_id=${phieu_nhap_id}&from_stock_id=${from_stock_id}&phieu_xuat_id=${phieu_xuat_id}';
+        '/PhieuNhapDetail?import_stock_id=${import_stock_id}&export_stock_id=${export_stock_id}&phieu_nhap_id=${phieu_nhap_id}&phieu_xuat_id=${phieu_xuat_id}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    print(jsonEncode(items));
+    final response = await http.post(jobsListAPIUrl,
+        headers: getHeaders(), body: jsonEncode(items));
+    if (response.statusCode == 200) {
+      log(response.body);
+      return "";
+    } else {
+      return "Failed to load jobs from API";
+    }
+  }
+
+  static Future<String> postPhieuXuatDetail(
+      String import_stock_id,
+      String export_stock_id,
+      String phieu_nhap_id,
+      String phieu_xuat_id,
+      List<PhieuXuatDetailProduct> items) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/PhieuXuatDetail?import_stock_id=${import_stock_id}&export_stock_id=${export_stock_id}&phieu_nhap_id=${phieu_nhap_id}&phieu_xuat_id=${phieu_xuat_id}';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     print(jsonEncode(items));
     final response = await http.post(jobsListAPIUrl,
