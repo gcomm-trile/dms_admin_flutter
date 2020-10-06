@@ -143,8 +143,9 @@ class API_HELPER {
     }
   }
 
-  static Future<List<PhieuNhap>> getPhieuNhap(String stockId) async {
-    final jobsListAPIUrl = SERVER_URL + '/phieunhap?stock_id=$stockId ';
+  static Future<List<PhieuNhap>> listPhieuNhap(String import_stock_id) async {
+    final jobsListAPIUrl =
+        SERVER_URL + '/phieunhap?import_stock_id=$import_stock_id ';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(
       jobsListAPIUrl,
@@ -160,10 +161,10 @@ class API_HELPER {
     }
   }
 
-  static Future<List<PhieuXuat>> getPhieuXuat(String exportStockId) async {
+  static Future<List<PhieuXuat>> listPhieuXuat(String exportStockId) async {
     final jobsListAPIUrl =
         SERVER_URL + '/phieuxuat?export_stock_id=$exportStockId ';
-    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    print("get $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(
       jobsListAPIUrl,
       headers: getHeaders(),
@@ -186,7 +187,7 @@ class API_HELPER {
       List<PhieuNhapDetail> items) async {
     final jobsListAPIUrl = SERVER_URL +
         '/PhieuNhapDetail?import_stock_id=${import_stock_id}&export_stock_id=${export_stock_id}&phieu_nhap_id=${phieu_nhap_id}&phieu_xuat_id=${phieu_xuat_id}';
-    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    print("POST $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     print(jsonEncode(items));
     final response = await http.post(jobsListAPIUrl,
         headers: getHeaders(), body: jsonEncode(items));
@@ -215,6 +216,20 @@ class API_HELPER {
       return "";
     } else {
       return "Failed to load jobs from API";
+    }
+  }
+
+  static Future<String> postDuyetPhieuXuat(
+      String phieu_xuat_id, int status) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/DuyetPhieuXuat?phieu_xuat_id=${phieu_xuat_id}&status=${status}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.post(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      log(response.body);
+      return "";
+    } else {
+      return response.body;
     }
   }
 }

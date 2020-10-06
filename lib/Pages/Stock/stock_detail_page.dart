@@ -6,6 +6,7 @@ import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_info_page.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class StockDetailPage extends StatelessWidget {
   final Stock data;
@@ -15,39 +16,41 @@ class StockDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Thông tin kho"),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.info_outline),
-                text: "Thông tin",
+      child: KeyboardDismisser(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Thông tin kho"),
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  icon: Icon(Icons.info_outline),
+                  text: "Thông tin",
+                ),
+                Tab(
+                  icon: Icon(Icons.inventory),
+                  text: "Tồn",
+                ),
+                Tab(
+                  icon: Icon(Icons.call_received),
+                  text: "Nhập",
+                ),
+                Tab(
+                  icon: Icon(Icons.call_made),
+                  text: "Xuất",
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              StockInfoPage(data),
+              StockCountProductPage(
+                stock_id: data.id,
               ),
-              Tab(
-                icon: Icon(Icons.inventory),
-                text: "Tồn kho",
-              ),
-              Tab(
-                icon: Icon(Icons.add),
-                text: "Phiếu nhập",
-              ),
-              Tab(
-                icon: Icon(Icons.outbond),
-                text: "Phiếu xuất",
-              ),
+              StockIncreasePage(stockId: data.id),
+              StockDecreasePage(stockId: data.id),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            StockInfoPage(data),
-            StockCountProductPage(
-              stock_id: data.id,
-            ),
-            StockIncreasePage(stockId: data.id),
-            StockDecreasePage(stockId: data.id),
-          ],
         ),
       ),
     );

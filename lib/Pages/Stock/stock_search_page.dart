@@ -55,10 +55,13 @@ class _StockSearchPageState extends State<StockSearchPage> {
             //   title: "Tìm sản phẩm",
             //   onChangedText: (textValue) {},
             // ),
-            _buildHeader,
+            // _buildHeader,
             Expanded(child: _buildAPI),
             RaisedButton(
-              child: Icon(Icons.save),
+              child: Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
               color: kPrimaryColor,
               onPressed: () {
                 setState(() {
@@ -76,10 +79,6 @@ class _StockSearchPageState extends State<StockSearchPage> {
       children: [
         Container(
           width: 40,
-        ),
-        Container(
-          width: 90.0,
-          child: Text("Mã kho"),
         ),
         Expanded(
           child: Text("Tên kho"),
@@ -108,13 +107,6 @@ class _StockSearchPageState extends State<StockSearchPage> {
             child: Icon(
               isChecked ? Icons.check_box : Icons.check_box_outline_blank,
               color: color,
-            ),
-          ),
-          Container(
-            width: 90.0,
-            child: Text(
-              stock.no,
-              style: TextStyle(color: color),
             ),
           ),
           Expanded(

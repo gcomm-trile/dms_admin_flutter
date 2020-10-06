@@ -1,5 +1,6 @@
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/inventory.dart';
+import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,6 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   Future<List<Inventory>> products;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     products = API_HELPER.getInventory(widget.stock_id);
   }
@@ -39,7 +39,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
         } else if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         } else
-          return Center(child: CircularProgressIndicator());
+          return LoadingControl();
       },
     );
   }
@@ -56,10 +56,13 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
             //   title: "Tìm sản phẩm",
             //   onChangedText: (textValue) {},
             // ),
-            _buildHeader,
+            // _buildHeader,
             Expanded(child: _buildAPI),
             RaisedButton(
-              child: Icon(Icons.save),
+              child: Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
               color: kPrimaryColor,
               onPressed: () {
                 setState(() {
@@ -83,7 +86,10 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
         ),
         Container(
           width: 40.0,
-          child: Text("Tồn"),
+          child: Text(
+            "Tồn",
+            textAlign: TextAlign.right,
+          ),
         )
       ],
     );
@@ -121,6 +127,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
             width: 40.0,
             child: Text(
               product.currentQty.toString(),
+              textAlign: TextAlign.right,
               style: TextStyle(color: color),
             ),
           )

@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
-import 'package:dms_admin/Models/phieu_nhap_detail.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
@@ -74,9 +72,8 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
     return AppBar(
       title: Text("Chi tiết phiếu xuất"),
       actions: [
-        RaisedButton(
-          color: Colors.transparent,
-          onPressed: () {
+        InkWell(
+          onTap: () {
             API_HELPER
                 .postPhieuXuatDetail(
                     phieuXuatDetail.importStockId,
@@ -95,11 +92,14 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
               }
             });
           },
-          child: Icon(
-            Icons.done,
-            color: Colors.white,
+          child: Container(
+            width: 50.0,
+            child: Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -164,34 +164,39 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
 
   Widget _buildListViewRowSection(PhieuXuatDetailProduct product) {
     return Container(
-      child: Row(children: <Widget>[
+        child: ListTile(
+      title: Row(children: <Widget>[
         GestureDetector(
           onTap: () => _removeProduct(product),
           child: Container(
+            padding: EdgeInsets.only(left: 5.0),
             child: Icon(
-              Icons.delete,
+              Icons.close,
               size: 30,
-              color: kPrimaryColor,
+              color: Colors.red,
             ),
           ),
         ),
         SizedBox(
           child: Text(product.productNo),
-          width: 60,
+          width: kWidthProductNo,
         ),
         Expanded(
           child: Text(product.productName),
         ),
-        QtyTextField(
-          value: product.qty,
-          minValue: 0,
-          maxValue: 10,
-          onChangedValue: (value) {
-            product.qty = value;
-          },
+        Container(
+          width: 110,
+          child: QtyTextField(
+            value: product.qty,
+            minValue: 0,
+            maxValue: 9999,
+            onChangedValue: (value) {
+              product.qty = value;
+            },
+          ),
         )
       ]),
-    );
+    ));
   }
 
   Widget _buildItemsSection(List<PhieuXuatDetailProduct> products) {
@@ -199,14 +204,17 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
       children: [
         products.length == 0
             ? Center(
-                child: Text("Không có sản phẩm"),
+                child: Text(kEmptyProductList),
               )
             : Column(children: [
                 // _buildListViewHeaderSection,
                 Expanded(
                     child: ListView.separated(
                         separatorBuilder: (context, index) {
-                          return Divider();
+                          return Divider(
+                            thickness: 0.2,
+                            color: Colors.black,
+                          );
                         },
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
@@ -225,26 +233,36 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
       padding: EdgeInsets.all(10.0),
       child: Row(
         children: [
-          Text("Kho nhận:"),
+          Text(
+            "Kho nhận:",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+          ),
           SizedBox(
             width: 10.0,
           ),
-          Text((phieuXuatDetail.importStockName == null)
-              ? "Chưa có kho nhận"
-              : phieuXuatDetail.importStockName),
+          Text(
+              (phieuXuatDetail.importStockName == null)
+                  ? "Chưa có kho nhận"
+                  : phieuXuatDetail.importStockName,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold)),
           SizedBox(
             width: 10.0,
           ),
-          Container(
-              width: 50,
-              child: RaisedButton(
-                  onPressed: () {
-                    _showPopupSearchStock(context);
-                  },
-                  child: Icon(
-                    Icons.search,
-                    color: kPrimaryColor,
-                  )))
+          InkWell(
+            onTap: () => _showPopupSearchStock(context),
+            child: Container(
+              child: Icon(
+                Icons.search,
+                color: kPrimaryColor,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -258,6 +276,10 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
           phieuXuatDetail = snapshot.data;
           return Column(children: [
             _buildImportStockSection(context, snapshot.data),
+            Divider(
+              thickness: 1.5,
+              color: Colors.black,
+            ),
             Expanded(child: _buildItemsSection(snapshot.data.products))
           ]);
         } else if (snapshot.hasError) {

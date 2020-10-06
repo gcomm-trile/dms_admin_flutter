@@ -29,17 +29,9 @@ class _QtyTextFieldState extends State<QtyTextField> {
       width: 150,
       child: Row(
         children: [
-          Container(
-            width: 40,
-            child: RaisedButton(
-              color: Colors.transparent,
-              onPressed: () {
-                _decreaseValue();
-              },
-              child: Icon(
-                Icons.remove,
-              ),
-            ),
+          InkWell(
+            child: Icon(Icons.remove),
+            onTap: () => _decreaseValue(),
           ),
           Expanded(
             child: TextField(
@@ -55,15 +47,9 @@ class _QtyTextFieldState extends State<QtyTextField> {
               ),
             ),
           ),
-          Container(
-            width: 40,
-            child: RaisedButton(
-              color: Colors.transparent,
-              onPressed: () {
-                _increaseValue();
-              },
-              child: Icon(Icons.add),
-            ),
+          InkWell(
+            child: Icon(Icons.add),
+            onTap: () => _increaseValue(),
           ),
         ],
       ),

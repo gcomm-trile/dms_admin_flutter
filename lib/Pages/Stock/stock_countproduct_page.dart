@@ -3,7 +3,11 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/inventory.dart';
+import 'package:dms_admin/components/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/style.dart';
+
+import '../../constants.dart';
 
 class StockCountProductPage extends StatefulWidget {
   final String stock_id;
@@ -14,8 +18,15 @@ class StockCountProductPage extends StatefulWidget {
 }
 
 class _StockCountProductPageState extends State<StockCountProductPage> {
-  Widget _buildRowListView() {
-    return Text("Hello");
+  Widget _buildListView(List<Inventory> data) {
+    return ListView.separated(
+        separatorBuilder: (context, index) {
+          return Divider(color: Colors.black, thickness: 0.2);
+        },
+        itemBuilder: (context, index) {
+          return ListTile(title: _buildRowListViewSection(data[index]));
+        },
+        itemCount: data.length);
   }
 
   Future<List<Inventory>> inventory;
@@ -23,6 +34,91 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
   void initState() {
     super.initState();
     inventory = API_HELPER.getInventory(widget.stock_id);
+  }
+
+  Widget get _buildHeaderSection {
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Row(children: <Widget>[
+        SizedBox(
+          child: Text(
+            "Mã",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0),
+          ),
+          width: kWidthProductNo,
+        ),
+        SizedBox(
+          width: 30,
+        ),
+        Expanded(
+            child: Text("Tên",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0))),
+        SizedBox(
+          child: Text(
+            "Tồn",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0),
+          ),
+          width: 70,
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildRowListViewSection(Inventory item) {
+    return Row(children: <Widget>[
+      SizedBox(
+        child: Text(
+          item.productNo,
+          textAlign: TextAlign.center,
+        ),
+        width: kWidthProductNo,
+      ),
+      SizedBox(
+        width: 30,
+      ),
+      Expanded(
+        child: Text(
+          item.productName,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      SizedBox(
+        child: Text(
+          item.currentQty.toString(),
+          textAlign: TextAlign.right,
+        ),
+        width: 50,
+      ),
+    ]);
+  }
+
+  Widget get _buildRefreshButtonSection {
+    return Positioned(
+        right: 20,
+        bottom: 20,
+        height: 50,
+        child: FloatingActionButton(
+          child: Icon(Icons.update),
+          onPressed: () {
+            setState(() {
+              log("refresh inventory count product data");
+              inventory = API_HELPER.getInventory(widget.stock_id);
+              UI.showSuccess(context, "Đã load lại danh sách thành công");
+            });
+          },
+        ));
   }
 
   @override
@@ -37,85 +133,20 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
                   ? Center(
                       child: Text("No data"),
                     )
-                  : ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return Divider(color: Colors.black, thickness: 1.0);
-                      },
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return ListTile(
-                            title: Row(children: <Widget>[
-                              SizedBox(
-                                child: Text(
-                                  "Mã",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                width: 80,
-                              ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              Expanded(
-                                child: Text("Tên",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              SizedBox(
-                                child: Text("Tồn",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                                width: 50,
-                              ),
-                            ]),
-                          );
-                        } else
-                          return ListTile(
-                            title: Row(children: <Widget>[
-                              SizedBox(
-                                child: Text(snapshot.data[index - 1].productNo),
-                                width: 80,
-                              ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              Expanded(
-                                child:
-                                    Text(snapshot.data[index - 1].productName),
-                              ),
-                              SizedBox(
-                                child: Text(snapshot.data[index - 1].currentQty
-                                    .toString()),
-                                width: 50,
-                              ),
-                            ]),
-                          );
-                      },
-                      itemCount: snapshot.data.length),
-              Positioned(
-                  right: 20,
-                  bottom: 20,
-                  height: 50,
-                  child: FloatingActionButton(
-                    child: Icon(Icons.update),
-                    onPressed: () {
-                      setState(() {
-                        log("refresh inventory count product data");
-                        inventory = API_HELPER.getInventory(widget.stock_id);
-                        UI.showSuccess(
-                            context, "Đã load lại danh sách thành công");
-                      });
-                    },
-                  ))
+                  : Column(
+                      children: [
+                        _buildHeaderSection,
+                        Divider(color: Colors.black, thickness: 3.0),
+                        Expanded(child: _buildListView(snapshot.data))
+                      ],
+                    ),
+              _buildRefreshButtonSection
             ],
           );
         } else if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingControl();
       },
     );
   }

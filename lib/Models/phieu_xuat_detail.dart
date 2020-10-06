@@ -5,6 +5,7 @@ class PhieuXuatDetail {
   String exportStockName;
   String importStockId;
   String importStockName;
+  int status;
   String statusName;
   List<PhieuXuatDetailProduct> products;
 
@@ -15,6 +16,7 @@ class PhieuXuatDetail {
       this.importStockName,
       this.exportStockId,
       this.exportStockName,
+      this.status,
       this.statusName,
       this.products});
 
@@ -25,6 +27,7 @@ class PhieuXuatDetail {
     importStockName = json['import_stock_name'];
     exportStockId = json['export_stock_id'];
     exportStockName = json['export_stock_name'];
+    status = json['status'];
     statusName = json['status_name'];
     if (json['products'] != null) {
       products = new List<PhieuXuatDetailProduct>();
@@ -42,6 +45,7 @@ class PhieuXuatDetail {
     data['import_stock_name'] = this.importStockName;
     data['export_stock_id'] = this.exportStockId;
     data['export_stock_name'] = this.exportStockName;
+    data['status'] = this.status;
     data['status_name'] = this.statusName;
     if (this.products != null) {
       data['products'] = this.products.map((v) => v.toJson()).toList();

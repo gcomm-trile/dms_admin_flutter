@@ -70,32 +70,27 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
 
   Widget _buildAppbarSection(BuildContext context) {
     return AppBar(
-      title: Text("Chi tiết phiếu nhập"),
+      title: Text("Nhập trực tiếp"),
       actions: [
-        RaisedButton(
-          color: Colors.transparent,
-          onPressed: () {
-            API_HELPER
-                .postPhieuNhapDetail(
-                    widget.stockId,
-                    '00000000-0000-0000-0000-000000000000',
-                    widget.phieuNhapId,
-                    '00000000-0000-0000-0000-000000000000',
-                    products.where((element) => element.qty > 0).toList())
-                .then((value) {
-              if (value.isEmpty) {
-                UI.showSuccess(context, "Đã cập nhật thành công");
-                Navigator.pop(context);
-              } else {
-                UI.showError(context, value);
-              }
-            });
-          },
-          child: Icon(
-            Icons.done,
-            color: Colors.white,
-          ),
-        )
+        InkWell(
+            child: Container(width: 50, child: Icon(Icons.done)),
+            onTap: () {
+              API_HELPER
+                  .postPhieuNhapDetail(
+                      widget.stockId,
+                      '00000000-0000-0000-0000-000000000000',
+                      widget.phieuNhapId,
+                      '00000000-0000-0000-0000-000000000000',
+                      products.where((element) => element.qty > 0).toList())
+                  .then((value) {
+                if (value.isEmpty) {
+                  UI.showSuccess(context, "Đã cập nhật thành công");
+                  Navigator.pop(context);
+                } else {
+                  UI.showError(context, value);
+                }
+              });
+            }),
       ],
     );
   }
@@ -161,43 +156,44 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
 
   Widget _buildListViewRowSection(PhieuNhapDetail product) {
     return ListTile(
-      title: Row(children: <Widget>[
-        SizedBox(
-          child: RaisedButton(
-            color: Colors.transparent,
-            child: Icon(
-              Icons.delete,
-              color: kPrimaryColor,
-            ),
-            onPressed: () {
-              _removeProduct(product);
-            },
+        title: Row(children: <Widget>[
+      InkWell(
+        child: Container(
+          width: 20,
+          padding: EdgeInsets.only(left: 2.0),
+          child: Icon(
+            Icons.close,
+            color: Colors.red,
           ),
-          width: 40,
         ),
-        SizedBox(
-          width: 10,
-        ),
-        SizedBox(
-          child: Text(product.productNo),
-          width: 80,
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Expanded(
-          child: Text(product.productName),
-        ),
-        QtyTextField(
+        onTap: () => _removeProduct(product),
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      SizedBox(
+        child: Container(child: Text(product.productNo)),
+        width: kWidthProductNo,
+      ),
+      SizedBox(
+        width: 2,
+      ),
+      Expanded(
+        child: Container(child: Text(product.productName)),
+      ),
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: QtyTextField(
           value: product.qty,
           minValue: 0,
-          maxValue: 10,
+          maxValue: 9999,
           onChangedValue: (value) {
             product.qty = value;
           },
-        )
-      ]),
-    );
+        ),
+      )
+    ]));
   }
 
   _buildBodySection(BuildContext context) {
@@ -210,12 +206,23 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
             children: [
               products.length == 0
                   ? Center(
-                      child: Text("No data"),
+                      child: Text(
+                          "Không có sản phẩm.Vui lòng bấm dấu + để thêm sản phẩm mới"),
                     )
                   : Column(children: [
-                      _buildListViewHeaderSection,
+                      Divider(
+                        color: Colors.black,
+                        thickness: 0.2,
+                      ),
+                      // _buildListViewHeaderSection,
                       Expanded(
-                          child: ListView.builder(
+                          child: ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return Divider(
+                                  color: Colors.black,
+                                  thickness: 0.2,
+                                );
+                              },
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return _buildListViewRowSection(

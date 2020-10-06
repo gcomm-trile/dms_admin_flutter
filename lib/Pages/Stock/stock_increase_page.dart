@@ -2,7 +2,10 @@ import 'dart:developer';
 
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
+import 'package:dms_admin/Pages/Stock/stock_increase_approve_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_import_page.dart';
+import 'package:dms_admin/components/loading.dart';
+import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 
@@ -19,62 +22,13 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
   @override
   void initState() {
     super.initState();
-    phieuNhap = API_HELPER.getPhieuNhap(widget.stockId);
-  }
-
-  Widget _buildSizedBox(double width) {
-    return SizedBox.fromSize(
-      size: Size.fromWidth(width),
-    );
-  }
-
-  Widget get _buildHeaderListViewSection {
-    return Row(children: <Widget>[
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Mã",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Tình trạng",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Expanded(
-        child: Container(
-          padding: EdgeInsets.only(left: 10),
-          width: 120,
-          child: Text(
-            "Người duyệt",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Ngày duyệt",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ]);
+    phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
   }
 
   Widget _buildListViewSection(List<PhieuNhap> data) {
     return ListView.separated(
         separatorBuilder: (context, index) {
-          return Divider(color: Colors.black, thickness: 1.0);
+          return Divider(color: Colors.black, thickness: 0.2);
         },
         itemBuilder: (context, index) {
           return _buildRowListViewSection(data[index]);
@@ -84,65 +38,116 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
 
   Widget _buildRowListViewSection(PhieuNhap item) {
     return InkWell(
-      onDoubleTap: () {
-        log("mở lại  đơn nhập cũ");
-        goToDetailPage(item.id);
-      },
-      child: Row(children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 10),
-          width: 120,
-          child: Text(
-            item.seq,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        onTap: () {
+          log("mở lại  đơn nhập cũ ${item.id}");
+          goToDetailPage(item.id, item);
+        },
+        child: Container(
+          child: Stack(
+            children: [
+              Container(
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+                height: 100,
+                child: Row(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.all(5.0),
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)),
+                        child: Center(
+                          child: Text(
+                            item.seqNo == null ? "N/A" : item.seqNo,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 25.0),
+                          ),
+                        )),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(Icons.call_made),
+                                Container(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(item.exportStockName == null
+                                        ? "N/A"
+                                        : item.exportStockName)),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(Icons.person),
+                                Container(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item.createdByFullname,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(Icons.timer),
+                                Container(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    item.createdOn,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                  right: 5.0,
+                  top: 5.0,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blueAccent)),
+                      child: Text(
+                        item.statusName,
+                        style: TextStyle(color: Colors.red),
+                      ))),
+            ],
           ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 10),
-          width: 120,
-          child: Text(
-            item.status,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.only(left: 10),
-            width: 120,
-            child: Text(
-              item.approvedBy,
-              textAlign: TextAlign.center,
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 10),
-          width: 120,
-          child: Text(
-            item.approvedOn,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ]),
-    );
+        ));
   }
 
-  void goToDetailPage(String phieuNhapId) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => StockIncreaseImportPage(
-              phieuNhapId: phieuNhapId, stockId: widget.stockId),
-        )).then((value) {
-      setState(() {
-        phieuNhap = API_HELPER.getPhieuNhap(widget.stockId);
+  void goToDetailPage(String id, PhieuNhap item) {
+    if (item != null &&
+        item.exportStockId != "00000000-0000-0000-0000-000000000000") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StockIncreaseApprovePage(
+              phieuXuatId: id,
+            ),
+          ));
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StockIncreaseImportPage(
+                phieuNhapId: id, stockId: widget.stockId),
+          )).then((value) {
+        setState(() {
+          phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
+        });
       });
-    });
+    }
   }
 
   Widget get _buildAddButtonSection {
@@ -154,7 +159,7 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
           child: Icon(Icons.add),
           onPressed: () {
             log("Thêm đơn nhập mới");
-            goToDetailPage(Guid.newGuid.toString());
+            goToDetailPage(Guid.newGuid.toString(), null);
           },
         ));
   }
@@ -171,8 +176,12 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
                       child: Text("No data"),
                     )
                   : Column(children: [
-                      _buildHeaderListViewSection,
-                      Divider(color: Colors.black, thickness: 3.0),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
                       Expanded(child: _buildListViewSection(snapshot.data))
                     ]),
               _buildAddButtonSection
@@ -181,7 +190,7 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
         } else if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingControl();
       },
     );
   }
