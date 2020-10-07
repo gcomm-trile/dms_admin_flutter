@@ -6,7 +6,9 @@ class Product {
   String description;
   int price;
   bool isActive;
-  String image_path;
+  int qty;
+  String imagePath;
+  int total;
 
   Product(
       {this.id,
@@ -16,7 +18,9 @@ class Product {
       this.description,
       this.price,
       this.isActive,
-      this.image_path});
+      this.qty,
+      this.imagePath,
+      this.total});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -26,8 +30,9 @@ class Product {
     description = json['description'];
     price = json['price'];
     isActive = json['is_active'];
-
-    image_path = json['image_path'];
+    qty = json['qty'];
+    imagePath = json['image_path'];
+    total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,9 +44,9 @@ class Product {
     data['description'] = this.description;
     data['price'] = this.price;
     data['is_active'] = this.isActive;
-    data['image_path'] = this.image_path;
+    data['qty'] = this.qty;
+    data['image_path'] = this.imagePath;
+    data['total'] = this.total;
     return data;
   }
-
-  static updateAsync() {}
 }

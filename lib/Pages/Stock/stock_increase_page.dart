@@ -135,7 +135,11 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
             builder: (context) => StockIncreaseApprovePage(
               phieuXuatId: id,
             ),
-          ));
+          )).then((value) {
+        setState(() {
+          phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
+        });
+      });
     } else {
       Navigator.push(
           context,

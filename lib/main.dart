@@ -1,3 +1,4 @@
+import 'package:dms_admin/Pages/Order/order_page.dart';
 import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:dms_admin/Pages/Login/login_page.dart';
 import 'package:dms_admin/Pages/Product/product_detail_page.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StockPage(),
+      home: OrderPage(),
     );
   }
 }

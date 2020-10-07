@@ -1,5 +1,7 @@
+import 'package:dms_admin/Pages/Order/order_page.dart';
 import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_page.dart';
+import 'package:dms_admin/Pages/Visit/visit_page.dart';
 import 'package:dms_admin/router.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +27,14 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => StockPage()));
+            },
+          ),
+          _createDrawerItem(
+            icon: Icons.event_busy,
+            text: 'Order',
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => OrderPage()));
             },
           ),
           Divider(),

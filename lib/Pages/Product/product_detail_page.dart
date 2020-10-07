@@ -73,7 +73,7 @@ class ProductDetailPage extends StatelessWidget {
 
   Widget get _productImageSection {
     return Row(
-      children: [ImagePicker(width: 150, height: 150, path: data.image_path)],
+      children: [ImagePicker(width: 150, height: 150, path: data.imagePath)],
     );
   }
 
@@ -96,7 +96,7 @@ class ProductDetailPage extends StatelessWidget {
                   product.name = _productNameController.text;
                   product.price = int.parse(_productPriceController.text);
                   product.isActive = true;
-                  product.image_path = data.image_path;
+                  product.imagePath = data.imagePath;
                   if (await API_HELPER.updateProduct(product) == true) {
                     _showToast(context);
                     Navigator.pop(context);

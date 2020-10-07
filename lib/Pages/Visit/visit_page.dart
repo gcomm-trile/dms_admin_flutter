@@ -7,18 +7,18 @@ import 'package:dms_admin/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ProductPage extends StatefulWidget {
-  static const String routeName = "/product";
-  ProductPage({Key key}) : super(key: key);
+class VisitPage extends StatefulWidget {
+  static const String routeName = "/visit";
+  VisitPage({Key key}) : super(key: key);
 
   @override
-  _ProductPageState createState() => _ProductPageState();
+  _VisitPageState createState() => _VisitPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _VisitPageState extends State<VisitPage> {
   Future<List<Product>> products;
-  List<Product> original_products = new List<Product>();
-  List<Product> search_products = new List<Product>();
+  List<Product> original_data = new List<Product>();
+  List<Product> search_data = new List<Product>();
 
   final formatter = new NumberFormat("#,###");
 
@@ -54,18 +54,18 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text("Products"),
+          title: Text("Viếng thăm"),
         ),
         drawer: AppDrawer(),
         body: FutureBuilder<List<Product>>(
           future: products,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              original_products = snapshot.data;
+              original_data = snapshot.data;
               if (editingController.text.isEmpty) {
-                search_products = original_products;
+                search_data = original_data;
               } else {
-                search_products = original_products
+                search_data = original_data
                     .where((element) => element.name
                         .toLowerCase()
                         .contains(editingController.text.toLowerCase()))
@@ -75,7 +75,7 @@ class _ProductPageState extends State<ProductPage> {
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
                   _searchSection,
-                  Expanded(child: _buildRowSearch(search_products))
+                  Expanded(child: _buildRowSearch(search_data))
                 ]),
               );
             } else if (snapshot.hasError) {
@@ -215,14 +215,14 @@ class _ProductPageState extends State<ProductPage> {
   void onSearchTextChanged(String value) async {
     if (value.isNotEmpty) {
       setState(() {
-        search_products = original_products
+        search_data = original_data
             .where((element) =>
                 element.name.toLowerCase().contains(value.toLowerCase()))
             .toList();
       });
     } else {
       setState(() {
-        search_products = original_products.where((element) => 1 == 1).toList();
+        search_data = original_data.where((element) => 1 == 1).toList();
       });
     }
     return;

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dms_admin/Models/inventory.dart';
+import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
@@ -179,6 +180,40 @@ class API_HELPER {
     }
   }
 
+  static Future<List<Order>> listOrder() async {
+    final jobsListAPIUrl = SERVER_URL + '/order';
+    print("get $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(
+      jobsListAPIUrl,
+      headers: getHeaders(),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((item) => new Order.fromJson(item)).toList();
+    } else {
+      print(response.body);
+      throw Exception('Failed to load jobs from API :${response.body}');
+    }
+  }
+
+  static Future<Order> getOrder(String order_id) async {
+    final jobsListAPIUrl = SERVER_URL + '/orderdetail?order_id=${order_id}';
+    print("get $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(
+      jobsListAPIUrl,
+      headers: getHeaders(),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+      final Map parsed = json.decode(response.body);
+      return Order.fromJson(parsed);
+    } else {
+      print(response.body);
+      throw Exception('Failed to load jobs from API :${response.body}');
+    }
+  }
+
   static Future<String> postPhieuNhapDetail(
       String import_stock_id,
       String export_stock_id,
@@ -215,7 +250,7 @@ class API_HELPER {
       log(response.body);
       return "";
     } else {
-      return "Failed to load jobs from API";
+      return response.body;
     }
   }
 
@@ -230,6 +265,20 @@ class API_HELPER {
       return "";
     } else {
       return response.body;
+    }
+  }
+
+  static Future<String> postDuyetXuatDonHang(
+      String order_id, String export_stock_id) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/OrderApproved?order_id=${order_id}&export_stock_id=${export_stock_id}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.post(jobsListAPIUrl, headers: getHeaders());
+    log(response.body);
+    if (response.statusCode == 200) {
+      return "";
+    } else {
+      return 'Lỗi ' + response.body;
     }
   }
 }
