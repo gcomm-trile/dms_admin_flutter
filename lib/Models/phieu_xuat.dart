@@ -13,6 +13,7 @@ class PhieuXuat {
   String approvedBy;
   int status;
   String statusName;
+  int type;
 
   PhieuXuat(
       {this.id,
@@ -28,7 +29,8 @@ class PhieuXuat {
       this.approvedByName,
       this.approvedBy,
       this.status,
-      this.statusName});
+      this.statusName,
+      this.type});
 
   PhieuXuat.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -45,6 +47,7 @@ class PhieuXuat {
     approvedBy = json['approved_by'];
     status = json['status'];
     statusName = json['status_name'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +66,7 @@ class PhieuXuat {
     data['approved_by'] = this.approvedBy;
     data['status'] = this.status;
     data['status_name'] = this.statusName;
+    data['type'] = this.type;
     return data;
   }
 }

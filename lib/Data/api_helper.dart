@@ -269,9 +269,9 @@ class API_HELPER {
   }
 
   static Future<String> postDuyetXuatDonHang(
-      String order_id, String export_stock_id) async {
+      String order_id, String export_stock_id, int status) async {
     final jobsListAPIUrl = SERVER_URL +
-        '/OrderApproved?order_id=${order_id}&export_stock_id=${export_stock_id}';
+        '/OrderApproved?order_id=${order_id}&export_stock_id=${export_stock_id}&status=${status}';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.post(jobsListAPIUrl, headers: getHeaders());
     log(response.body);

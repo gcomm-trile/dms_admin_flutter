@@ -7,6 +7,7 @@ import 'package:dms_admin/Pages/Order/order_detail_page.dart';
 import 'package:dms_admin/Pages/Order/order_detail_page.dart';
 import 'package:dms_admin/Pages/Product/product_detail_page.dart';
 import 'package:dms_admin/components/drawer.dart';
+import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +72,13 @@ class _OrderPageState extends State<OrderPage> {
                     SizedBox(
                       height: 5.0,
                     ),
-                    Expanded(child: _buildRowSearch(search_data))
+                    Expanded(child: _buildListViewSection(search_data))
                   ]),
                 );
               } else if (snapshot.hasError) {
-                return Center(child: Text("${snapshot.error}"));
+                return ErrorControl(
+                  error: snapshot.error,
+                );
               }
               return LoadingControl();
             },
@@ -83,20 +86,7 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  Widget _buildInfoItem(IconData iconData, String textInfo) {
-    return Container(
-      child: Row(
-        children: [
-          Icon(iconData),
-          Flexible(
-            child: Text(textInfo),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRowSearch(List<Order> data) {
+  Widget _buildListViewSection(List<Order> data) {
     return ListView.separated(
         separatorBuilder: (context, index) {
           return Divider(
@@ -106,32 +96,11 @@ class _OrderPageState extends State<OrderPage> {
         },
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return _buildRowListView(data[index]);
+          return _buildRowListViewSection(data[index]);
         });
   }
 
-  void onSearchTextChanged(String value) async {
-    if (value.isNotEmpty) {
-      setState(() {
-        search_data = original_data
-            .where((element) =>
-                element.seq.toLowerCase().contains(value.toLowerCase()))
-            .toList();
-      });
-    } else {
-      setState(() {
-        search_data = original_data.where((element) => 1 == 1).toList();
-      });
-    }
-    return;
-
-    // _userDetails.forEach((userDetail) {
-    //   if (userDetail.firstName.contains(text) || userDetail.lastName.contains(text))
-    //     _searchResult.add(userDetail);
-    // });
-  }
-
-  Widget _buildRowListView(Order item) {
+  Widget _buildRowListViewSection(Order item) {
     return InkWell(
         onTap: () {
           log("item search selected");
@@ -173,11 +142,11 @@ class _OrderPageState extends State<OrderPage> {
                   child: Container(
                     child: Column(
                       children: [
-                        _buildInfoItem(Icons.store, item.storeName),
-                        _buildInfoItem(
+                        _buildInfoItemSection(Icons.store, item.storeName),
+                        _buildInfoItemSection(
                             Icons.gps_fixed, item.storeAddress.toUpperCase()),
-                        _buildInfoItem(Icons.person, item.createdByName),
-                        _buildInfoItem(Icons.timer, item.createdOn),
+                        _buildInfoItemSection(Icons.person, item.createdByName),
+                        _buildInfoItemSection(Icons.timer, item.createdOn),
                       ],
                     ),
                   ),
@@ -192,16 +161,29 @@ class _OrderPageState extends State<OrderPage> {
                 opacity: 0.7,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: item.isExportedStock == true
+                    color: item.isExportStock == true
                         ? Colors.green
                         : Colors.red,
                   ),
                   child: Text(
-                    item.isExportedStock == true ? 'Đã duyệt' : 'Chưa duyệt',
+                    item.isExportStock == true ? 'Đã duyệt' : 'Chưa duyệt',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
               ))
         ]));
+  }
+
+  Widget _buildInfoItemSection(IconData iconData, String textInfo) {
+    return Container(
+      child: Row(
+        children: [
+          Icon(iconData),
+          Flexible(
+            child: Text(textInfo),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -2,7 +2,11 @@ import 'dart:developer';
 
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
+import 'package:dms_admin/Pages/Stock/stock_decrease_export_for_order_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_export_page.dart';
+import 'package:dms_admin/components/error.dart';
+import 'package:dms_admin/components/loading.dart';
+import 'package:dms_admin/components/row_info_section.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
@@ -37,8 +41,6 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
                         child: Text("No data"),
                       )
                     : Column(children: [
-                        // _buildHeaderListViewSection,
-
                         Expanded(child: _buildListViewSection(snapshot.data))
                       ]),
                 _buildAddButtonSection
@@ -46,60 +48,13 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
             ),
           );
         } else if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
+          return ErrorControl(
+            error: snapshot.error,
+          );
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingControl();
       },
     );
-  }
-
-  Widget _buildSizedBox(double width) {
-    return SizedBox.fromSize(
-      size: Size.fromWidth(width),
-    );
-  }
-
-  Widget get _buildHeaderListViewSection {
-    return Row(children: <Widget>[
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Mã",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Tình trạng",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Expanded(
-        child: Container(
-          padding: EdgeInsets.only(left: 10),
-          width: 120,
-          child: Text(
-            "Người duyệt",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 10),
-        width: 120,
-        child: Text(
-          "Ngày duyệt",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ]);
   }
 
   Widget _buildListViewSection(List<PhieuXuat> data) {
@@ -121,14 +76,20 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     return InkWell(
       onTap: () {
         log("mở lại  đơn cũ");
-        goToDetailPage(item.id);
+        if (item.type == 2) {
+          goToExportOrderDetail(item.id);
+        } else {
+          goToExportPageDetail(item.id);
+        }
       },
       child: Container(
         child: Stack(
           children: [
             Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: kPrimaryColor, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0)),
               height: 100,
               child: Row(
                 children: [
@@ -137,7 +98,9 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
                       height: 100,
                       width: 100,
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent)),
+                          border:
+                              Border.all(color: kPrimaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(8.0)),
                       child: Center(
                         child: Text(
                           item.seqNo,
@@ -145,67 +108,61 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
                         ),
                       )),
                   Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(Icons.call_received),
-                              Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(item.importStockName)),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(Icons.person),
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  item.createdByName,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(Icons.timer),
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  item.createdOn,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                    child: Container(
+                      child: Column(
+                        children: [
+                          RowInfoSection(
+                              iconData: item.type == 1
+                                  ? Icons.call_received
+                                  : Icons.store,
+                              text: item.importStockName),
+                          RowInfoSection(
+                              iconData: Icons.timer, text: item.createdOn),
+                          RowInfoSection(
+                              iconData: Icons.person, text: item.createdByName)
+                        ],
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
             Positioned(
-                right: 5.0,
-                top: 5.0,
-                child: Container(
+                right: 8,
+                top: 8,
+                child: Opacity(
+                  opacity: 0.7,
+                  child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent)),
+                      color: item.status == 1 ? Colors.red : Colors.green,
+                    ),
                     child: Text(
                       item.statusName,
-                      style: TextStyle(color: Colors.red),
-                    ))),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                )),
           ],
         ),
       ),
     );
   }
 
-  void goToDetailPage(String phieuXuatId) {
+  Widget get _buildAddButtonSection {
+    return Positioned(
+        right: 20,
+        bottom: 20,
+        height: 50,
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            log("Thêm đơn nhập mới");
+            goToExportPageDetail(Guid.newGuid.toString());
+          },
+        ));
+  }
+
+  void goToExportPageDetail(String phieuXuatId) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -218,17 +175,16 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     });
   }
 
-  Widget get _buildAddButtonSection {
-    return Positioned(
-        right: 20,
-        bottom: 20,
-        height: 50,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            log("Thêm đơn nhập mới");
-            goToDetailPage(Guid.newGuid.toString());
-          },
-        ));
+  void goToExportOrderDetail(String id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StockDecreaseExportForOrderPage(
+              order_id: id, stockId: widget.stockId),
+        )).then((value) {
+      setState(() {
+        phieuXuat = API_HELPER.listPhieuXuat(widget.stockId);
+      });
+    });
   }
 }

@@ -10,9 +10,9 @@ class Order {
   String note;
   String createdByName;
   String createdOn;
-  bool isExportedStock;
-  String exportedStockId;
-  String exportedStockName;
+  bool isExportStock;
+  String exportStockId;
+  String exportStockName;
   List<Product> products;
 
   Order(
@@ -25,9 +25,9 @@ class Order {
       this.note,
       this.createdByName,
       this.createdOn,
-      this.isExportedStock,
-      this.exportedStockId,
-      this.exportedStockName,
+      this.isExportStock,
+      this.exportStockId,
+      this.exportStockName,
       this.products});
 
   Order.fromJson(Map<String, dynamic> json) {
@@ -40,10 +40,9 @@ class Order {
     note = json['note'];
     createdByName = json['created_by_name'];
     createdOn = json['created_on'];
-    isExportedStock = json['is_exported_stock'];
-    exportedStockId = json['exported_stock_id'];
-    exportedStockName = json['exported_stock_name'];
-
+    isExportStock = json['is_export_stock'];
+    exportStockId = json['export_stock_id'];
+    exportStockName = json['export_stock_name'];
     if (json['products'] != null) {
       products = new List<Product>();
       json['products'].forEach((v) {
@@ -63,9 +62,9 @@ class Order {
     data['note'] = this.note;
     data['created_by_name'] = this.createdByName;
     data['created_on'] = this.createdOn;
-    data['is_exported_stock'] = this.isExportedStock;
-    data['exported_stock_id'] = this.exportedStockId;
-    data['exported_stock_name'] = this.exportedStockName;
+    data['is_export_stock'] = this.isExportStock;
+    data['export_stock_id'] = this.exportStockId;
+    data['export_stock_name'] = this.exportStockName;
     if (this.products != null) {
       data['products'] = this.products.map((v) => v.toJson()).toList();
     }

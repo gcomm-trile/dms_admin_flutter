@@ -5,6 +5,8 @@ import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
+import 'package:dms_admin/components/error.dart';
+import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
@@ -35,39 +37,6 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
         appBar: _buildAppbarSection(context), body: _buildBodySection(context));
   }
 
-  void _showPopupProduct(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: ProductSearchPage(
-              stock_id: widget.stockId,
-              savedData: (selectedProducts) {
-                setState(() {
-                  log("Đã chọn ${selectedProducts.length.toString()}");
-                  for (var selectedProduct in selectedProducts) {
-                    if (phieuXuatDetail.products
-                            .where((element) =>
-                                element.productId == selectedProduct.productId)
-                            .length ==
-                        0) {
-                      log("Đã chọn ${selectedProduct.productId.toString()}");
-                      log("Đã chọn ${selectedProduct.productName.toString()}");
-                      phieuXuatDetail.products.add(new PhieuXuatDetailProduct(
-                          productId: selectedProduct.productId,
-                          productNo: selectedProduct.productNo,
-                          productName: selectedProduct.productName,
-                          productPrice: selectedProduct.productPrice,
-                          qty: 0));
-                    }
-                  }
-                });
-              },
-            ),
-          );
-        });
-  }
-
   Widget _buildAppbarSection(BuildContext context) {
     return AppBar(
       title: Text("Chi tiết phiếu xuất"),
@@ -95,7 +64,8 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
           child: Container(
             width: 50.0,
             child: Icon(
-              Icons.done,
+              Icons.approval,
+              size: 50,
               color: Colors.white,
             ),
           ),
@@ -104,41 +74,27 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
     );
   }
 
-  Widget get _buildListViewHeaderSection {
-    return ListTile(
-      title: Row(children: <Widget>[
-        SizedBox(
-          child: Text(
-            "",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          width: 40,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        SizedBox(
-          child: Text(
-            "Mã",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          width: 80,
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Expanded(
-          child: Text("Tên",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        ),
-        SizedBox(
-          width: widthQuantibox,
-          child: Text("SL",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        ),
-      ]),
+  Widget _buildBodySection(BuildContext context) {
+    return FutureBuilder<PhieuXuatDetail>(
+      future: f_phieuXuatDetail,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          phieuXuatDetail = snapshot.data;
+          return Column(children: [
+            _buildImportStockSection(context, snapshot.data),
+            Divider(
+              thickness: 1.5,
+              color: Colors.black,
+            ),
+            Expanded(child: _buildListViewSection(snapshot.data.products))
+          ]);
+        } else if (snapshot.hasError) {
+          return ErrorControl(
+            error: snapshot.error,
+          );
+        }
+        return LoadingControl();
+      },
     );
   }
 
@@ -156,50 +112,45 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
         ));
   }
 
-  void _removeProduct(PhieuXuatDetailProduct product) {
-    setState(() {
-      phieuXuatDetail.products.remove(product);
-    });
-  }
-
-  Widget _buildListViewRowSection(PhieuXuatDetailProduct product) {
+  Widget _buildRowListViewSection(PhieuXuatDetailProduct product) {
     return Container(
-        child: ListTile(
-      title: Row(children: <Widget>[
-        GestureDetector(
-          onTap: () => _removeProduct(product),
-          child: Container(
-            padding: EdgeInsets.only(left: 5.0),
-            child: Icon(
-              Icons.close,
-              size: 30,
-              color: Colors.red,
-            ),
+        child: Row(children: <Widget>[
+      InkWell(
+        onTap: () => _removeProduct(product),
+        child: Container(
+          padding: EdgeInsets.only(left: 5.0),
+          child: Icon(
+            Icons.close,
+            size: 30,
+            color: Colors.red,
           ),
         ),
-        SizedBox(
-          child: Text(product.productNo),
-          width: kWidthProductNo,
+      ),
+      SizedBox(
+        width: 5.0,
+      ),
+      SizedBox(
+        child: Text(product.productNo),
+        width: kWidthProductNo,
+      ),
+      Expanded(
+        child: Text(product.productName),
+      ),
+      Container(
+        width: 110,
+        child: QtyTextField(
+          value: product.qty,
+          minValue: 0,
+          maxValue: 9999,
+          onChangedValue: (value) {
+            product.qty = value;
+          },
         ),
-        Expanded(
-          child: Text(product.productName),
-        ),
-        Container(
-          width: 110,
-          child: QtyTextField(
-            value: product.qty,
-            minValue: 0,
-            maxValue: 9999,
-            onChangedValue: (value) {
-              product.qty = value;
-            },
-          ),
-        )
-      ]),
-    ));
+      )
+    ]));
   }
 
-  Widget _buildItemsSection(List<PhieuXuatDetailProduct> products) {
+  Widget _buildListViewSection(List<PhieuXuatDetailProduct> products) {
     return Stack(
       children: [
         products.length == 0
@@ -212,13 +163,13 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                     child: ListView.separated(
                         separatorBuilder: (context, index) {
                           return Divider(
-                            thickness: 0.2,
-                            color: Colors.black,
+                            thickness: 0.4,
+                            color: kPrimaryColor,
                           );
                         },
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return _buildListViewRowSection(products[index]);
+                          return _buildRowListViewSection(products[index]);
                         },
                         itemCount: products.length))
               ]),
@@ -268,26 +219,43 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
     );
   }
 
-  _buildBodySection(BuildContext context) {
-    return FutureBuilder<PhieuXuatDetail>(
-      future: f_phieuXuatDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          phieuXuatDetail = snapshot.data;
-          return Column(children: [
-            _buildImportStockSection(context, snapshot.data),
-            Divider(
-              thickness: 1.5,
-              color: Colors.black,
+  void _removeProduct(PhieuXuatDetailProduct product) {
+    setState(() {
+      phieuXuatDetail.products.remove(product);
+    });
+  }
+
+  void _showPopupProduct(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: ProductSearchPage(
+              stock_id: widget.stockId,
+              savedData: (selectedProducts) {
+                setState(() {
+                  log("Đã chọn ${selectedProducts.length.toString()}");
+                  for (var selectedProduct in selectedProducts) {
+                    if (phieuXuatDetail.products
+                            .where((element) =>
+                                element.productId == selectedProduct.productId)
+                            .length ==
+                        0) {
+                      log("Đã chọn ${selectedProduct.productId.toString()}");
+                      log("Đã chọn ${selectedProduct.productName.toString()}");
+                      phieuXuatDetail.products.add(new PhieuXuatDetailProduct(
+                          productId: selectedProduct.productId,
+                          productNo: selectedProduct.productNo,
+                          productName: selectedProduct.productName,
+                          productPrice: selectedProduct.productPrice,
+                          qty: 0));
+                    }
+                  }
+                });
+              },
             ),
-            Expanded(child: _buildItemsSection(snapshot.data.products))
-          ]);
-        } else if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    );
+          );
+        });
   }
 
   void _showPopupSearchStock(BuildContext context) {
