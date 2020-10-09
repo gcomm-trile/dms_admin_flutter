@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
+import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/error.dart';
@@ -10,12 +11,11 @@ import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class StockDecreaseExportPage extends StatefulWidget {
   final String phieuXuatId;
-  final String stockId;
-  StockDecreaseExportPage({Key key, this.phieuXuatId, this.stockId})
-      : super(key: key);
+  StockDecreaseExportPage({Key key, this.phieuXuatId}) : super(key: key);
 
   @override
   _StockDecreaseExportPageState createState() =>
@@ -25,94 +25,144 @@ class StockDecreaseExportPage extends StatefulWidget {
 class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
   final double widthQuantibox = 80.0;
   Future<PhieuXuatDetail> f_phieuXuatDetail;
-  PhieuXuatDetail phieuXuatDetail;
+  PhieuXuatDetail data;
+  final formatter = new NumberFormat("#,###");
+  final TextStyle _style_header = TextStyle(
+      color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold);
+  final TextStyle _style_item = TextStyle(fontSize: 14.0);
+  final icon_size = 30.0;
+
   @override
   void initState() {
     super.initState();
-    f_phieuXuatDetail = API_HELPER.listPhieuXuatDetail(widget.phieuXuatId);
+    f_phieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
   }
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppbarSection(context), body: _buildBodySection(context));
-  }
-
-  Widget _buildAppbarSection(BuildContext context) {
+  Widget _buildAppbarSection(BuildContext context, int status) {
     return AppBar(
       title: Text("Chi tiết phiếu xuất"),
       actions: [
-        InkWell(
-          onTap: () {
-            API_HELPER
-                .postPhieuXuatDetail(
-                    phieuXuatDetail.importStockId,
-                    widget.stockId,
-                    '00000000-0000-0000-0000-000000000000',
-                    widget.phieuXuatId,
-                    phieuXuatDetail.products
-                        .where((element) => element.qty > 0)
-                        .toList())
-                .then((value) {
-              if (value.isEmpty) {
-                UI.showSuccess(context, "Đã cập nhật thành công");
-                Navigator.pop(context);
-              } else {
-                UI.showError(context, value);
-              }
-            });
-          },
-          child: Container(
-            width: 50.0,
-            child: Icon(
-              Icons.approval,
-              size: 50,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        (status != 0 && status != 1)
+            ? Container(
+                child: Text(''),
+              )
+            : InkWell(
+                onTap: () {
+                  API_HELPER
+                      .postPhieuXuatDetail(
+                          data.importStockId,
+                          data.exportStockId,
+                          '00000000-0000-0000-0000-000000000000',
+                          widget.phieuXuatId,
+                          data.products
+                              .where((element) => element.qty > 0)
+                              .toList())
+                      .then((value) {
+                    if (value.isEmpty) {
+                      UI.showSuccess(context, "Đã cập nhật thành công");
+                      Navigator.pop(context);
+                    } else {
+                      UI.showError(context, value);
+                    }
+                  });
+                },
+                child: Container(
+                  width: 50.0,
+                  child: Icon(
+                    Icons.approval,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
       ],
     );
   }
 
-  Widget _buildBodySection(BuildContext context) {
+  Widget build(BuildContext context) {
     return FutureBuilder<PhieuXuatDetail>(
       future: f_phieuXuatDetail,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          phieuXuatDetail = snapshot.data;
-          return Column(children: [
-            _buildImportStockSection(context, snapshot.data),
-            Divider(
-              thickness: 1.5,
-              color: Colors.black,
-            ),
-            Expanded(child: _buildListViewSection(snapshot.data.products))
-          ]);
-        } else if (snapshot.hasError) {
-          return ErrorControl(
-            error: snapshot.error,
+          data = snapshot.data;
+          return Scaffold(
+            appBar: _buildAppbarSection(context, data.status),
+            body: Stack(children: [
+              Column(children: [
+                _buildInfoSection(context, snapshot.data),
+                Divider(
+                  thickness: 1.5,
+                  color: Colors.black,
+                ),
+                _buildHeaderListView,
+                Divider(
+                  thickness: 1.5,
+                  color: Colors.black,
+                ),
+                Expanded(child: _buildListViewSection(snapshot.data.products))
+              ]),
+              // Positioned(
+              //   child: Align(
+              //     alignment: Alignment.center,
+              //     child: Opacity(
+              //         opacity: 0.5,
+              //         child: Image.asset(
+              //           snapshot.data.status == 2
+              //               ? 'assets/images/approved.jpg'
+              //               : 'assets/images/pending.jpg',
+              //           height: 150,
+              //           width: 150,
+              //         )),
+              //   ),
+              // ),
+            ]),
           );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+              appBar: _buildAppbarSection(context, 0),
+              body: ErrorControl(
+                error: snapshot.error,
+              ));
         }
-        return LoadingControl();
+        return Scaffold(
+            appBar: _buildAppbarSection(context, 0), body: LoadingControl());
       },
     );
   }
 
-  Widget get _buildAddProductSection {
-    return Positioned(
-        right: 20,
-        bottom: 20,
-        height: 50,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            log("Thêm sản phẩm mới");
-            _showPopupProduct(context);
-          },
-        ));
+  Widget get _buildHeaderListView {
+    return Container(
+      child: Row(
+        children: [
+          SizedBox(
+            width: 30,
+          ),
+          Expanded(
+            child: Container(
+              child: Text(
+                "Tên SP",
+                style: _style_header,
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ),
+          SizedBox(
+              width: 110,
+              child: Container(
+                  child: Text(
+                "SL",
+                style: _style_header,
+                textAlign: TextAlign.center,
+              ))),
+          SizedBox(
+            width: 5.0,
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _buildRowListViewSection(PhieuXuatDetailProduct product) {
+  Widget _buildRowListViewSection(Product product) {
     return Container(
         child: Row(children: <Widget>[
       InkWell(
@@ -129,12 +179,8 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
       SizedBox(
         width: 5.0,
       ),
-      SizedBox(
-        child: Text(product.productNo),
-        width: kWidthProductNo,
-      ),
       Expanded(
-        child: Text(product.productName),
+        child: Text(product.name),
       ),
       Container(
         width: 110,
@@ -146,11 +192,14 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
             product.qty = value;
           },
         ),
-      )
+      ),
+      SizedBox(
+        width: 5.0,
+      ),
     ]));
   }
 
-  Widget _buildListViewSection(List<PhieuXuatDetailProduct> products) {
+  Widget _buildListViewSection(List<Product> products) {
     return Stack(
       children: [
         products.length == 0
@@ -178,76 +227,157 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
     );
   }
 
+  Widget _buildInfoSection(BuildContext context, PhieuXuatDetail data) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [_buildImportStockSection(context, data)],
+      ),
+    );
+  }
+
   Widget _buildImportStockSection(
       BuildContext context, PhieuXuatDetail phieuXuatDetail) {
     return Container(
       padding: EdgeInsets.all(10.0),
-      child: Row(
+      child: Column(
         children: [
-          Text(
-            "Kho nhận:",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text(
-              (phieuXuatDetail.importStockName == null)
-                  ? "Chưa có kho nhận"
-                  : phieuXuatDetail.importStockName,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold)),
-          SizedBox(
-            width: 10.0,
-          ),
-          InkWell(
-            onTap: () => _showPopupSearchStock(context),
-            child: Container(
-              child: Icon(
-                Icons.search,
-                color: kPrimaryColor,
+          Row(
+            children: [
+              Container(
+                child: Icon(
+                  Icons.call_received,
+                  size: 50.0,
+                ),
               ),
-            ),
+              SizedBox(
+                width: 10.0,
+              ),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: StockSearchPage(
+                            savedData: (selectedStock) {
+                              setState(() {
+                                data.importStockId = selectedStock.id;
+                                data.importStockName = selectedStock.name;
+                              });
+                            },
+                          ),
+                        );
+                      });
+                },
+                child: Text(
+                    (phieuXuatDetail.importStockName == null)
+                        ? "Chưa có kho nhận"
+                        : phieuXuatDetail.importStockName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                child: Icon(
+                  Icons.call_made,
+                  size: 50.0,
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: StockSearchPage(
+                            savedData: (selectedStock) {
+                              setState(() {
+                                data.exportStockId = selectedStock.id;
+                                data.exportStockName = selectedStock.name;
+                              });
+                            },
+                          ),
+                        );
+                      });
+                },
+                child: Text(
+                    (phieuXuatDetail.exportStockName == null)
+                        ? "Chưa có kho xuất"
+                        : phieuXuatDetail.exportStockName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  void _removeProduct(PhieuXuatDetailProduct product) {
+  Widget get _buildAddProductSection {
+    return Positioned(
+        right: 20,
+        bottom: 20,
+        height: 50,
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            log("Thêm sản phẩm mới");
+            _showPopupProduct(context);
+          },
+        ));
+  }
+
+  void _removeProduct(Product product) {
     setState(() {
-      phieuXuatDetail.products.remove(product);
+      data.products.remove(product);
     });
   }
 
   void _showPopupProduct(BuildContext context) {
+    if (data.exportStockId == null || data.exportStockId == kDefaultGuildId) {
+      UI.showError(context, 'Chưa chọn kho xuất');
+      return;
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             content: ProductSearchPage(
-              stock_id: widget.stockId,
+              stock_id: data.exportStockId,
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
                   for (var selectedProduct in selectedProducts) {
-                    if (phieuXuatDetail.products
+                    if (data.products
                             .where((element) =>
-                                element.productId == selectedProduct.productId)
+                                element.id == selectedProduct.productId)
                             .length ==
                         0) {
                       log("Đã chọn ${selectedProduct.productId.toString()}");
                       log("Đã chọn ${selectedProduct.productName.toString()}");
-                      phieuXuatDetail.products.add(new PhieuXuatDetailProduct(
-                          productId: selectedProduct.productId,
-                          productNo: selectedProduct.productNo,
-                          productName: selectedProduct.productName,
-                          productPrice: selectedProduct.productPrice,
+                      data.products.add(new Product(
+                          id: selectedProduct.productId,
+                          no: selectedProduct.productNo,
+                          name: selectedProduct.productName,
+                          price: selectedProduct.productPrice,
                           qty: 0));
                     }
                   }
@@ -266,8 +396,8 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
             content: StockSearchPage(
               savedData: (selectedStock) {
                 setState(() {
-                  phieuXuatDetail.importStockId = selectedStock.id;
-                  phieuXuatDetail.importStockName = selectedStock.name;
+                  data.importStockId = selectedStock.id;
+                  data.importStockName = selectedStock.name;
                 });
               },
             ),

@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
+import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
+import 'package:dms_admin/components/header_listview_product.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -23,10 +25,11 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
   final double widthQuantibox = 80.0;
   Future<PhieuXuatDetail> f_phieuXuatDetail;
   PhieuXuatDetail phieuXuatDetail;
+  final TextStyle _style_item = TextStyle(fontSize: 14.0);
   @override
   void initState() {
     super.initState();
-    f_phieuXuatDetail = API_HELPER.listPhieuXuatDetail(widget.phieuXuatId);
+    f_phieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
   }
 
   Widget build(BuildContext context) {
@@ -38,29 +41,38 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
     return AppBar(title: Text("Nhận phiếu xuất"));
   }
 
-  Widget _buildListViewRowSection(PhieuXuatDetailProduct product, int index) {
+  Widget _buildListViewRowSection(Product product, int index) {
     return Container(
-        child: ListTile(
-      title: Row(children: <Widget>[
-        SizedBox(
-          child: Text('#${(index + 1).toString()}.'),
-          width: 30,
+        child: Row(children: <Widget>[
+      SizedBox(
+        child: Text(
+          '${(index + 1).toString()}.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        SizedBox(
-          child: Text(product.productNo),
-          width: kWidthProductNo,
+        width: 30,
+      ),
+      Expanded(
+        child: Text(
+          product.name,
+          style: _style_item,
         ),
-        Expanded(
-          child: Text(product.productName),
-        ),
-        SizedBox(
-          child: Text('SL: ${product.qty.toString()}'),
-        ),
-      ]),
-    ));
+      ),
+      SizedBox(
+          width: 80.0,
+          child: Container(
+              child: Text(
+            product.qty.toString(),
+            textAlign: TextAlign.center,
+            style: _style_item,
+          ))),
+      SizedBox(
+        width: 5.0,
+      ),
+    ]));
   }
 
-  Widget _buildItemsSection(List<PhieuXuatDetailProduct> products, int status) {
+  Widget _buildItemsSection(List<Product> products, int status) {
     return Stack(
       children: [
         products.length == 0
@@ -70,12 +82,18 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
             : Stack(
                 children: [
                   Column(children: [
-                    // _buildListViewHeaderSection,
+                    HeaderListViewProduct(
+                      sized_qty: 80,
+                    ),
+                    Divider(
+                      thickness: 1.5,
+                      color: Colors.black,
+                    ),
                     Expanded(
                         child: ListView.separated(
                             separatorBuilder: (context, index) {
                               return Divider(
-                                thickness: 0.2,
+                                thickness: 0.5,
                                 color: Colors.black,
                               );
                             },

@@ -1,17 +1,21 @@
+import 'package:dms_admin/Models/product.dart';
+
 class PhieuXuatDetail {
   String id;
-  String seq;
+  int seq;
+  String seqNo;
   String exportStockId;
   String exportStockName;
   String importStockId;
   String importStockName;
   int status;
   String statusName;
-  List<PhieuXuatDetailProduct> products;
+  List<Product> products;
 
   PhieuXuatDetail(
       {this.id,
       this.seq,
+      this.seqNo,
       this.importStockId,
       this.importStockName,
       this.exportStockId,
@@ -23,6 +27,7 @@ class PhieuXuatDetail {
   PhieuXuatDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     seq = json['seq'];
+    seqNo = json['seq_no'];
     importStockId = json['import_stock_id'];
     importStockName = json['import_stock_name'];
     exportStockId = json['export_stock_id'];
@@ -30,9 +35,9 @@ class PhieuXuatDetail {
     status = json['status'];
     statusName = json['status_name'];
     if (json['products'] != null) {
-      products = new List<PhieuXuatDetailProduct>();
+      products = new List<Product>();
       json['products'].forEach((v) {
-        products.add(new PhieuXuatDetailProduct.fromJson(v));
+        products.add(new Product.fromJson(v));
       });
     }
   }
@@ -41,6 +46,7 @@ class PhieuXuatDetail {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['seq'] = this.seq;
+    data['seq_no'] = this.seqNo;
     data['import_stock_id'] = this.importStockId;
     data['import_stock_name'] = this.importStockName;
     data['export_stock_id'] = this.exportStockId;
@@ -50,39 +56,6 @@ class PhieuXuatDetail {
     if (this.products != null) {
       data['products'] = this.products.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class PhieuXuatDetailProduct {
-  int productId;
-  int qty;
-  String productNo;
-  String productName;
-  int productPrice;
-
-  PhieuXuatDetailProduct(
-      {this.productId,
-      this.qty,
-      this.productNo,
-      this.productName,
-      this.productPrice});
-
-  PhieuXuatDetailProduct.fromJson(Map<String, dynamic> json) {
-    productId = json['product_id'];
-    qty = json['qty'];
-    productNo = json['product_no'];
-    productName = json['product_name'];
-    productPrice = json['product_price'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product_id'] = this.productId;
-    data['qty'] = this.qty;
-    data['product_no'] = this.productNo;
-    data['product_name'] = this.productName;
-    data['product_price'] = this.productPrice;
     return data;
   }
 }

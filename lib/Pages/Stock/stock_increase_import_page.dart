@@ -3,16 +3,21 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
+import 'package:dms_admin/Models/phieu_xuat_detail.dart';
+import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
+import 'package:dms_admin/components/error.dart';
+import 'package:dms_admin/components/header_listview_product.dart';
+import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 
 class StockIncreaseImportPage extends StatefulWidget {
   final String phieuNhapId;
-  final String stockId;
-  StockIncreaseImportPage({Key key, this.phieuNhapId, this.stockId})
-      : super(key: key);
+
+  StockIncreaseImportPage({Key key, this.phieuNhapId}) : super(key: key);
 
   @override
   _StockIncreaseImportPageState createState() =>
@@ -20,44 +25,54 @@ class StockIncreaseImportPage extends StatefulWidget {
 }
 
 class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
-  Future<List<PhieuNhapDetail>> phieuNhapDetails;
-  List<PhieuNhapDetail> products;
+  Future<PhieuNhapDetail> phieuNhapDetail;
+  PhieuNhapDetail data;
+
   @override
   void initState() {
     super.initState();
-    phieuNhapDetails = API_HELPER.listPhieuNhapDetail(widget.phieuNhapId);
+    phieuNhapDetail = API_HELPER.getPhieuNhapDetail(widget.phieuNhapId);
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _buildAppbarSection(context), body: _buildBodySection(context));
+      appBar: _buildAppbarSection(context),
+      body: _buildBodySection(context),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => _showPopupProduct(context),
+          child: Icon(Icons.add, size: kSizeIconAddButton)),
+    );
   }
 
   void _showPopupProduct(BuildContext context) {
+    if (data.importStockId == null || data.importStockId == kDefaultGuildId) {
+      UI.showError(context, 'Chọn kho nhập trước');
+      return;
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             content: ProductSearchPage(
-              stock_id: widget.stockId,
+              stock_id: data.importStockId,
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
-                  log("Đang có ${products.length.toString()}");
+                  log("Đang có ${data.products.length.toString()}");
                   for (var selectedProduct in selectedProducts) {
                     print("check ${selectedProduct.productId}");
-                    if (products
+                    if (data.products
                             .where((element) =>
-                                element.productId == selectedProduct.productId)
+                                element.id == selectedProduct.productId)
                             .length ==
                         0) {
                       log("Đã chọn ${selectedProduct.productId.toString()}");
                       log("Đã chọn ${selectedProduct.productName.toString()}");
-                      products.add(new PhieuNhapDetail(
-                          productId: selectedProduct.productId,
-                          productNo: selectedProduct.productNo,
-                          productName: selectedProduct.productName,
-                          productPrice: selectedProduct.productPrice,
+                      data.products.add(new Product(
+                          id: selectedProduct.productId,
+                          no: selectedProduct.productNo,
+                          name: selectedProduct.productName,
+                          price: selectedProduct.productPrice,
                           qty: 0));
                     }
                   }
@@ -73,15 +88,22 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
       title: Text("Nhập trực tiếp"),
       actions: [
         InkWell(
-            child: Container(width: 50, child: Icon(Icons.done)),
+            child: Container(
+                width: 50,
+                child: Icon(
+                  Icons.approval,
+                  size: 50.0,
+                )),
             onTap: () {
               API_HELPER
                   .postPhieuNhapDetail(
-                      widget.stockId,
+                      data.importStockId,
                       '00000000-0000-0000-0000-000000000000',
                       widget.phieuNhapId,
                       '00000000-0000-0000-0000-000000000000',
-                      products.where((element) => element.qty > 0).toList())
+                      data.products
+                          .where((element) => element.qty > 0)
+                          .toList())
                   .then((value) {
                 if (value.isEmpty) {
                   UI.showSuccess(context, "Đã cập nhật thành công");
@@ -95,68 +117,16 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
     );
   }
 
-  Widget get _buildListViewHeaderSection {
-    return ListTile(
-      title: Row(children: <Widget>[
-        SizedBox(
-          child: Text(
-            "",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          width: 40,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        SizedBox(
-          child: Text(
-            "Mã",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          width: 80,
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Expanded(
-          child: Text("Tên",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        ),
-        SizedBox(
-          width: widthQuantibox,
-          child: Text("SL",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        ),
-      ]),
-    );
-  }
-
   final double widthQuantibox = 80.0;
-  Widget get _buildAddProductSection {
-    return Positioned(
-        right: 20,
-        bottom: 20,
-        height: 50,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            log("Thêm sản phẩm mới");
-            _showPopupProduct(context);
-          },
-        ));
-  }
 
-  void _removeProduct(PhieuNhapDetail product) {
+  void _removeProduct(Product product) {
     setState(() {
-      products.remove(product);
+      data.products.remove(product);
     });
   }
 
-  Widget _buildListViewRowSection(PhieuNhapDetail product) {
-    return ListTile(
-        title: Row(children: <Widget>[
+  Widget _buildListViewRowSection(Product product) {
+    return Row(children: <Widget>[
       InkWell(
         child: Container(
           width: 20,
@@ -171,15 +141,8 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
       SizedBox(
         width: 10,
       ),
-      SizedBox(
-        child: Container(child: Text(product.productNo)),
-        width: kWidthProductNo,
-      ),
-      SizedBox(
-        width: 2,
-      ),
       Expanded(
-        child: Container(child: Text(product.productName)),
+        child: Container(child: Text(product.name)),
       ),
       Container(
         width: 110,
@@ -193,50 +156,108 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
           },
         ),
       )
-    ]));
+    ]);
+  }
+
+  _buildInfoSection(BuildContext context, PhieuNhapDetail phieuNhapDetail) {
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.call_received, size: 30.0),
+              SizedBox(
+                width: 10.0,
+              ),
+              InkWell(
+                  onTap: () {
+                    print('open select import stock');
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: StockSearchPage(
+                              savedData: (selectedItem) {
+                                setState(() {
+                                  data.importStockId = selectedItem.id;
+                                  data.importStockName = selectedItem.name;
+                                });
+                              },
+                            ),
+                          );
+                        });
+                  },
+                  child: Expanded(
+                      child: Text(
+                    phieuNhapDetail.importStockName == null
+                        ? "CHỌN KHO NHẬP"
+                        : phieuNhapDetail.importStockName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0),
+                  )))
+            ],
+          ),
+          Divider(
+            color: Colors.black,
+            thickness: 1.5,
+          ),
+        ],
+      ),
+    );
   }
 
   _buildBodySection(BuildContext context) {
-    return FutureBuilder<List<PhieuNhapDetail>>(
-      future: phieuNhapDetails,
+    return FutureBuilder<PhieuNhapDetail>(
+      future: phieuNhapDetail,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          products = snapshot.data;
-          return Stack(
+          data = snapshot.data;
+
+          return Column(
             children: [
-              products.length == 0
-                  ? Center(
-                      child: Text(
-                          "Không có sản phẩm.Vui lòng bấm dấu + để thêm sản phẩm mới"),
-                    )
-                  : Column(children: [
-                      Divider(
-                        color: Colors.black,
-                        thickness: 0.2,
+              _buildInfoSection(context, data),
+              data.products.length == 0
+                  ? Expanded(
+                      child: Center(
+                        child: Text(
+                            "Không có sản phẩm.Vui lòng bấm dấu + để thêm sản phẩm mới"),
                       ),
-                      // _buildListViewHeaderSection,
-                      Expanded(
-                          child: ListView.separated(
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  color: Colors.black,
-                                  thickness: 0.2,
-                                );
-                              },
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return _buildListViewRowSection(
-                                    products[index]);
-                              },
-                              itemCount: products.length))
-                    ]),
-              _buildAddProductSection
+                    )
+                  : HeaderListViewProduct(
+                      sized_qty: 110.0,
+                    ),
+              data.products.length == 0
+                  ? SizedBox(
+                      height: 0.0,
+                    )
+                  : Divider(thickness: 1.5, color: Colors.black),
+              data.products.length == 0
+                  ? SizedBox(
+                      height: 0.0,
+                    )
+                  : Expanded(
+                      child: ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              color: Colors.black,
+                              thickness: 0.2,
+                            );
+                          },
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return _buildListViewRowSection(
+                                data.products[index]);
+                          },
+                          itemCount: data.products.length))
             ],
           );
         } else if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
+          return ErrorControl(error: snapshot.error);
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingControl();
       },
     );
   }

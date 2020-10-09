@@ -1,36 +1,77 @@
+import 'package:dms_admin/Models/product.dart';
+
 class PhieuNhapDetail {
-  int productId;
-  int qty;
-  String stockId;
-  String productNo;
-  String productName;
-  int productPrice;
+  String id;
+  String importStockId;
+  String importStockName;
+  String exportStockId;
+  String exportStockName;
+  int seq;
+  String seqNo;
+  String createdByFullname;
+  String createdOn;
+  String approvedByFullname;
+  String approvedOn;
+  int status;
+  String statusName;
+  List<Product> products;
 
   PhieuNhapDetail(
-      {this.productId,
-      this.qty,
-      this.stockId,
-      this.productNo,
-      this.productName,
-      this.productPrice});
+      {this.id,
+      this.importStockId,
+      this.importStockName,
+      this.exportStockId,
+      this.exportStockName,
+      this.seq,
+      this.seqNo,
+      this.createdByFullname,
+      this.createdOn,
+      this.approvedByFullname,
+      this.approvedOn,
+      this.status,
+      this.statusName,
+      this.products});
 
   PhieuNhapDetail.fromJson(Map<String, dynamic> json) {
-    productId = json['product_id'];
-    qty = json['qty'];
-    stockId = json['stock_id'];
-    productNo = json['product_no'];
-    productName = json['product_name'];
-    productPrice = json['product_price'];
+    id = json['id'];
+    importStockId = json['import_stock_id'];
+    importStockName = json['import_stock_name'];
+    exportStockId = json['export_stock_id'];
+    exportStockName = json['export_stock_name'];
+    seq = json['seq'];
+    seqNo = json['seq_no'];
+    createdByFullname = json['created_by_fullname'];
+    createdOn = json['created_on'];
+    approvedByFullname = json['approved_by_fullname'];
+    approvedOn = json['approved_on'];
+    status = json['status'];
+    statusName = json['status_name'];
+    if (json['products'] != null) {
+      products = new List<Product>();
+      json['products'].forEach((v) {
+        products.add(new Product.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product_id'] = this.productId;
-    data['qty'] = this.qty;
-    data['stock_id'] = this.stockId;
-    data['product_no'] = this.productNo;
-    data['product_name'] = this.productName;
-    data['product_price'] = this.productPrice;
+    data['id'] = this.id;
+    data['import_stock_id'] = this.importStockId;
+    data['import_stock_name'] = this.importStockName;
+    data['export_stock_id'] = this.exportStockId;
+    data['export_stock_name'] = this.exportStockName;
+    data['seq'] = this.seq;
+    data['seq_no'] = this.seqNo;
+    data['created_by_fullname'] = this.createdByFullname;
+    data['created_on'] = this.createdOn;
+    data['approved_by_fullname'] = this.approvedByFullname;
+    data['approved_on'] = this.approvedOn;
+    data['status'] = this.status;
+    data['status_name'] = this.statusName;
+    if (this.products != null) {
+      data['products'] = this.products.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

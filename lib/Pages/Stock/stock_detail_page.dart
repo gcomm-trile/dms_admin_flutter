@@ -15,7 +15,7 @@ class StockDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: KeyboardDismisser(
         child: Scaffold(
           appBar: AppBar(
@@ -44,11 +44,7 @@ class StockDetailPage extends StatelessWidget {
           body: TabBarView(
             children: [
               StockInfoPage(data),
-              StockCountProductPage(
-                stock_id: data.id,
-              ),
-              StockIncreasePage(stockId: data.id),
-              StockDecreasePage(stockId: data.id),
+              StockDecreasePage(),
             ],
           ),
         ),

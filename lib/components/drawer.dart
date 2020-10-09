@@ -1,5 +1,9 @@
+import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Order/order_page.dart';
 import 'package:dms_admin/Pages/Product/product_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_page.dart';
 import 'package:dms_admin/Pages/Visit/visit_page.dart';
 import 'package:dms_admin/router.dart';
@@ -14,19 +18,38 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
-            icon: Icons.add_box,
-            text: 'product',
+            icon: Icons.dashboard,
+            text: 'Dashboard',
             onTap: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => ProductPage()));
+                  MaterialPageRoute(builder: (context) => DashboardPage()));
+            },
+          ),
+          Divider(thickness: 1.5, color: Colors.black),
+          _createDrawerItem(
+            icon: Icons.inventory,
+            text: 'Tồn kho',
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StockCountProductPage()));
             },
           ),
           _createDrawerItem(
-            icon: Icons.inventory,
-            text: 'Kho',
+            icon: Icons.call_received,
+            text: 'Nhập kho',
             onTap: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => StockPage()));
+                  MaterialPageRoute(builder: (context) => StockIncreasePage()));
+            },
+          ),
+          _createDrawerItem(
+            icon: Icons.call_made,
+            text: 'Xuất kho',
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => StockDecreasePage()));
             },
           ),
           _createDrawerItem(
@@ -37,7 +60,7 @@ class AppDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => OrderPage()));
             },
           ),
-          Divider(),
+          Divider(thickness: 1.5, color: Colors.black),
           ListTile(
             title: Text('0.0.1'),
             onTap: () {},

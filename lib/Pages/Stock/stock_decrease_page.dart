@@ -4,6 +4,7 @@ import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_export_for_order_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_export_page.dart';
+import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/row_info_section.dart';
@@ -12,8 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 
 class StockDecreasePage extends StatefulWidget {
-  final String stockId;
-  StockDecreasePage({Key key, this.stockId}) : super(key: key);
+  StockDecreasePage({Key key}) : super(key: key);
 
   @override
   _StockDecreasePageState createState() => _StockDecreasePageState();
@@ -24,36 +24,40 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
   @override
   void initState() {
     super.initState();
-    phieuXuat = API_HELPER.listPhieuXuat(widget.stockId);
+    phieuXuat = API_HELPER.listPhieuXuat();
   }
 
   Widget build(BuildContext context) {
-    return FutureBuilder<List<PhieuXuat>>(
-      future: phieuXuat,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            margin: EdgeInsets.all(10.0),
-            child: Stack(
-              children: [
-                snapshot.data.length == 0
-                    ? Center(
-                        child: Text("No data"),
-                      )
-                    : Column(children: [
-                        Expanded(child: _buildListViewSection(snapshot.data))
-                      ]),
-                _buildAddButtonSection
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return ErrorControl(
-            error: snapshot.error,
-          );
-        }
-        return LoadingControl();
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('Xuất kho')),
+      drawer: AppDrawer(),
+      body: FutureBuilder<List<PhieuXuat>>(
+        future: phieuXuat,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              margin: EdgeInsets.all(10.0),
+              child: Stack(
+                children: [
+                  snapshot.data.length == 0
+                      ? Center(
+                          child: Text("No data"),
+                        )
+                      : Column(children: [
+                          Expanded(child: _buildListViewSection(snapshot.data))
+                        ]),
+                  _buildAddButtonSection
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return ErrorControl(
+              error: snapshot.error,
+            );
+          }
+          return LoadingControl();
+        },
+      ),
     );
   }
 
@@ -166,11 +170,11 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StockDecreaseExportPage(
-              phieuXuatId: phieuXuatId, stockId: widget.stockId),
+          builder: (context) =>
+              StockDecreaseExportPage(phieuXuatId: phieuXuatId),
         )).then((value) {
       setState(() {
-        phieuXuat = API_HELPER.listPhieuXuat(widget.stockId);
+        phieuXuat = API_HELPER.listPhieuXuat();
       });
     });
   }
@@ -179,11 +183,10 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StockDecreaseExportForOrderPage(
-              order_id: id, stockId: widget.stockId),
+          builder: (context) => StockDecreaseExportForOrderPage(order_id: id),
         )).then((value) {
       setState(() {
-        phieuXuat = API_HELPER.listPhieuXuat(widget.stockId);
+        phieuXuat = API_HELPER.listPhieuXuat();
       });
     });
   }

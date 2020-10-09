@@ -4,14 +4,15 @@ import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_approve_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_import_page.dart';
+import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
+import 'package:dms_admin/components/row_info_section.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 
 class StockIncreasePage extends StatefulWidget {
-  final String stockId;
-  StockIncreasePage({Key key, this.stockId}) : super(key: key);
+  StockIncreasePage({Key key}) : super(key: key);
 
   @override
   _StockIncreasePageState createState() => _StockIncreasePageState();
@@ -22,13 +23,16 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
   @override
   void initState() {
     super.initState();
-    phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
+    phieuNhap = API_HELPER.listPhieuNhap();
   }
 
   Widget _buildListViewSection(List<PhieuNhap> data) {
     return ListView.separated(
         separatorBuilder: (context, index) {
-          return Divider(color: Colors.black, thickness: 0.2);
+          return Divider(
+            thickness: 0.5,
+            color: Colors.black,
+          );
         },
         itemBuilder: (context, index) {
           return _buildRowListViewSection(data[index]);
@@ -46,8 +50,10 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
           child: Stack(
             children: [
               Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+                margin: EdgeInsets.all(1.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: kPrimaryColor, width: 2.0),
+                    borderRadius: BorderRadius.circular(8.0)),
                 height: 100,
                 child: Row(
                   children: [
@@ -56,71 +62,53 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
                         height: 100,
                         width: 100,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)),
+                            border: Border.all(
+                                color: kPrimaryLightColor, width: 2.0),
+                            borderRadius: BorderRadius.circular(8.0)),
                         child: Center(
                           child: Text(
-                            item.seqNo == null ? "N/A" : item.seqNo,
+                            item.seqNo == null ? 'N/A' : item.seqNo,
                             style:
                                 TextStyle(color: Colors.black, fontSize: 25.0),
                           ),
                         )),
                     Expanded(
-                      child: Column(
-                        children: [
-                          Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.call_made),
-                                Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(item.exportStockName == null
-                                        ? "N/A"
-                                        : item.exportStockName)),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.person),
-                                Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    item.createdByFullname,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.timer),
-                                Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    item.createdOn,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                      child: Container(
+                        child: Column(
+                          children: [
+                            RowInfoSection(
+                                iconData: Icons.call_received,
+                                text: item.importStockName),
+                            RowInfoSection(
+                                iconData: Icons.call_made,
+                                text: item.exportStockName),
+                            RowInfoSection(
+                                iconData: Icons.timer, text: item.createdOn),
+                            RowInfoSection(
+                                iconData: Icons.person,
+                                text: item.createdByFullname)
+                          ],
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               Positioned(
-                  right: 5.0,
-                  top: 5.0,
-                  child: Container(
+                  right: 8,
+                  top: 8,
+                  child: Opacity(
+                    opacity: 0.7,
+                    child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent)),
+                        color: item.status == 1 ? Colors.red : Colors.green,
+                      ),
                       child: Text(
                         item.statusName,
-                        style: TextStyle(color: Colors.red),
-                      ))),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )),
             ],
           ),
         ));
@@ -137,18 +125,17 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
             ),
           )).then((value) {
         setState(() {
-          phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
+          phieuNhap = API_HELPER.listPhieuNhap();
         });
       });
     } else {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StockIncreaseImportPage(
-                phieuNhapId: id, stockId: widget.stockId),
+            builder: (context) => StockIncreaseImportPage(phieuNhapId: id),
           )).then((value) {
         setState(() {
-          phieuNhap = API_HELPER.listPhieuNhap(widget.stockId);
+          phieuNhap = API_HELPER.listPhieuNhap();
         });
       });
     }
@@ -169,33 +156,34 @@ class _StockIncreasePageState extends State<StockIncreasePage> {
   }
 
   Widget build(BuildContext context) {
-    return FutureBuilder<List<PhieuNhap>>(
-      future: phieuNhap,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Stack(
-            children: [
-              snapshot.data.length == 0
-                  ? Center(
-                      child: Text("No data"),
-                    )
-                  : Column(children: [
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Expanded(child: _buildListViewSection(snapshot.data))
-                    ]),
-              _buildAddButtonSection
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
-        }
-        return LoadingControl();
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('Nhập kho')),
+      drawer: AppDrawer(),
+      body: FutureBuilder<List<PhieuNhap>>(
+        future: phieuNhap,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              margin: EdgeInsets.all(5.0),
+              child: Stack(
+                children: [
+                  snapshot.data.length == 0
+                      ? Center(
+                          child: Text("No data"),
+                        )
+                      : Column(children: [
+                          Expanded(child: _buildListViewSection(snapshot.data))
+                        ]),
+                  _buildAddButtonSection
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          }
+          return LoadingControl();
+        },
+      ),
     );
   }
 }

@@ -1,12 +1,8 @@
-import 'package:dms_admin/Pages/Order/order_page.dart';
-import 'package:dms_admin/Pages/Product/product_page.dart';
-import 'package:dms_admin/Pages/Login/login_page.dart';
-import 'package:dms_admin/Pages/Product/product_detail_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_decrease_export_page.dart';
+import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_page.dart';
+import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/components/drawer.dart';
-import 'package:dms_admin/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dms_admin/router.dart';
 
@@ -28,14 +24,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        drawer: AppDrawer(),
-        appBar: AppBar(
-          title: Text("Phiếu xuất"),
-        ),
-        body: StockDecreaseExportPage(
-          phieuXuatId: '4412ba53-e08c-4969-8423-c25692f1c158',
-          stockId: '7F7DFD24-D206-45B2-A9D9-E0F32EDFCC81',
-        ),
+        body: DashboardPage(
+            //  phieuXuatId: '4412ba53-e08c-4969-8423-c25692f1c158',
+            // stockId: '7F7DFD24-D206-45B2-A9D9-E0F32EDFCC81',
+            ),
       ),
     );
   }

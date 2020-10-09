@@ -10,3 +10,4 @@ const kWidthDateTime = 75.0;
 const kDefaultGuildId = '00000000-0000-0000-0000-000000000000';
 const kEmptyProductList =
     'Không có sản phẩm.Vui lòng bấm dấu + để thêm sản phẩm mới';
+const kSizeIconAddButton = 50.0;

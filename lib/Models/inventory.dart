@@ -1,5 +1,6 @@
 class Inventory {
   String stockId;
+  String stockName;
   int productId;
   int currentQty;
   String productNo;
@@ -12,6 +13,7 @@ class Inventory {
 
   Inventory(
       {this.stockId,
+      this.stockName,
       this.productId,
       this.currentQty,
       this.productNo,
@@ -24,6 +26,7 @@ class Inventory {
 
   Inventory.fromJson(Map<String, dynamic> json) {
     stockId = json['stock_id'];
+    stockName = json['stock_name'];
     productId = json['product_id'];
     currentQty = json['current_qty'];
     productNo = json['product_no'];
@@ -38,6 +41,7 @@ class Inventory {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['stock_id'] = this.stockId;
+    data['stock_name'] = this.stockName;
     data['product_id'] = this.productId;
     data['current_qty'] = this.currentQty;
     data['product_no'] = this.productNo;

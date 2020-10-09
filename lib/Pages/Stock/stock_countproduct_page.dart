@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/inventory.dart';
+import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/style.dart';
@@ -10,8 +11,7 @@ import 'package:flutter_html/style.dart';
 import '../../constants.dart';
 
 class StockCountProductPage extends StatefulWidget {
-  final String stock_id;
-  StockCountProductPage({Key key, this.stock_id}) : super(key: key);
+  StockCountProductPage({Key key}) : super(key: key);
 
   @override
   _StockCountProductPageState createState() => _StockCountProductPageState();
@@ -33,7 +33,7 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
   @override
   void initState() {
     super.initState();
-    inventory = API_HELPER.getInventory(widget.stock_id);
+    inventory = API_HELPER.listInventoryProduct();
   }
 
   Widget get _buildHeaderSection {
@@ -41,15 +41,17 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
       margin: EdgeInsets.all(5),
       child: Row(children: <Widget>[
         SizedBox(
-          child: Text(
-            "Mã",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0),
+          child: Flexible(
+            child: Text(
+              "Kho",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0),
+            ),
           ),
-          width: kWidthProductNo,
+          width: 100,
         ),
         SizedBox(
           width: 30,
@@ -79,11 +81,13 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
   Widget _buildRowListViewSection(Inventory item) {
     return Row(children: <Widget>[
       SizedBox(
-        child: Text(
-          item.productNo,
-          textAlign: TextAlign.center,
+        child: Flexible(
+          child: Text(
+            item.stockName,
+            textAlign: TextAlign.center,
+          ),
         ),
-        width: kWidthProductNo,
+        width: 100,
       ),
       SizedBox(
         width: 30,
@@ -114,7 +118,7 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
           onPressed: () {
             setState(() {
               log("refresh inventory count product data");
-              inventory = API_HELPER.getInventory(widget.stock_id);
+              inventory = API_HELPER.listInventoryProduct();
               UI.showSuccess(context, "Đã load lại danh sách thành công");
             });
           },
@@ -123,31 +127,35 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Inventory>>(
-      future: inventory,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Stack(
-            children: [
-              snapshot.data.length == 0
-                  ? Center(
-                      child: Text("No data"),
-                    )
-                  : Column(
-                      children: [
-                        _buildHeaderSection,
-                        Divider(color: Colors.black, thickness: 3.0),
-                        Expanded(child: _buildListView(snapshot.data))
-                      ],
-                    ),
-              _buildRefreshButtonSection
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
-        }
-        return LoadingControl();
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('Tồn kho')),
+      drawer: AppDrawer(),
+      body: FutureBuilder<List<Inventory>>(
+        future: inventory,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                snapshot.data.length == 0
+                    ? Center(
+                        child: Text("No data"),
+                      )
+                    : Column(
+                        children: [
+                          _buildHeaderSection,
+                          Divider(color: Colors.black, thickness: 3.0),
+                          Expanded(child: _buildListView(snapshot.data))
+                        ],
+                      ),
+                _buildRefreshButtonSection
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          }
+          return LoadingControl();
+        },
+      ),
     );
   }
 }

@@ -19,7 +19,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   @override
   void initState() {
     super.initState();
-    products = API_HELPER.getInventory(widget.stock_id);
+    products = API_HELPER.listInventoryProduct();
   }
 
   Widget get _buildAPI {
