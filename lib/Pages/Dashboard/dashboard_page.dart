@@ -1,8 +1,15 @@
+import 'dart:developer';
+
+import 'package:dms_admin/Models/dashboard_tong_hop.dart';
 import 'package:dms_admin/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+
+import '../../Data/api_helper.dart';
+import '../../Data/api_helper.dart';
+import '../../Models/product.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -16,10 +23,14 @@ class _DashboardPageState extends State<DashboardPage>
   TabController _nestedTabController;
   DateTimeRange range = new DateTimeRange(
       start: DateTime.now().add(new Duration(days: -7)), end: DateTime.now());
+
+  Future<List<DashboardTongHop>> dashboardTongHop;
   @override
   void initState() {
     super.initState();
-    _nestedTabController = new TabController(length: 2, vsync: this);
+    _nestedTabController = new TabController(length: 1, vsync: this);
+    dashboardTongHop = API_HELPER.getReportTongHop();
+    // products = API_HELPER.getProductStream();
   }
 
   get _buildSectionRangeDateSection => Row(children: [
@@ -67,15 +78,6 @@ class _DashboardPageState extends State<DashboardPage>
         Tab(
           text: "TỔNG HỢP",
         ),
-        Tab(
-          text: "TUYẾN",
-        ),
-        Tab(
-          text: "NHÂN VIÊN",
-        ),
-        Tab(
-          text: "HOẠT ĐỘNG",
-        ),
       ],
     );
   }
@@ -109,50 +111,104 @@ class _DashboardPageState extends State<DashboardPage>
     ]);
   }
 
+  Widget get _buildDashboardTongHop {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.blueGrey[300],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: Container()),
+                SizedBox(width: 50.0, child: Text('Thăm viếng')),
+                SizedBox(width: 50.0, child: Text('Có đơn hàng')),
+                SizedBox(width: 50.0, child: Text('Số đơn hàng')),
+                SizedBox(width: 50.0, child: Text('Tổng tiền')),
+              ],
+            ),
+            Expanded(
+                child: FutureBuilder<List<DashboardTongHop>>(
+              future: dashboardTongHop,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Expanded(
+                              child: Container(
+                            child: Text(
+                              snapshot.data[index].province,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontWeight: index == 0
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                          )),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(
+                                  snapshot.data[index].countVisit.toString())),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(snapshot.data[index].countStoreOrder
+                                  .toString())),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(snapshot.data[index].sumOrderPrice
+                                  .toString())),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ))
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Text('abc'),
-        TabBar(
-          controller: _nestedTabController,
-          indicatorColor: Colors.orange,
-          labelColor: Colors.orange,
-          unselectedLabelColor: Colors.black54,
-          isScrollable: true,
-          tabs: <Widget>[
-            Tab(
-              text: "Inside Pokhara",
-            ),
-            Tab(
-              text: "Outside Pokhara",
-            ),
-          ],
-        ),
-        Container(
-          height: screenHeight * 0.70,
-          margin: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: TabBarView(
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          _buildSectionRangeDateSection,
+          TabBar(
             controller: _nestedTabController,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.blueGrey[300],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.blueGrey[300],
-                ),
+            indicatorColor: Colors.orange,
+            labelColor: Colors.orange,
+            unselectedLabelColor: Colors.black54,
+            isScrollable: true,
+            tabs: <Widget>[
+              Tab(
+                text: "TỔNG HỢP",
               ),
             ],
           ),
-        )
-      ],
+          Container(
+            child: Flexible(
+              // height: screenHeight * 0.80,
+              // padding: EdgeInsets.all(10.0),
+              child: TabBarView(
+                controller: _nestedTabController,
+                children: <Widget>[
+                  _buildDashboardTongHop,
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -45,6 +45,7 @@ dependencies:
   fluttertoast: ^7.1.1
   flutter_guid: ^0.1.0
   date_range_picker: ^1.0.6
+  rxdart: ^0.24.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
