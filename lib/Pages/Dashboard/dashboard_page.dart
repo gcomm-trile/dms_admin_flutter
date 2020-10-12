@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
+import 'package:dms_admin/Pages/Dashboard/dashboard_tonghop_page.dart';
 import 'package:dms_admin/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -202,7 +204,7 @@ class _DashboardPageState extends State<DashboardPage>
               child: TabBarView(
                 controller: _nestedTabController,
                 children: <Widget>[
-                  _buildDashboardTongHop,
+                  DashboardTongHopPage(),
                 ],
               ),
             ),
@@ -212,7 +214,13 @@ class _DashboardPageState extends State<DashboardPage>
     );
   }
 
+  Future<List<DashboardTongHop>> _generateRandomInt() {
+    return API_HELPER.getReportTongHop();
+  }
+
   Widget _buildTabSection() {
     return Column(children: [_buildTabBarSection, _buildTabViewSection()]);
   }
+
+  void refreshData() {}
 }
