@@ -1,3 +1,4 @@
+import 'package:dms_admin/Controllers/dashboardController.dart';
 import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
@@ -5,10 +6,11 @@ import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:dms_admin/router.dart';
+import 'package:get/get.dart';
 
 void main() {
   FluroRouter.setupRouter();
-
+  Get.put(DashboardController());
   runApp(MyApp());
 }
 

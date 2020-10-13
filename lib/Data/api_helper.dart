@@ -11,6 +11,7 @@ import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
 import 'package:dms_admin/Models/stock.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import '../constants.dart';
 
@@ -39,9 +40,10 @@ class API_HELPER {
     }
   }
 
-  static Future<List<DashboardTongHop>> getReportTongHop() async {
+  static Future<List<DashboardTongHop>> getReportTongHop(
+      DateTime startDate, DateTime endDate) async {
     final jobsListAPIUrl = SERVER_URL +
-        '/DashboardTongHop?from_date=2020-08-01&to_date=2020-10-10';
+        '/DashboardTongHop?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(jobsListAPIUrl, headers: getHeaders());
     if (response.statusCode == 200) {

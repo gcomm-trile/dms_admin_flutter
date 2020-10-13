@@ -1,16 +1,12 @@
+import 'package:dms_admin/Controllers/dashboardController.dart';
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
 import 'package:dms_admin/Pages/Dashboard/future_generator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DashboardTongHopPage extends StatefulWidget {
-  final List<DashboardTongHop> data;
-  DashboardTongHopPage({Key key, this.data}) : super(key: key);
+class DashboardTongHopPage extends StatelessWidget {
+  const DashboardTongHopPage({Key key}) : super(key: key);
 
-  @override
-  _DashboardTongHopPageState createState() => _DashboardTongHopPageState();
-}
-
-class _DashboardTongHopPageState extends State<DashboardTongHopPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,36 +20,54 @@ class _DashboardTongHopPageState extends State<DashboardTongHopPage> {
             SizedBox(width: 50.0, child: Text('Tổng tiền')),
           ],
         ),
-        ListView.builder(
-          itemCount: widget.data.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  child: Text(
-                    widget.data[index].province,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight:
-                            index == 0 ? FontWeight.bold : FontWeight.normal),
+        GetX<DashboardController>(builder: (controller) {
+          return controller.isLoading.value
+              ? Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
-                )),
-                SizedBox(
-                    width: 50.0,
-                    child: Text(widget.data[index].countVisit.toString())),
-                SizedBox(
-                    width: 50.0,
-                    child: Text(widget.data[index].countStoreOrder.toString())),
-                SizedBox(
-                    width: 50.0,
-                    child: Text(widget.data[index].sumOrderPrice.toString())),
-              ],
-            );
-          },
-        ),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.data.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Expanded(
+                              child: Container(
+                            child: Text(
+                              controller.data[index].province,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontWeight: index == 0
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                          )),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(controller.data[index].countVisit
+                                  .toString())),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(controller.data[index].countStoreOrder
+                                  .toString())),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(controller.data[index].countOrder
+                                  .toString())),
+                          SizedBox(
+                              width: 50.0,
+                              child: Text(controller.data[index].sumOrderPrice
+                                  .toString())),
+                        ],
+                      );
+                    },
+                  ),
+                );
+        }),
       ],
     );
   }
