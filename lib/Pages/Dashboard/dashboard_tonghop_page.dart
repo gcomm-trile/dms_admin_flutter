@@ -9,6 +9,7 @@ class DashboardTongHopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build tong hop');
     return Column(
       children: [
         Row(
@@ -29,7 +30,7 @@ class DashboardTongHopPage extends StatelessWidget {
                 )
               : Expanded(
                   child: ListView.builder(
-                    itemCount: controller.data.length,
+                    itemCount: controller.report.value.reportTonghop.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Row(
@@ -37,7 +38,8 @@ class DashboardTongHopPage extends StatelessWidget {
                           Expanded(
                               child: Container(
                             child: Text(
-                              controller.data[index].province,
+                              controller
+                                  .report.value.reportTonghop[index].province,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -48,19 +50,23 @@ class DashboardTongHopPage extends StatelessWidget {
                           )),
                           SizedBox(
                               width: 50.0,
-                              child: Text(controller.data[index].countVisit
+                              child: Text(controller
+                                  .report.value.reportTonghop[index].countVisit
                                   .toString())),
                           SizedBox(
                               width: 50.0,
-                              child: Text(controller.data[index].countStoreOrder
+                              child: Text(controller.report.value
+                                  .reportTonghop[index].countStoreOrder
                                   .toString())),
                           SizedBox(
                               width: 50.0,
-                              child: Text(controller.data[index].countOrder
+                              child: Text(controller
+                                  .report.value.reportTonghop[index].countOrder
                                   .toString())),
                           SizedBox(
                               width: 50.0,
-                              child: Text(controller.data[index].sumOrderPrice
+                              child: Text(controller.report.value
+                                  .reportTonghop[index].sumOrderPrice
                                   .toString())),
                         ],
                       );

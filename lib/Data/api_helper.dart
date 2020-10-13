@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dms_admin/Models/dashboard.dart';
 import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
@@ -40,17 +41,15 @@ class API_HELPER {
     }
   }
 
-  static Future<List<DashboardTongHop>> getReportTongHop(
+  static Future<Dashboard> getReport(
       DateTime startDate, DateTime endDate) async {
     final jobsListAPIUrl = SERVER_URL +
-        '/DashboardTongHop?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
+        '/dashboard?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
     print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
     final response = await http.get(jobsListAPIUrl, headers: getHeaders());
     if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((item) => new DashboardTongHop.fromJson(item))
-          .toList();
+      final Map parsed = json.decode(response.body);
+      return Dashboard.fromJson(parsed);
     } else {
       throw Exception('Failed to load jobs from API');
     }

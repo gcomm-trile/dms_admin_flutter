@@ -1,5 +1,6 @@
 import 'package:dms_admin/Controllers/dashboardController.dart';
 import 'package:dms_admin/Pages/Dashboard/dashboard_tonghop_page.dart';
+import 'package:dms_admin/Pages/Dashboard/dashboard_tuyen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -21,7 +22,7 @@ class _DashboardPageState extends State<DashboardPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _nestedTabController = new TabController(length: 1, vsync: this);
+    _nestedTabController = new TabController(length: 2, vsync: this);
   }
 
   @override
@@ -41,6 +42,9 @@ class _DashboardPageState extends State<DashboardPage>
               Tab(
                 text: "TỔNG HỢP",
               ),
+              Tab(
+                text: "TUYẾN",
+              ),
             ],
           ),
           Container(
@@ -51,6 +55,7 @@ class _DashboardPageState extends State<DashboardPage>
                 controller: _nestedTabController,
                 children: <Widget>[
                   DashboardTongHopPage(),
+                  DashboardTuyenPage(),
                 ],
               ),
             ),

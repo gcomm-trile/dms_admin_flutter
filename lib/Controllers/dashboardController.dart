@@ -5,11 +5,13 @@ import 'package:dms_admin/Models/product2.dart';
 import 'package:get/state_manager.dart';
 
 class DashboardController extends GetxController {
-  var data = List<DashboardTongHop>().obs;
-  var count = 0.obs;
+  var report = Dashboard().obs;
   var startDate = DateTime.now().add(Duration(days: -7)).obs;
   var endDate = DateTime.now().obs;
   var isLoading = false.obs;
+  RxString filter_city = ''.obs;
+  var filter_tuyen = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -18,8 +20,8 @@ class DashboardController extends GetxController {
 
   void fetchData() {
     isLoading.value = true;
-    API_HELPER.getReportTongHop(startDate.value, endDate.value).then((value) {
-      data.value = value;
+    API_HELPER.getReport(startDate.value, endDate.value).then((value) {
+      report.value = value;
       isLoading.value = false;
     });
   }
@@ -29,5 +31,9 @@ class DashboardController extends GetxController {
     endDate.value = picked[1];
     fetchData();
     // products.add(product);
+  }
+
+  void setFilterCity(String value) {
+    filter_city.value = value;
   }
 }
