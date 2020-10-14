@@ -22,6 +22,11 @@ class ListViewRow extends StatelessWidget {
       this.sumOrderPrice})
       : super(key: key);
 
+  var textStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 20.0,
+  );
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,10 +35,7 @@ class ListViewRow extends StatelessWidget {
             child: Container(
           child: Text(
             this.content,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-            ),
+            style: textStyle,
           ),
         )),
         Container(
@@ -41,6 +43,7 @@ class ListViewRow extends StatelessWidget {
             child: Text(
               formatNumber.format(countVisit == null ? 0 : countVisit),
               textAlign: TextAlign.center,
+              style: textStyle,
             )),
         Container(
             width: 70.0,
@@ -48,18 +51,21 @@ class ListViewRow extends StatelessWidget {
               formatNumber
                   .format(countStoreOrder == null ? 0 : countStoreOrder),
               textAlign: TextAlign.center,
+              style: textStyle,
             )),
         Container(
             width: 70.0,
             child: Text(
               formatNumber.format(countOrder == null ? 0 : countOrder),
               textAlign: TextAlign.center,
+              style: textStyle,
             )),
         Container(
-            width: 70.0,
+            width: 120.0,
             child: Text(
               formatNumber.format(sumOrderPrice == null ? 0 : sumOrderPrice),
               textAlign: TextAlign.center,
+              style: textStyle,
             )),
       ],
     );

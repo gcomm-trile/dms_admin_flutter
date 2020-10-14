@@ -122,10 +122,10 @@ class _DashboardPageState extends State<DashboardPage>
                 child: TabBarView(
                   controller: _nestedTabController,
                   children: <Widget>[
-                    DashboardActivityPage(),
                     DashboardTongHopPage(),
                     DashboardRoutePage(),
                     DashboardUserPage(),
+                    DashboardActivityPage(),
                   ],
                 ),
               ),

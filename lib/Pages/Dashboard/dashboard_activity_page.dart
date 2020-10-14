@@ -1,13 +1,13 @@
+import 'dart:developer';
 import 'package:dms_admin/Controllers/dashboard_activity_controller.dart';
-import 'package:dms_admin/Models/dashboard_route.dart';
-import 'package:dms_admin/Pages/Dashboard/listview_header.dart';
+import 'package:dms_admin/Models/dashboard_activity.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
-import 'package:dms_admin/share/widgets/divider_header.dart';
-import 'package:dms_admin/share/widgets/divider_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class DashboardActivityPage extends StatelessWidget {
   final DashboardActivityController dashboardActivityController =
@@ -25,131 +25,167 @@ class DashboardActivityPage extends StatelessWidget {
                 child: LoadingControl(),
               ),
             )
-          : Column(children: [
-              SizedBox(
-                height: 5.0,
-              ),
-              Stack(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    margin: EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Container(width: 100.0, child: Text('Chọn tỉnh/TP')),
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0),
-                            child: DropdownButton<String>(
-                              value: controller.filterProvince.value,
-                              items: controller.provinces
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                      width: kWidthDropdown,
-                                      child: Text(value)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                dashboardActivityController
-                                    .setFilterProvince(value);
-                              },
+          : Column(
+              children: [
+                SizedBox(
+                  height: 5.0,
+                ),
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                  decoration: kBoxDecorationFilter,
+                  child: Column(children: [
+                    Row(
+                      children: [
+                        Container(width: 100.0, child: Text('Chọn tỉnh/TP')),
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: DropdownButton<String>(
+                            value: controller.filterProvince.value,
+                            items: controller.provinces
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Container(
+                                    width: kWidthDropdown, child: Text(value)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              dashboardActivityController
+                                  .setFilterProvince(value);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(width: 100, child: Text('Chọn NVBH')),
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: DropdownButton<String>(
+                            value: controller.filterUser.value,
+                            items: controller.users
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Container(
+                                    width: kWidthDropdown, child: Text(value)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              dashboardActivityController.setFilterUser(value);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ]),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: kBoxDecorationTable,
+                    child: ListView.builder(
+                        itemCount: controller.data.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final example = controller.data[index];
+                          return TimelineTile(
+                            alignment: TimelineAlign.manual,
+                            lineXY: 0.1,
+                            isFirst: index == 0,
+                            isLast: index == controller.data.length - 1,
+                            indicatorStyle: IndicatorStyle(
+                              width: 40,
+                              height: 40,
+                              indicator:
+                                  _IndicatorExample(number: '${index + 1}'),
+                              drawGap: true,
                             ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(width: 100, child: Text('Chọn NVBH')),
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0),
-                            child: DropdownButton<String>(
-                              value: controller.filterUser.value,
-                              items: controller.users
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                      width: kWidthDropdown,
-                                      child: Text(value)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                dashboardActivityController
-                                    .setFilterUser(value);
-                              },
+                            beforeLineStyle: LineStyle(
+                              color: Colors.white.withOpacity(0.2),
                             ),
-                          )
-                        ],
-                      ),
-                    ]),
+                            endChild: GestureDetector(
+                              child: _RowExample(example: example),
+                              onTap: () {},
+                            ),
+                          );
+                        }),
                   ),
-                  Positioned(
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        color: Colors.white,
-                        child: Text(
-                          'Bộ lọc',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                    left: 30.0,
-                    top: 0.0,
-                  )
-                ],
-              ),
-              Expanded(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return DividerRow();
-                    },
-                    itemCount: controller.data.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        children: [
-                          Container(
-                            width: 1,
-                            height: 100,
-                            color: Colors.grey,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(controller.data[index].content),
-                              Text(controller.data[index].updatedOn),
-                            ],
-                          )
-                        ],
-                      );
-                    }),
-              ),
-            ]);
+                ),
+              ],
+            );
     });
   }
+}
 
-  Widget _buildRowListView(DashboardRoute item) {
-    return Row(
-      children: [
-        Expanded(
-            child: Container(
-          child: Text(
-            item.routeName,
+class _IndicatorExample extends StatelessWidget {
+  const _IndicatorExample({Key key, this.number}) : super(key: key);
+
+  final String number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.fromBorderSide(
+          BorderSide(
+            color: Colors.white.withOpacity(0.2),
+            width: 4,
           ),
-        )),
-        SizedBox(width: 50.0, child: Text(item.countVisit.toString())),
-        SizedBox(width: 50.0, child: Text(item.countStoreOrder.toString())),
-        SizedBox(width: 50.0, child: Text(item.countOrder.toString())),
-        SizedBox(width: 50.0, child: Text(item.sumOrderPrice.toString())),
-      ],
+        ),
+      ),
+      child: Center(
+        child: Text(number,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.deepOrange,
+              fontSize: 26,
+            )),
+      ),
+    );
+  }
+}
+
+class _RowExample extends StatelessWidget {
+  const _RowExample({Key key, this.example}) : super(key: key);
+
+  final DashboardActivity example;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        log('item tap');
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                example.content,
+                style: GoogleFonts.jura(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Text(
+              example.updatedOn,
+              style: GoogleFonts.jura(
+                color: Colors.white,
+                fontSize: 13,
+              ),
+            ),
+            Divider(
+              color: Colors.black87,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

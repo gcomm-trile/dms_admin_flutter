@@ -12,3 +12,31 @@ const kEmptyProductList =
     'Không có sản phẩm.Vui lòng bấm dấu + để thêm sản phẩm mới';
 const kSizeIconAddButton = 50.0;
 const kWidthDropdown = 200.0;
+BoxDecoration kBoxDecorationTable = BoxDecoration(
+  borderRadius: BorderRadius.circular(5.0),
+  border: Border.fromBorderSide(
+    BorderSide(
+      color: Colors.white.withOpacity(0.2),
+      width: 4,
+    ),
+  ),
+  gradient: LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF004E92),
+      Color(0xFF000428),
+    ],
+  ),
+);
+BoxDecoration kBoxDecorationFilter = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        kPrimaryColor,
+        kPrimaryLightColor,
+      ],
+    ),
+    border: Border.all(color: Colors.blueAccent, width: 2.0),
+    borderRadius: BorderRadius.circular(10.0));

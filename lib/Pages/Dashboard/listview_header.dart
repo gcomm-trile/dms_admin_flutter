@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ListViewHeader extends StatelessWidget {
   const ListViewHeader({Key key}) : super(key: key);
   static const headerTextStyle = TextStyle(
-      color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15.0);
+      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.0);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -31,7 +31,7 @@ class ListViewHeader extends StatelessWidget {
               style: headerTextStyle,
             )),
         Container(
-            width: 70.0,
+            width: 120.0,
             child: Text('Tổng tiền',
                 textAlign: TextAlign.center, style: headerTextStyle)),
       ],

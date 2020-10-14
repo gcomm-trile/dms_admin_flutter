@@ -35,123 +35,100 @@ class DashboardUserPage extends StatelessWidget {
               ],
             )
           : Column(children: [
-              Stack(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    margin: EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Container(width: 100, child: Text('Chọn tỉnh/TP')),
-                          Container(
-                            child: DropdownButton<String>(
-                              value: controller.filterProvince.value,
-                              items: controller.provinces
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                      width: kWidthDropdown,
-                                      child: Text(value)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                dashboardTuyenController
-                                    .setFilterProvince(value);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(width: 100, child: Text('Chọn tuyến')),
-                          Container(
-                            child: DropdownButton<String>(
-                              value: controller.filterRoute.value,
-                              items: controller.routes
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                      width: kWidthDropdown,
-                                      child: Text(value)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                dashboardTuyenController.setFilterRoute(value);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(width: 100, child: Text('Chọn NVBH')),
-                          Container(
-                            child: DropdownButton<String>(
-                              value: controller.filterUser.value,
-                              items: controller.users
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                      width: kWidthDropdown,
-                                      child: Text(value)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                dashboardTuyenController.setFilterUser(value);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ]),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                decoration: kBoxDecorationFilter,
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Container(width: 100, child: Text('Chọn tỉnh/TP')),
+                      Container(
+                        child: DropdownButton<String>(
+                          value: controller.filterProvince.value,
+                          items: controller.provinces
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Container(
+                                  width: kWidthDropdown, child: Text(value)),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            dashboardTuyenController.setFilterProvince(value);
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                  Positioned(
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        color: Colors.white,
-                        child: Text(
-                          'Bộ lọc',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                    left: 30.0,
-                    top: 0.0,
-                  )
-                ],
+                  Row(
+                    children: [
+                      Container(width: 100, child: Text('Chọn tuyến')),
+                      Container(
+                        child: DropdownButton<String>(
+                          value: controller.filterRoute.value,
+                          items: controller.routes
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Container(
+                                  width: kWidthDropdown, child: Text(value)),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            dashboardTuyenController.setFilterRoute(value);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(width: 100, child: Text('Chọn NVBH')),
+                      Container(
+                        child: DropdownButton<String>(
+                          value: controller.filterUser.value,
+                          items: controller.users
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Container(
+                                  width: kWidthDropdown, child: Text(value)),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            dashboardTuyenController.setFilterUser(value);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ]),
               ),
-              DividerHeader(),
-              ListViewHeader(),
-              DividerHeader(),
               Expanded(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return DividerRow();
-                    },
-                    itemCount: controller.data.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return ListViewRow(
-                        content: controller.data[index].reportDate
-                            .replaceAll('T00:00:00', ''),
-                        countOrder: controller.data[index].countOrder,
-                        countStoreOrder: controller.data[index].countStoreOrder,
-                        countVisit: controller.data[index].countVisit,
-                        sumOrderPrice: controller.data[index].sumOrderPrice,
-                      );
-                    }),
+                child: Container(
+                  decoration: kBoxDecorationTable,
+                  child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        if (index == 0) return DividerHeader();
+                        return DividerRow();
+                      },
+                      itemCount: controller.data.length + 1,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        if (index == 0) return ListViewHeader();
+                        return ListViewRow(
+                          content: controller.data[index - 1].reportDate
+                              .replaceAll('T00:00:00', ''),
+                          countOrder: controller.data[index - 1].countOrder,
+                          countStoreOrder:
+                              controller.data[index - 1].countStoreOrder,
+                          countVisit: controller.data[index - 1].countVisit,
+                          sumOrderPrice:
+                              controller.data[index - 1].sumOrderPrice,
+                        );
+                      }),
+                ),
               ),
             ]);
     });

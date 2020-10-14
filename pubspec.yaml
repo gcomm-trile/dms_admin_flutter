@@ -30,17 +30,21 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2
   fluro: ^1.6.3
   flutter_guid: ^0.1.0
+  flutter_highlight: ^0.6.0
   flutter_html: ^1.0.2
   flutter_svg: ^0.18.1
   fluttertoast: ^7.1.1
   font_awesome_flutter: ^8.8.1
   get: ^3.13.2
+  google_fonts: ^1.1.0
   http: ^0.12.2
   intl: ^0.16.1
   keyboard_dismisser: ^1.0.2
   queries: ^0.1.14
   rxdart: ^0.24.1
   scoped_model: ^1.0.1
+  timeline: ^0.0.1
+  timeline_tile: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

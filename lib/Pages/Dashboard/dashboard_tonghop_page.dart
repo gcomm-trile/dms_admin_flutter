@@ -29,29 +29,34 @@ class DashboardTongHopPage extends StatelessWidget {
                 )
               ],
             )
-          : Column(
-              children: [
-                ListViewHeader(),
-                DividerHeader(),
-                Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return DividerRow();
-                    },
-                    itemCount: controller.data.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return ListViewRow(
-                        content: controller.data[index].province,
-                        countOrder: controller.data[index].countOrder,
-                        countStoreOrder: controller.data[index].countStoreOrder,
-                        countVisit: controller.data[index].countVisit,
-                        sumOrderPrice: controller.data[index].sumOrderPrice,
-                      );
-                    },
-                  ),
-                )
-              ],
+          : Container(
+              margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+              decoration: kBoxDecorationTable,
+              child: Column(
+                children: [
+                  ListViewHeader(),
+                  DividerHeader(),
+                  Expanded(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return DividerRow();
+                      },
+                      itemCount: controller.data.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ListViewRow(
+                          content: controller.data[index].province,
+                          countOrder: controller.data[index].countOrder,
+                          countStoreOrder:
+                              controller.data[index].countStoreOrder,
+                          countVisit: controller.data[index].countVisit,
+                          sumOrderPrice: controller.data[index].sumOrderPrice,
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
             );
     });
   }
