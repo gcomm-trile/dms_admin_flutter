@@ -38,6 +38,7 @@ dependencies:
   http: ^0.12.2
   intl: ^0.16.1
   keyboard_dismisser: ^1.0.2
+  queries: ^0.1.14
   rxdart: ^0.24.1
   scoped_model: ^1.0.1
 dev_dependencies:

@@ -1,4 +1,4 @@
-import 'package:dms_admin/Controllers/dashboardController.dart';
+import 'package:dms_admin/Controllers/dashboard_tonghop_controller.dart';
 import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 void main() {
   FluroRouter.setupRouter();
-  Get.put(DashboardController());
+  // Get.put(DashboardTongHopController());
   runApp(MyApp());
 }
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(

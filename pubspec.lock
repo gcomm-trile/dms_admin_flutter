@@ -219,6 +219,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.8.1"
+  function_types:
+    dependency: transitive
+    description:
+      name: function_types
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   get:
     dependency: "direct main"
     description:
@@ -394,6 +401,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.13"
+  queries:
+    dependency: "direct main"
+    description:
+      name: queries
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.14"
   random_string:
     dependency: transitive
     description:

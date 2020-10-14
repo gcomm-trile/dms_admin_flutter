@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dms_admin/Models/dashboard.dart';
+import 'package:dms_admin/Models/dashboard_activity.dart';
+import 'package:dms_admin/Models/dashboard_user.dart';
+import 'package:dms_admin/Models/dashboard_route.dart';
 import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
@@ -50,6 +53,70 @@ class API_HELPER {
     if (response.statusCode == 200) {
       final Map parsed = json.decode(response.body);
       return Dashboard.fromJson(parsed);
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<List<DashboardTongHop>> getReportTongHop(
+      DateTime startDate, DateTime endDate) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/dashboardtonghop?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((item) => new DashboardTongHop.fromJson(item))
+          .toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<List<DashboardUser>> getReportNVBH(
+      DateTime startDate, DateTime endDate) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/dashboardnvbh?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((item) => new DashboardUser.fromJson(item))
+          .toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<List<DashboardActivity>> getReportActivity(
+      DateTime startDate, DateTime endDate) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/DashboardActivity?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((item) => new DashboardActivity.fromJson(item))
+          .toList();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<List<DashboardRoute>> getReportRoute(
+      DateTime startDate, DateTime endDate) async {
+    final jobsListAPIUrl = SERVER_URL +
+        '/dashboardtuyen?from_date=${DateFormat('yyyy-MM-dd').format(startDate)}&to_date=${DateFormat('yyyy-MM-dd').format(endDate)}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((item) => new DashboardRoute.fromJson(item))
+          .toList();
     } else {
       throw Exception('Failed to load jobs from API');
     }
