@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:dms_admin/Controllers/dashboard_activity_controller.dart';
 import 'package:dms_admin/Models/dashboard_activity.dart';
+import 'package:dms_admin/Pages/Store/store_detail_controller.dart';
+import 'package:dms_admin/Pages/Store/store_detail_page.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
@@ -105,9 +107,13 @@ class DashboardActivityPage extends StatelessWidget {
                             beforeLineStyle: LineStyle(
                               color: Colors.white.withOpacity(0.2),
                             ),
-                            endChild: GestureDetector(
+                            endChild: InkWell(
                               child: _RowExample(example: example),
-                              onTap: () {},
+                              onTap: () {
+                                if (example.actionType == 1) {
+                                  _showDialog(context, example);
+                                }
+                              },
                             ),
                           );
                         }),
@@ -116,6 +122,18 @@ class DashboardActivityPage extends StatelessWidget {
               ],
             );
     });
+  }
+
+  _showDialog(BuildContext context, DashboardActivity example) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: StoreDetailPage(
+              storeId: example.storeId,
+            ),
+          );
+        });
   }
 }
 
@@ -155,36 +173,31 @@ class _RowExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        log('item tap');
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                example.content,
-                style: GoogleFonts.jura(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            Text(
-              example.updatedOn,
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              example.content,
               style: GoogleFonts.jura(
                 color: Colors.white,
-                fontSize: 13,
+                fontSize: 18,
               ),
             ),
-            Divider(
-              color: Colors.black87,
-            )
-          ],
-        ),
+          ),
+          Text(
+            example.updatedOn,
+            style: GoogleFonts.jura(
+              color: Colors.white,
+              fontSize: 13,
+            ),
+          ),
+          Divider(
+            color: Colors.black87,
+          )
+        ],
       ),
     );
   }
