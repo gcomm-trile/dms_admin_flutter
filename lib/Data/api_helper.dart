@@ -15,6 +15,7 @@ import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
 import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/Models/store.dart';
+import 'package:dms_admin/Models/visit_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -54,6 +55,18 @@ class API_HELPER {
     if (response.statusCode == 200) {
       final Map parsed = json.decode(response.body);
       return Dashboard.fromJson(parsed);
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  static Future<VisitDetail> getVisitDetail(String visitId) async {
+    final jobsListAPIUrl = SERVER_URL + '/visitdetail?visit_id=${visitId}';
+    print("call $jobsListAPIUrl with header " + jsonEncode(getHeaders()));
+    final response = await http.get(jobsListAPIUrl, headers: getHeaders());
+    if (response.statusCode == 200) {
+      final Map parsed = json.decode(response.body);
+      return VisitDetail.fromJson(parsed);
     } else {
       throw Exception('Failed to load jobs from API');
     }

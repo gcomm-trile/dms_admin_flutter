@@ -12,15 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-class OrderDetailPage extends StatefulWidget {
+class VisitOrderDetailPage extends StatefulWidget {
   final String order_id;
-  OrderDetailPage({Key key, this.order_id}) : super(key: key);
+  VisitOrderDetailPage({Key key, this.order_id}) : super(key: key);
 
   @override
-  _OrderDetailPageState createState() => _OrderDetailPageState();
+  _VisitOrderDetaiPageState createState() => _VisitOrderDetaiPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
+class _VisitOrderDetaiPageState extends State<VisitOrderDetailPage> {
   Future<Order> f_data;
   final formatter = new NumberFormat("#,###");
   final TextStyle _style_header = TextStyle(
@@ -40,57 +40,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return Divider(
       thickness: 1.5,
       color: Colors.black,
-    );
-  }
-
-  Widget _buildInfoItem(IconData iconData, String textInfo) {
-    return Container(
-      child: Row(
-        children: [
-          Icon(iconData),
-          Flexible(
-            child: Text(textInfo),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImportStockSection(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Text(
-            "Kho nhận:",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text("Hello",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold)),
-          SizedBox(
-            width: 10.0,
-          ),
-          GestureDetector(
-            onTap: () => _showPopupSearchStock(context),
-            child: Container(
-              child: Icon(
-                Icons.search,
-                size: 50,
-                color: kPrimaryColor,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -171,15 +120,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ? 'Chưa có kho xuất'
                     : data.exportStockName),
               ),
-              InkWell(
-                onTap: () => _showPopupSearchStock(context),
-                child: Container(
-                  child: Icon(
-                    Icons.search,
-                    size: icon_size,
-                  ),
-                ),
-              ),
             ],
           ),
         ],
@@ -189,56 +129,41 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardDismisser(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Chi tiết đơn hàng'),
-          actions: [
-            AbsorbPointer(
-              absorbing: !enabled,
-              child: InkWell(
-                  onTap: () => _approved(),
-                  child: Icon(Icons.approval, size: 50)),
-            )
-          ],
-        ),
-        body: FutureBuilder<Order>(
-          future: f_data,
-          builder: (context, snapshot) {
-            if (snapshot.hasData == true) {
-              data = snapshot.data;
-              return Stack(children: [
-                Column(
-                  children: [
-                    _buildInfoSection(data),
-                    _buildDivider,
-                    _buildHeaderListView,
-                    _buildDivider,
-                    Expanded(child: _buildListView(data.products))
-                  ],
-                ),
-                Positioned.fill(
-                    child: Align(
-                  alignment: Alignment.topRight,
-                  child: Opacity(
-                      opacity: 0.5,
-                      child: Image.asset(
-                        data.isExportStock == true
-                            ? ('assets/images/approved.jpg')
-                            : ('assets/images/pending.jpg'),
-                        height: 150,
-                        width: 150,
-                      )),
-                )),
-              ]);
-            } else if (snapshot.hasError == true) {
-              return Center(child: Text("${snapshot.error}"));
-            } else {
-              return LoadingControl();
-            }
-          },
-        ),
-      ),
+    return FutureBuilder<Order>(
+      future: f_data,
+      builder: (context, snapshot) {
+        if (snapshot.hasData == true) {
+          data = snapshot.data;
+          return Stack(children: [
+            Column(
+              children: [
+                _buildInfoSection(data),
+                _buildDivider,
+                _buildHeaderListView,
+                _buildDivider,
+                Expanded(child: _buildListView(data.products))
+              ],
+            ),
+            Positioned.fill(
+                child: Align(
+              alignment: Alignment.topRight,
+              child: Opacity(
+                  opacity: 0.5,
+                  child: Image.asset(
+                    data.isExportStock == true
+                        ? ('assets/images/approved.jpg')
+                        : ('assets/images/pending.jpg'),
+                    height: 150,
+                    width: 150,
+                  )),
+            )),
+          ]);
+        } else if (snapshot.hasError == true) {
+          return Center(child: Text("${snapshot.error}"));
+        } else {
+          return LoadingControl();
+        }
+      },
     );
   }
 

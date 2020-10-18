@@ -3,6 +3,7 @@ import 'package:dms_admin/Controllers/dashboard_activity_controller.dart';
 import 'package:dms_admin/Models/dashboard_activity.dart';
 import 'package:dms_admin/Pages/Store/store_detail_controller.dart';
 import 'package:dms_admin/Pages/Store/store_detail_page.dart';
+import 'package:dms_admin/Pages/Visit/widgets/visit_detail_page.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
@@ -110,9 +111,7 @@ class DashboardActivityPage extends StatelessWidget {
                             endChild: InkWell(
                               child: _RowExample(example: example),
                               onTap: () {
-                                if (example.actionType == 1) {
-                                  _showDialog(context, example);
-                                }
+                                _showDialog(context, example);
                               },
                             ),
                           );
@@ -125,15 +124,25 @@ class DashboardActivityPage extends StatelessWidget {
   }
 
   _showDialog(BuildContext context, DashboardActivity example) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: StoreDetailPage(
-              storeId: example.storeId,
-            ),
-          );
-        });
+    if (example.actionType == 1) {
+      log('1');
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: StoreDetailPage(
+                storeId: example.storeId,
+              ),
+            );
+          });
+    }
+    if (example.actionType == 2) {
+      log(example.visitId);
+      Get.to(VisitDetailPage(visitId: example.visitId));
+    }
+    if (example.actionType == 3) {
+      log('3');
+    }
   }
 }
 
