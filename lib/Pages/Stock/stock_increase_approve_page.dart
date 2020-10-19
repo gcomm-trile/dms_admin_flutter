@@ -217,10 +217,10 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
   _approved(int status) {
     API_HELPER.postDuyetPhieuXuat(widget.phieuXuatId, status).then((value) {
       if (value.isEmpty) {
-        UI.showSuccess(context, "Đã cập nhật thành công");
+        UI.showSuccess( "Đã cập nhật thành công");
         Navigator.pop(context);
       } else {
-        UI.showError(context, value);
+        UI.showError( value);
       }
     });
   }

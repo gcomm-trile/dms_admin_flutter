@@ -321,7 +321,7 @@ class _VisitOrderDetaiPageState extends State<VisitOrderDetailPage> {
 
   _approved() {
     if (data.exportStockId == kDefaultGuildId) {
-      UI.showError(context, "Chưa chọn kho xuất");
+      UI.showError("Chưa chọn kho xuất");
       return;
     }
 
@@ -331,10 +331,10 @@ class _VisitOrderDetaiPageState extends State<VisitOrderDetailPage> {
         .postDuyetXuatDonHang(widget.order_id, data.exportStockId, 1)
         .then((value) {
       if (value.isEmpty) {
-        UI.showSuccess(context, "Đã cập nhật thành công");
+        UI.showSuccess("Đã cập nhật thành công");
         Navigator.pop(context);
       } else {
-        UI.showError(context, value);
+        UI.showError(value);
         enabled = !enabled;
       }
     });

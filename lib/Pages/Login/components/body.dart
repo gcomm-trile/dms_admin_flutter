@@ -50,7 +50,7 @@ class Body extends StatelessWidget {
                     var result = await API_HELPER.login(_username, _password);
                     if (result.isEmpty) {
                       UI.showError(
-                          context, "Xảy ra lỗi trong quá trình đăng nhập");
+                           "Xảy ra lỗi trong quá trình đăng nhập");
                     } else {
                       Navigator.push(
                         context,
@@ -59,7 +59,7 @@ class Body extends StatelessWidget {
                     }
                   } else {
                     UI.showError(
-                        context, "Xảy ra lỗi trong quá trình đăng nhập");
+                        "Xảy ra lỗi trong quá trình đăng nhập");
                   }
                 }),
             SizedBox(height: 30),

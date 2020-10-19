@@ -123,6 +123,7 @@ class _VisitDetailPageState extends State<VisitDetailPage>
                         // height: screenHeight * 0.80,
                         // padding: EdgeInsets.all(10.0),
                         child: TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
                           controller: _nestedTabController,
                           children: <Widget>[
                             VisitCheckInPage(),

@@ -8,6 +8,7 @@ import 'package:dms_admin/Pages/Stock/stock_page.dart';
 import 'package:dms_admin/Pages/Visit/widgets/visit_page.dart';
 import 'package:dms_admin/router.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -21,8 +22,14 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.dashboard,
             text: 'Dashboard',
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => DashboardPage()));
+              Get.to(DashboardPage());
+            },
+          ),
+          _createDrawerItem(
+            icon: Icons.view_sidebar,
+            text: 'Visit',
+            onTap: () {
+              Get.to(VisitPage());
             },
           ),
           Divider(thickness: 1.5, color: Colors.black),

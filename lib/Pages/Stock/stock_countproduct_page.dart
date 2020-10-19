@@ -7,6 +7,7 @@ import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/style.dart';
+import 'package:get/get.dart';
 
 import '../../constants.dart';
 
@@ -119,7 +120,9 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
             setState(() {
               log("refresh inventory count product data");
               inventory = API_HELPER.listInventoryProduct();
-              UI.showSuccess(context, "Đã load lại danh sách thành công");
+              Get.snackbar("Thông báo", 'Đã cập nhật',
+                  duration: Duration(seconds: 1),
+                  snackPosition: SnackPosition.BOTTOM);
             });
           },
         ));
@@ -133,7 +136,7 @@ class _StockCountProductPageState extends State<StockCountProductPage> {
       body: FutureBuilder<List<Inventory>>(
         future: inventory,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.done) {
             return Stack(
               children: [
                 snapshot.data.length == 0

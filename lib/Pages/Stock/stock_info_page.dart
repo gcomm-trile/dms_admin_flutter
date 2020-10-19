@@ -56,11 +56,11 @@ class StockInfoPage extends StatelessWidget {
                   log("no: " + data.name);
 
                   if (await API_HELPER.updateStock(data) == true) {
-                    UI.showSuccess(context, "Đã cập nhật thành công");
+                    UI.showSuccess( "Đã cập nhật thành công");
                     // Navigator.pop(context);
                   } else {
                     UI.showError(
-                        context, "Có lỗi trong quá trình cập nhật dữ liệu");
+                         "Có lỗi trong quá trình cập nhật dữ liệu");
                   }
                 }))
       ],

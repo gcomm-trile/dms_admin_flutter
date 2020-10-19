@@ -59,10 +59,10 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                               .toList())
                       .then((value) {
                     if (value.isEmpty) {
-                      UI.showSuccess(context, "Đã cập nhật thành công");
+                      UI.showSuccess( "Đã cập nhật thành công");
                       Navigator.pop(context);
                     } else {
-                      UI.showError(context, value);
+                      UI.showError( value);
                     }
                   });
                 },
@@ -353,7 +353,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
 
   void _showPopupProduct(BuildContext context) {
     if (data.exportStockId == null || data.exportStockId == kDefaultGuildId) {
-      UI.showError(context, 'Chưa chọn kho xuất');
+      UI.showError( 'Chưa chọn kho xuất');
       return;
     }
     showDialog(

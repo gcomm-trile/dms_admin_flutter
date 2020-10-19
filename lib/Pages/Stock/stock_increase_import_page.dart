@@ -46,7 +46,7 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
 
   void _showPopupProduct(BuildContext context) {
     if (data.importStockId == null || data.importStockId == kDefaultGuildId) {
-      UI.showError(context, 'Chọn kho nhập trước');
+      UI.showError('Chọn kho nhập trước');
       return;
     }
     showDialog(
@@ -106,10 +106,10 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
                           .toList())
                   .then((value) {
                 if (value.isEmpty) {
-                  UI.showSuccess(context, "Đã cập nhật thành công");
+                  UI.showSuccess( "Đã cập nhật thành công");
                   Navigator.pop(context);
                 } else {
-                  UI.showError(context, value);
+                  UI.showError( value);
                 }
               });
             }),

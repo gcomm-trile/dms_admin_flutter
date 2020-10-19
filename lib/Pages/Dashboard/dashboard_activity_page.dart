@@ -138,7 +138,8 @@ class DashboardActivityPage extends StatelessWidget {
     }
     if (example.actionType == 2) {
       log(example.visitId);
-      Get.to(VisitDetailPage(visitId: example.visitId));
+      Get.to(VisitDetailPage(visitId: example.visitId),
+          transition: Transition.zoom, duration: Duration(seconds: 1));
     }
     if (example.actionType == 3) {
       log('3');
