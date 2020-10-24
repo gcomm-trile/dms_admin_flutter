@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const SERVER_URL = "http://localhost:58985";
+const SERVER_URL = "http://gcomm.online:9812";
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kWidthProductNo = 80.0;

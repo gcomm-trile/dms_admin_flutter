@@ -1,9 +1,11 @@
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
+import 'package:dms_admin/Models/dashboard.dart';
+import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:get/get.dart';
 import 'package:dms_admin/components/already_have_an_account_acheck.dart';
 import 'package:dms_admin/components/rounded_button.dart';
 import 'package:dms_admin/components/rounded_input_field.dart';
@@ -49,17 +51,12 @@ class Body extends StatelessWidget {
                   if (_username.isNotEmpty && _password.isNotEmpty) {
                     var result = await API_HELPER.login(_username, _password);
                     if (result.isEmpty) {
-                      UI.showError(
-                           "Xảy ra lỗi trong quá trình đăng nhập");
+                      UI.showError("Xảy ra lỗi trong quá trình đăng nhập");
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProductPage()),
-                      );
+                      Get.to(DashboardPage(), transition: Transition.zoom);
                     }
                   } else {
-                    UI.showError(
-                        "Xảy ra lỗi trong quá trình đăng nhập");
+                    UI.showError("Xảy ra lỗi trong quá trình đăng nhập");
                   }
                 }),
             SizedBox(height: 30),

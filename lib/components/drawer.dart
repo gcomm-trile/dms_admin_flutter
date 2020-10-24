@@ -20,16 +20,24 @@ class AppDrawer extends StatelessWidget {
           _createHeader(),
           _createDrawerItem(
             icon: Icons.dashboard,
-            text: 'Dashboard',
+            text: 'Báo cáo',
             onTap: () {
               Get.to(DashboardPage());
             },
           ),
           _createDrawerItem(
             icon: Icons.view_sidebar,
-            text: 'Visit',
+            text: 'Viếng thăm',
             onTap: () {
               Get.to(VisitPage());
+            },
+          ),
+          _createDrawerItem(
+            icon: Icons.event_busy,
+            text: 'Đơn hàng',
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => OrderPage()));
             },
           ),
           Divider(thickness: 1.5, color: Colors.black),
@@ -59,14 +67,6 @@ class AppDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => StockDecreasePage()));
             },
           ),
-          _createDrawerItem(
-            icon: Icons.event_busy,
-            text: 'Order',
-            onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => OrderPage()));
-            },
-          ),
           Divider(thickness: 1.5, color: Colors.black),
           ListTile(
             title: Text('0.0.1'),
@@ -91,7 +91,7 @@ class AppDrawer extends StatelessWidget {
               left: 16.0,
               child: Text("EZ Solution",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 30.0,
                       fontWeight: FontWeight.w500))),
         ]));
