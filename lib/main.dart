@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         body: LoginPage(
-
             //  phieuXuatId: '4412ba53-e08c-4969-8423-c25692f1c158',
             // stockId: '7F7DFD24-D206-45B2-A9D9-E0F32EDFCC81',
             ),
