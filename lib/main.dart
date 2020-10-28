@@ -1,5 +1,6 @@
 import 'package:dms_admin/Pages/Login/login_page.dart';
 import 'package:dms_admin/Pages/Visit/widgets/visit_page.dart';
+import 'package:dms_admin/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dms_admin/router.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(

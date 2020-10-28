@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const SERVER_URL = "http://gcomm.online:9812";
-const kPrimaryColor = Color(0xFF6F35A5);
+const kPrimaryColor = Color.fromRGBO(109, 192, 45, 1); //Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kWidthProductNo = 80.0;
 const kWidthSeqNo = 50.0;
