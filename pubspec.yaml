@@ -34,6 +34,7 @@ dependencies:
   flutter_guid: ^0.1.0
   flutter_highlight: ^0.6.0
   flutter_html: ^1.0.2
+  flutter_spinkit: ^4.1.2+1
   flutter_svg: ^0.18.1
   fluttertoast: ^7.1.1
   font_awesome_flutter: ^8.8.1
@@ -47,6 +48,7 @@ dependencies:
   scoped_model: ^1.0.1
   timeline: ^0.0.1
   timeline_tile: ^1.0.0
+  tab_indicator_styler: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

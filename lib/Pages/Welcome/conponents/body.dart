@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:dms_admin/Pages/Login/login_page.dart';
+import 'package:dms_admin/Pages/Login/widgets/login_page.dart';
 import 'package:dms_admin/Pages/Welcome/conponents/background.dart';
 import 'package:dms_admin/components/rounded_button.dart';
 import 'package:dms_admin/constants.dart';

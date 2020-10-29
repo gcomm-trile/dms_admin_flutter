@@ -40,6 +40,10 @@ class UI {
   }
 
   static void showError(String message) {
-    Get.snackbar('Lỗi', message, snackPosition: SnackPosition.TOP);
+    Get.snackbar('Lỗi', message,
+        snackPosition: SnackPosition.TOP,
+        backgroundGradient: LinearGradient(colors: [Colors.red, Colors.orange]),
+        colorText: Colors.white,
+        margin: EdgeInsets.all(10));
   }
 }

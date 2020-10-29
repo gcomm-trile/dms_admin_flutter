@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:dms_admin/Pages/Login/login_page.dart';
+import 'package:dms_admin/Pages/Login/widgets/login_page.dart';
 import 'package:dms_admin/Pages/Signup/conponents/background.dart';
 import 'package:dms_admin/components/already_have_an_account_acheck.dart';
 import 'package:dms_admin/components/rounded_button.dart';

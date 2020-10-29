@@ -8,6 +8,7 @@ import 'package:dms_admin/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class VisitDetailPage extends StatefulWidget {
   final String visitId;
@@ -40,102 +41,114 @@ class _VisitDetailPageState extends State<VisitDetailPage>
       body: GetX<VisitDetailController>(builder: (controller) {
         return controller.isLoading.value == LoadStatus.loading
             ? LoadingControl()
-            : Container(
-                padding: EdgeInsets.all(10.0),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 10.0),
-                    PreferredSize(
-                      preferredSize: const Size.fromHeight(kToolbarHeight),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TabBar(
-                          indicator: UnderlineTabIndicator(
-                              borderSide: BorderSide(
-                            width: 4,
-                            color: Color(0xFF646464),
-                          )),
-                          indicatorSize: TabBarIndicatorSize.label,
-                          labelPadding: EdgeInsets.only(left: 0, right: 0),
-                          controller: _nestedTabController,
-                          labelColor: kPrimaryColor,
-                          unselectedLabelColor: Colors.orangeAccent,
-                          isScrollable: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0),
-                          tabs: <Widget>[
-                            Tab(
-                              child: Container(
-                                padding: EdgeInsets.only(top: 5),
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    Text('Check in'),
-                                    Icon(Icons.smart_button_sharp)
-                                  ],
+            : Stack(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 10.0),
+                        PreferredSize(
+                          preferredSize: const Size.fromHeight(
+                              30), // const Size.fromHeight(kToolbarHeight),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: 400,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: TabBar(
+                                // indicator: UnderlineTabIndicator(
+                                //     borderSide: BorderSide(
+                                //   width: 4,
+                                //   color: Color(0xFF646464),
+                                // )),
+                                controller: _nestedTabController,
+                                labelColor: Colors.white,
+                                unselectedLabelColor: Colors.black,
+                                indicator: RectangularIndicator(
+                                  bottomLeftRadius: 100,
+                                  bottomRightRadius: 100,
+                                  topLeftRadius: 100,
+                                  topRightRadius: 100,
+                                  // paintingStyle: PaintingStyle.stroke,
                                 ),
+                                tabs: <Widget>[
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 5),
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text('Check in'),
+                                          // Icon(Icons.smart_button_sharp)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 5),
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text('Đơn hàng'),
+                                          // Icon(Icons.router)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 5),
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text('Check out'),
+                                          // Icon(Icons.person)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 5),
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text('Bản đồ'),
+                                          // Icon(Icons.person)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Tab(
-                              child: Container(
-                                padding: EdgeInsets.only(top: 5),
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    Text('Đơn hàng'),
-                                    Icon(Icons.router)
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Tab(
-                              child: Container(
-                                padding: EdgeInsets.only(top: 5),
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    Text('Check out'),
-                                    Icon(Icons.person)
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Tab(
-                              child: Container(
-                                padding: EdgeInsets.only(top: 5),
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    Text('Bản đồ'),
-                                    Icon(Icons.person)
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      child: Flexible(
-                        // height: screenHeight * 0.80,
-                        // padding: EdgeInsets.all(10.0),
-                        child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          controller: _nestedTabController,
-                          children: <Widget>[
-                            VisitCheckInPage(),
-                            VisitOrderDetailPage(order_id: widget.visitId),
-                            VisitCheckOutPage(),
-                            VisitMapPage(),
-                          ],
+                        Container(
+                          child: Flexible(
+                            // height: screenHeight * 0.80,
+                            // padding: EdgeInsets.all(10.0),
+                            child: TabBarView(
+                              physics: NeverScrollableScrollPhysics(),
+                              controller: _nestedTabController,
+                              children: <Widget>[
+                                VisitCheckInPage(),
+                                VisitOrderDetailPage(order_id: widget.visitId),
+                                VisitCheckOutPage(),
+                                VisitMapPage(),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
       }),
     );
