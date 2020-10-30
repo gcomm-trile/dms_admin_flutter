@@ -1,4 +1,4 @@
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class DividerRow extends StatelessWidget {

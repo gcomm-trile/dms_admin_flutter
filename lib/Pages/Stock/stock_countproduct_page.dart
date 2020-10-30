@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/style.dart';
 import 'package:get/get.dart';
 
-import '../../constants.dart';
+import '../../utils/constants.dart';
 
 class StockCountProductPage extends StatefulWidget {
   StockCountProductPage({Key key}) : super(key: key);

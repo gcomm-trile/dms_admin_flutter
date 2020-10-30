@@ -7,7 +7,7 @@ import 'package:dms_admin/components/my_checkbox.dart';
 import 'package:dms_admin/components/image_picker.dart';
 import 'package:dms_admin/components/my_textfield.dart';
 
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';

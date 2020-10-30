@@ -8,7 +8,7 @@ import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/row_info_section.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 

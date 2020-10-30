@@ -1,6 +1,5 @@
-import 'dart:io';
-import 'package:dms_admin/Pages/Login/controller/login_controller.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/modules/login/login_controller.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';

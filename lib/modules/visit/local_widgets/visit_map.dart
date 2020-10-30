@@ -6,7 +6,7 @@
 
 import 'dart:html';
 
-import 'package:dms_admin/Pages/Visit/controller/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/share/load_status.dart';
 
@@ -17,8 +17,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 
-class VisitMapPage extends StatelessWidget {
-  VisitMapPage() : super();
+class VisitMap extends StatelessWidget {
+  VisitMap() : super();
 
   @override
   Widget build(BuildContext context) {

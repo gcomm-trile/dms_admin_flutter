@@ -1,10 +1,9 @@
-import 'package:dms_admin/Pages/Visit/controller/visit_detail_controller.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_check_in_page.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_check_out_page.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_map_page.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_order_page.dart';
+import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/local_widgets/visit_check_in.dart';
+import 'package:dms_admin/modules/visit/local_widgets/visit_check_out.dart';
+import 'package:dms_admin/modules/visit/local_widgets/visit_map.dart';
+import 'package:dms_admin/modules/visit/local_widgets/visit_order.dart';
 import 'package:dms_admin/components/loading.dart';
-import 'package:dms_admin/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +25,6 @@ class _VisitDetailPageState extends State<VisitDetailPage>
       Get.put(VisitDetailController());
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nestedTabController = new TabController(length: 4, vsync: this);
     visitDetailController.setVisitId(widget.visitId);
@@ -65,6 +63,7 @@ class _VisitDetailPageState extends State<VisitDetailPage>
                                 //   width: 4,
                                 //   color: Color(0xFF646464),
                                 // )),
+
                                 controller: _nestedTabController,
                                 labelColor: Colors.white,
                                 unselectedLabelColor: Colors.black,
@@ -137,10 +136,10 @@ class _VisitDetailPageState extends State<VisitDetailPage>
                               physics: NeverScrollableScrollPhysics(),
                               controller: _nestedTabController,
                               children: <Widget>[
-                                VisitCheckInPage(),
-                                VisitOrderDetailPage(order_id: widget.visitId),
-                                VisitCheckOutPage(),
-                                VisitMapPage(),
+                                VisitCheckIn(),
+                                VisitOrderDetail(order_id: widget.visitId),
+                                VisitCheckOut(),
+                                VisitMap(),
                               ],
                             ),
                           ),

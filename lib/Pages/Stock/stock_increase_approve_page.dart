@@ -7,7 +7,7 @@ import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/header_listview_product.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class StockIncreaseApprovePage extends StatefulWidget {

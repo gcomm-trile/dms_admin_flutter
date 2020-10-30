@@ -1,9 +1,9 @@
 import 'package:dms_admin/Models/visit.dart';
 import 'package:dms_admin/Pages/Visit/controller/visit_controller.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_detail_page.dart';
+import 'package:dms_admin/modules/visit/visit_detail_page.dart';
 import 'package:dms_admin/components/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

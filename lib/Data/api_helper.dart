@@ -20,7 +20,7 @@ import 'package:dms_admin/Models/visit_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import '../constants.dart';
+import '../utils/constants.dart';
 
 // ignore: camel_case_types
 class API_HELPER {

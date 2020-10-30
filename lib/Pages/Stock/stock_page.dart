@@ -5,7 +5,7 @@ import 'package:dms_admin/Models/stock.dart';
 import 'package:dms_admin/Pages/Stock/stock_detail_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_info_page.dart';
 import 'package:dms_admin/components/drawer.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 

@@ -1,7 +1,7 @@
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/components/loading.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProductSearchPage extends StatefulWidget {

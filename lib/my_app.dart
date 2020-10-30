@@ -1,12 +1,11 @@
-import 'package:dms_admin/Models/dashboard.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_detail_page.dart';
+import 'package:dms_admin/Models/visit_detail.dart';
+import 'package:dms_admin/modules/visit/visit_detail_binding.dart';
+import 'package:dms_admin/modules/visit/visit_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
-import 'Pages/Dashboard/dashboard_page.dart';
-import 'Pages/Login/binding/login_binding.dart';
-import 'Pages/Login/widgets/login_page.dart';
+import 'modules/login/login_binding.dart';
+import 'modules/login/login_page.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -30,18 +29,24 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // initialRoute: '/',
-      // getPages: [
-      //   GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
-      // ],
+      initialRoute: '/visitdetail',
+      getPages: [
+        GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
+        GetPage(
+            name: '/visitdetail',
+            page: () => VisitDetailPage(
+                visitId: 'c6f7c90e-4c7d-438b-bbab-4c83b3112928'),
+            binding: VisitDetailBinding()),
+      ],
 
-      home: Scaffold(
-        body: VisitDetailPage(
-          visitId: 'c6f7c90e-4c7d-438b-bbab-4c83b3112928',
-          //  phieuXuatId: '4412ba53-e08c-4969-8423-c25692f1c158',
-          // stockId: '7F7DFD24-D206-45B2-A9D9-E0F32EDFCC81',
-        ),
-      ),
+      // home: Scaffold(
+      //   body:  LoginPae
+      //   // body: VisitDetailPage(
+      //   //   visitId: 'c6f7c90e-4c7d-438b-bbab-4c83b3112928',
+      //   //   //  phieuXuatId: '4412ba53-e08c-4969-8423-c25692f1c158',
+      //   //   // stockId: '7F7DFD24-D206-45B2-A9D9-E0F32EDFCC81',
+      //   // ),
+      // ),
     );
   }
 }

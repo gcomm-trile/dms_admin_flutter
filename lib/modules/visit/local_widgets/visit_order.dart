@@ -6,21 +6,21 @@ import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/loading.dart';
-import 'package:dms_admin/constants.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-class VisitOrderDetailPage extends StatefulWidget {
+class VisitOrderDetail extends StatefulWidget {
   final String order_id;
-  VisitOrderDetailPage({Key key, this.order_id}) : super(key: key);
+  VisitOrderDetail({Key key, this.order_id}) : super(key: key);
 
   @override
-  _VisitOrderDetaiPageState createState() => _VisitOrderDetaiPageState();
+  _VisitOrderDetailState createState() => _VisitOrderDetailState();
 }
 
-class _VisitOrderDetaiPageState extends State<VisitOrderDetailPage> {
+class _VisitOrderDetailState extends State<VisitOrderDetail> {
   Future<Order> f_data;
   final formatter = new NumberFormat("#,###");
   final TextStyle _style_header = TextStyle(

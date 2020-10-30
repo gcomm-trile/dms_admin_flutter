@@ -1,10 +1,10 @@
-import 'package:dms_admin/Pages/Visit/controller/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
 import 'package:dms_admin/share/widgets/divider_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
-class VisitCheckInPage extends StatelessWidget {
-  const VisitCheckInPage({Key key}) : super(key: key);
+class VisitCheckIn extends StatelessWidget {
+  const VisitCheckIn({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

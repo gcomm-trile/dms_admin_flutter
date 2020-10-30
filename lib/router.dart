@@ -3,7 +3,7 @@ import 'package:dms_admin/Pages/Product/product_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_page.dart';
 import 'package:fluro/fluro.dart' as ModularRouter;
 import 'package:flutter/material.dart';
-import 'package:dms_admin/Pages/Login/widgets/login_page.dart';
+import 'package:dms_admin/modules/login/login_page.dart';
 import 'package:dms_admin/Pages/Signup/signup_page.dart';
 import 'package:dms_admin/Pages/Welcome/welcome_page.dart';
 
