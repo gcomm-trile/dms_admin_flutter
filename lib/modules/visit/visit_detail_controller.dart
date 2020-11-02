@@ -1,32 +1,20 @@
-import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/visit_detail.dart';
-import 'package:dms_admin/share/load_status.dart';
-import 'package:get/state_manager.dart';
+import 'package:dms_admin/data/model/visit.dart';
+import 'package:dms_admin/data/repository/visit_repository.dart';
+import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 
 class VisitDetailController extends GetxController {
-  var data = VisitDetail().obs;
-  var isLoading = LoadStatus.success.obs;
+  final VisitRepository repository;
+  VisitDetailController({@required this.repository})
+      : assert(repository != null);
 
-  String visit_id;
+  final _visit = Visit().obs;
+  Visit get visit => this._visit.value;
+  set visit(value) => this._visit.value = value;
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchData();
-  }
-
-  void fetchData() {
-    isLoading(LoadStatus.loading);
-    if (visit_id != null) {
-      API_HELPER.getVisitDetail(visit_id).then((value) {
-        data.value = value;
-        isLoading(LoadStatus.success);
-      }, onError: (error, stackTrace) {});
-    }
-  }
-
-  void setVisitId(String value) {
-    this.visit_id = value;
-    fetchData();
+  getId(id) {
+    repository.getId(id).then((data) {
+      visit = data;
+    });
   }
 }

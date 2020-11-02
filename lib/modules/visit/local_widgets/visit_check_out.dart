@@ -1,43 +1,46 @@
+// import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+// import 'package:dms_admin/share/widgets/divider_header.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/state_manager.dart';
 import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
-import 'package:dms_admin/share/widgets/divider_header.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 
-class VisitCheckOut extends GetX<VisitDetailController> {
+class VisitCheckOut extends GetView<VisitDetailController> {
+  const VisitCheckOut({Key key}) : super(key: key);
+  // final VisitDetailController controller = Get.find();
   @override
   Widget build(BuildContext context) {
-    return GetX<VisitDetailController>(builder: (controller) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Phản hồi của cửa hàng'),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(),
-            ),
-            child: Text(
-              controller.data.value.feedBack,
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
+    print('build visit check out');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Phản hồi của cửa hàng'),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
           ),
-          Text('Hình ảnh'),
-          Expanded(
-              child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.data.value.checkoutImages.length,
-            itemBuilder: (context, index) {
-              return Row(children: [
-                Image.network(
-                  controller.data.value.checkoutImages[index].path,
-                  height: 200,
-                  width: 200,
-                )
-              ]);
-            },
-          ))
-        ],
-      );
-    });
+          child: Text(
+            controller.visit.feedBack,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Text('Hình ảnh'),
+        Expanded(
+            child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: controller.visit.checkoutImages.length,
+          itemBuilder: (context, index) {
+            return Row(children: [
+              Image.network(
+                controller.visit.checkoutImages[index].path,
+                height: 200,
+                width: 200,
+              )
+            ]);
+          },
+        ))
+      ],
+    );
   }
 }

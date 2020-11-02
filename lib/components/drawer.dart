@@ -5,7 +5,7 @@ import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_page.dart';
-import 'package:dms_admin/Pages/Visit/widgets/visit_page.dart';
+import 'package:dms_admin/modules/visit/visit_page.dart';
 import 'package:dms_admin/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

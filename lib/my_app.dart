@@ -1,11 +1,12 @@
-import 'package:dms_admin/Models/visit_detail.dart';
-import 'package:dms_admin/modules/visit/visit_detail_binding.dart';
-import 'package:dms_admin/modules/visit/visit_detail_page.dart';
+import 'package:dms_admin/modules/visit/visit_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'modules/login/login_binding.dart';
 import 'modules/login/login_page.dart';
+import 'modules/visit/visit_detail_binding.dart';
+import 'modules/visit/visit_detail_page.dart';
+import 'modules/visit/visit_page.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -32,6 +33,8 @@ class MainApp extends StatelessWidget {
       initialRoute: '/visitdetail',
       getPages: [
         GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
+        GetPage(
+            name: '/visit', page: () => VisitPage(), binding: VisitBinding()),
         GetPage(
             name: '/visitdetail',
             page: () => VisitDetailPage(

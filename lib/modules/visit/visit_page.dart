@@ -1,47 +1,38 @@
-import 'package:dms_admin/Models/visit.dart';
-import 'package:dms_admin/Pages/Visit/controller/visit_controller.dart';
-import 'package:dms_admin/modules/visit/visit_detail_page.dart';
-import 'package:dms_admin/components/drawer.dart';
-import 'package:dms_admin/components/loading.dart';
+import 'package:dms_admin/data/model/visit.dart';
+import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
-import 'package:dms_admin/share/load_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VisitPage extends StatelessWidget {
-  const VisitPage({Key key}) : super(key: key);
-
+class VisitPage extends GetView<VisitController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: AppDrawer(),
-        appBar: AppBar(
-          title: Text('Viếng thăm'),
-        ),
-        body: GetX<VisitController>(
-          init: VisitController(),
-          builder: (controller) {
-            return controller.isLoading.value == LoadStatus.success
-                ? ListView.builder(
-                    itemCount: controller.data.value.length,
-                    itemBuilder: (context, index) {
-                      return _buildRowListViewSection(
-                          controller.data.value[index]);
-                    },
-                  )
-                : LoadingControl();
-          },
-        ));
+        appBar: AppBar(title: Text('VisitPage')),
+        body: GetX<VisitController>(initState: (state) {
+          Get.find<VisitController>().getAll();
+        }, builder: (_) {
+          return _.visitList.isEmpty
+              ? Center(child: CircularProgressIndicator())
+              : ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                        height: 1,
+                      ),
+                  itemCount: _.visitList.length,
+                  itemBuilder: (context, index) {
+                    return _buildRowListViewSection(_.visitList[index]);
+                  });
+        }));
   }
 
   Widget _buildRowListViewSection(Visit item) {
     return InkWell(
         onTap: () {
-          Get.to(
-              VisitDetailPage(
-                visitId: item.id,
-              ),
-              transition: Transition.downToUp);
+          // Get.to(
+          // VisitDetailPage(
+          //   visitId: item.id,
+          // ),
+          // transition: Transition.downToUp);
         },
         child: Container(
           child: Stack(
@@ -78,7 +69,7 @@ class VisitPage extends StatelessWidget {
                                 children: [
                                   Icon(Icons.store),
                                   Flexible(
-                                    child: Text(item.storeName),
+                                    child: Text(item.store.name),
                                   ),
                                 ],
                               ),
@@ -88,7 +79,7 @@ class VisitPage extends StatelessWidget {
                                 children: [
                                   Icon(Icons.person),
                                   Flexible(
-                                    child: Text(item.userName),
+                                    child: Text(item.createdByName),
                                   ),
                                 ],
                               ),
@@ -115,3 +106,29 @@ class VisitPage extends StatelessWidget {
         ));
   }
 }
+
+// class VisitPage extends StatelessWidget {
+//   const VisitPage({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         drawer: AppDrawer(),
+//         appBar: AppBar(
+//           title: Text('Viếng thăm'),
+//         ),
+//         body: GetX<VisitController>(
+//           init: VisitController(),
+//           builder: (controller) {
+//             return controller.isLoading.value == LoadStatus.success
+//                 ? ListView.builder(
+//                     itemCount: controller.data.value.length,
+//                     itemBuilder: (context, index) {
+//                       return _buildRowListViewSection(
+//                           controller.data.value[index]);
+//                     },
+//                   )
+//                 : LoadingControl();
+//           },
+//         ));
+//   }
