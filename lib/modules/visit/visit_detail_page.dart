@@ -1,13 +1,14 @@
-import 'package:dms_admin/data/model/store.dart';
 import 'package:dms_admin/data/model/visit.dart';
 import 'package:dms_admin/modules/store/store_detail.dart';
 import 'package:dms_admin/modules/visit/local_widgets/tab_header.dart';
 import 'package:dms_admin/modules/visit/local_widgets/visit_order.dart';
 import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
-import 'package:dms_admin/theme/text_theme.dart';
+
 import 'package:dms_admin/widgets/icon_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:motion_tab_bar/MotionTabController.dart';
+import 'package:motion_tab_bar/motiontabbar.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'local_widgets/visit_check_in.dart';
 import 'local_widgets/visit_check_out.dart';
@@ -25,10 +26,17 @@ class VisitDetailPage extends StatefulWidget {
 class _VisitDetailPageState extends State<VisitDetailPage>
     with TickerProviderStateMixin {
   TabController _nestedTabController;
+
   @override
   void initState() {
     super.initState();
     _nestedTabController = new TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nestedTabController.dispose();
   }
 
   @override
@@ -48,68 +56,76 @@ class _VisitDetailPageState extends State<VisitDetailPage>
         builder: (controller) {
           return controller.visit.id == null
               ? Center(child: CircularProgressIndicator())
-              : Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: mainBodySection(controller.visit));
+              : mainBodySection(controller.visit);
         });
   }
 
   tabbarSection(Visit visit) {
-    return TabBar(
-      controller: _nestedTabController,
-      // indicatorColor: Colors.black,
-      // labelColor: Colors.black,
+    return PreferredSize(
+      preferredSize: Size.fromHeight(100.0),
+      child: TabBar(
+        controller: _nestedTabController,
+        // indicatorColor: Colors.black,
+        // labelColor: Colors.black,
 
-      labelColor: Colors.white,
-      unselectedLabelColor: Colors.black,
-      indicator: RectangularIndicator(
-        bottomLeftRadius: 100,
-        bottomRightRadius: 100,
-        topLeftRadius: 100,
-        topRightRadius: 100,
-        // paintingStyle: PaintingStyle.stroke,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.black,
+        indicator: RectangularIndicator(
+          bottomLeftRadius: 100,
+          bottomRightRadius: 100,
+          topLeftRadius: 100,
+          topRightRadius: 100,
+          // paintingStyle: PaintingStyle.stroke,
+        ),
+        tabs: <Widget>[
+          TabHeader(title: 'Check in'),
+          TabHeader(title: 'Đơn hàng'),
+          TabHeader(title: 'Check out'),
+          TabHeader(title: 'Bản đồ'),
+        ],
       ),
-      tabs: <Widget>[
-        TabHeader(title: 'Check in'),
-        TabHeader(title: 'Đơn hàng'),
-        TabHeader(title: 'Check out'),
-        TabHeader(title: 'Bản đồ'),
-      ],
     );
   }
 
   mainBodySection(Visit data) {
-    return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return [
-          SliverAppBar(
-              pinned: false,
-              backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    infoSection(data),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+                pinned: false,
+                backgroundColor: Colors.white,
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
+                  background: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      infoSection(data),
+                    ],
+                  ),
                 ),
-              ),
-              expandedHeight: 155,
-              bottom: tabbarSection(data))
-        ];
-      },
-      body: Container(
-          child: Flexible(
+                expandedHeight: 155,
+                bottom: tabbarSection(data))
+          ];
+        },
+        body: Column(
+          children: [
+            Flexible(
               child: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _nestedTabController,
-        children: <Widget>[
-          const VisitCheckIn(),
-          VisitOrder(),
-          const VisitCheckOut(),
-          const VisitMap(),
-        ],
-      ))),
+                physics: NeverScrollableScrollPhysics(),
+                controller: _nestedTabController,
+                children: <Widget>[
+                  const VisitCheckIn(),
+                  VisitOrder(),
+                  const VisitCheckOut(),
+                  const VisitMap(),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 

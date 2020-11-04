@@ -17,24 +17,7 @@ class VisitMap extends GetView<VisitDetailController> {
     print('build map');
     return Container(
       padding: EdgeInsets.only(top: 10),
-      child: Stack(
-        children: [
-          googleMapSection(),
-          Positioned(
-              left: 2.0,
-              bottom: 2.0,
-              child: Container(
-                color: Colors.grey,
-                child: Column(
-                  children: [
-                    iconHelperSection(assetCheckin, 'Check in'),
-                    iconHelperSection(assetCheckOut, 'Check out'),
-                    iconHelperSection(assetStore, 'Cửa hàng'),
-                  ],
-                ),
-              ))
-        ],
-      ),
+      child: googleMapSection(),
     );
   }
 
@@ -44,7 +27,10 @@ class VisitMap extends GetView<VisitDetailController> {
         Image.asset(
           asset,
         ),
-        Text(title)
+        Text(
+          title,
+          style: TextStyle(fontSize: 9),
+        )
       ],
     );
   }
@@ -53,7 +39,7 @@ class VisitMap extends GetView<VisitDetailController> {
     var _key = GlobalKey<GoogleMapStateBase>();
     return GoogleMap(
       key: _key,
-      initialZoom: 17,
+      initialZoom: 18,
       initialPosition: GeoCoord(controller.visit.locationCheckinLat,
           controller.visit.locationCheckinLong), // Los Angeles, CA
       mapType: MapType.roadmap,
@@ -62,16 +48,20 @@ class VisitMap extends GetView<VisitDetailController> {
           GeoCoord(controller.visit.locationCheckinLat,
               controller.visit.locationCheckinLong),
           icon: assetCheckin,
+          label: 'Check in',
         ),
         Marker(
           GeoCoord(controller.visit.locationCheckoutLat,
               controller.visit.locationCheckoutLong),
           icon: assetCheckOut,
+          label: 'Check out',
         ),
         Marker(
-            GeoCoord(controller.visit.store.gpsLatitude,
-                controller.visit.store.gpsLongitude),
-            icon: assetStore)
+          GeoCoord(controller.visit.store.gpsLatitude,
+              controller.visit.store.gpsLongitude),
+          icon: assetStore,
+          label: 'Cửa hàng',
+        )
       ].toSet(),
       interactive: true,
 

@@ -21,25 +21,33 @@ class VisitOrder extends GetView<VisitDetailController> {
             Column(
               children: [
                 buildInfoSection(controller.visit.order),
-                // _buildDivider,
+                Divider(
+                  thickness: 1.5,
+                  color: Colors.black,
+                ),
                 buildHeaderListView(),
-                // _buildDivider,
-                Expanded(child: buildListView(controller.visit.order.products))
+                Divider(
+                  thickness: 1.5,
+                  color: Colors.black,
+                ),
+                Expanded(
+                  child: buildListView(controller.visit.order.products),
+                )
               ],
             ),
-            // Positioned.fill(
-            //     child: Align(
-            //   alignment: Alignment.topRight,
-            //   child: Opacity(
-            //       opacity: 0.5,
-            //       child: Image.asset(
-            //         data.isExportStock == true
-            //             ? ('assets/images/approved.jpg')
-            //             : ('assets/images/pending.jpg'),
-            //         height: 150,
-            //         width: 150,
-            //       )),
-            // )),
+            Positioned.fill(
+                child: Align(
+              alignment: Alignment.topRight,
+              child: Opacity(
+                  opacity: 0.2,
+                  child: Image.asset(
+                    controller.visit.order.isExportStock == true
+                        ? ('assets/images/approved.jpg')
+                        : ('assets/images/pending.jpg'),
+                    height: 150,
+                    width: 150,
+                  )),
+            )),
           ]);
   }
 
@@ -51,15 +59,6 @@ class VisitOrder extends GetView<VisitDetailController> {
         children: [
           Row(
             children: [
-              Container(
-                child: Icon(
-                  Icons.person,
-                  size: _iconSize,
-                ),
-              ),
-              Container(
-                child: Text(data.createdByName),
-              ),
               Container(
                 child: Icon(
                   Icons.timer,
@@ -149,15 +148,14 @@ class VisitOrder extends GetView<VisitDetailController> {
           } else {
             double sum = 0.0;
             data.forEach((e) => sum += (e.qty * e.price));
-            return Expanded(
-                child: Container(
+            return Container(
               margin: EdgeInsets.all(10.0),
               child: Text(
                 "Tổng : " + formatter.format(sum) + " đ",
                 textAlign: TextAlign.end,
                 style: kStyleListViewHeader,
               ),
-            ));
+            );
           }
         },
         separatorBuilder: (context, index) {
