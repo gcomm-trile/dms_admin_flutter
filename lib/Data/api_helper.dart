@@ -6,20 +6,20 @@ import 'package:dms_admin/Models/dashboard_activity.dart';
 import 'package:dms_admin/Models/dashboard_user.dart';
 import 'package:dms_admin/Models/dashboard_route.dart';
 import 'package:dms_admin/Models/inventory.dart';
-import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
 import 'package:dms_admin/Models/stock.dart';
-import 'package:dms_admin/Models/store.dart';
+import 'package:dms_admin/data/model/order.dart';
+import 'package:dms_admin/data/model/product.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../utils/constants.dart';
+import 'model/store.dart';
 
 // ignore: camel_case_types
 class API_HELPER {

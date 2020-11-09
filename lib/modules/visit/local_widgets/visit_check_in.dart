@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:get/get.dart';
 
-class VisitCheckIn extends GetView<VisitDetailController> {
+class VisitCheckIn extends GetView<VisitController> {
   const VisitCheckIn({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

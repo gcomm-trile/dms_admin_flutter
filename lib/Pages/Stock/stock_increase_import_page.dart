@@ -3,14 +3,13 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_nhap_detail.dart';
-import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/header_listview_product.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/qty_textfield.dart';
+import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -106,10 +105,10 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
                           .toList())
                   .then((value) {
                 if (value.isEmpty) {
-                  UI.showSuccess( "Đã cập nhật thành công");
+                  UI.showSuccess("Đã cập nhật thành công");
                   Navigator.pop(context);
                 } else {
-                  UI.showError( value);
+                  UI.showError(value);
                 }
               });
             }),

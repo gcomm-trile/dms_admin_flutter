@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dms_admin/data/model/visit.dart';
 import 'package:dms_admin/data/repository/visit_repository.dart';
 import 'package:get/get.dart';
@@ -11,10 +13,24 @@ class VisitController extends GetxController {
   get visitList => this._visitList.value;
   set visitList(value) => this._visitList.value = value;
 
+  final _visit = Visit().obs;
+  Visit get visit => this._visit.value;
+  set visit(value) => this._visit.value = value;
+
   getAll() {
     print('visit get all');
     repository.getAll().then((data) {
       this.visitList = data;
-    }).catchError((onError) => {print(onError.toString())});
+    }).catchError((onError) {
+      print(onError.toString());
+      log(onError.toString());
+    });
+  }
+
+  getId(id) {
+    print('visit get ID');
+    repository.getId(id).then((data) {
+      visit = data;
+    });
   }
 }

@@ -2,11 +2,11 @@
 // import 'package:dms_admin/share/widgets/divider_header.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/state_manager.dart';
-import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VisitCheckOut extends GetView<VisitDetailController> {
+class VisitCheckOut extends GetView<VisitController> {
   const VisitCheckOut({Key key}) : super(key: key);
   // final VisitDetailController controller = Get.find();
   @override

@@ -1,11 +1,11 @@
+import 'package:dms_admin/modules/order/order_binding.dart';
 import 'package:dms_admin/modules/visit/visit_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'modules/login/login_binding.dart';
 import 'modules/login/login_page.dart';
-import 'modules/visit/visit_detail_binding.dart';
-import 'modules/visit/visit_detail_page.dart';
+import 'modules/order/order_page.dart';
 import 'modules/visit/visit_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -30,16 +30,19 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/visitdetail',
+      initialRoute: '/orders',
       getPages: [
         GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
         GetPage(
-            name: '/visit', page: () => VisitPage(), binding: VisitBinding()),
+            name: '/visits', page: () => VisitPage(), binding: VisitBinding()),
         GetPage(
-            name: '/visitdetail',
-            page: () => VisitDetailPage(
-                visitId: 'c6f7c90e-4c7d-438b-bbab-4c83b3112928'),
-            binding: VisitDetailBinding()),
+            name: '/orders', page: () => OrderPage(), binding: OrderBinding()),
+        // GetPage(
+        //   name: '/visitdetail',
+        //   page: () =>
+        //       VisitDetailPage(visitId: 'c6f7c90e-4c7d-438b-bbab-4c83b3112928'),
+        //   // binding: VisitDetailBinding()
+        // ),
       ],
 
       // home: Scaffold(

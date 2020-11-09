@@ -6,6 +6,7 @@ import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/components/my_checkbox.dart';
 import 'package:dms_admin/components/image_picker.dart';
 import 'package:dms_admin/components/my_textfield.dart';
+import 'package:dms_admin/data/model/product.dart';
 
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';

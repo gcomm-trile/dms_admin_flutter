@@ -6,6 +6,8 @@ import 'package:dms_admin/Models/order.dart';
 import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/loading.dart';
+import 'package:dms_admin/data/model/order.dart';
+import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -396,7 +398,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   _approved() {
     if (data.exportStockId == kDefaultGuildId) {
-      UI.showError( "Chưa chọn kho xuất");
+      UI.showError("Chưa chọn kho xuất");
       return;
     }
 
@@ -409,7 +411,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         UI.showSuccess("Đã cập nhật thành công");
         Navigator.pop(context);
       } else {
-        UI.showError( value);
+        UI.showError(value);
         enabled = !enabled;
       }
     });

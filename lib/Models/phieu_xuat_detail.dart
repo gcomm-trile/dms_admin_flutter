@@ -1,4 +1,4 @@
-import 'package:dms_admin/Models/product.dart';
+import 'package:dms_admin/data/model/product.dart';
 
 class PhieuXuatDetail {
   String id;

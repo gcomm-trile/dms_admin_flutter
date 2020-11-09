@@ -5,7 +5,7 @@ import 'package:dms_admin/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-const baseUrl = SERVER_URL + 'visit';
+const baseUrl = SERVER_URL + 'visits';
 
 class VisitApiClient {
   http.Client httpClient;
@@ -13,23 +13,35 @@ class VisitApiClient {
 
   getAll() async {
     try {
+      print('call getall api');
       var response =
           await httpClient.get(baseUrl, headers: API_HELPER.getHeaders());
       if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        var listMyModel =
-            jsonResponse.map((item) => new Visit.fromJson(item)).toList();
-        // print(listMyModel.length);
-        return listMyModel;
-      } else {
+        print('call getall api ${response.statusCode}');
         var res = "{\"status\":" +
             response.statusCode.toString() +
             ",\"message\":\"error\",\"response\":" +
             response.body +
             "}";
+
+        List jsonResponse = json.decode(response.body);
+
+        var listMyModel =
+            jsonResponse.map((item) => new Visit.fromJson(item)).toList();
+        print('call getall api return ${listMyModel.length} ');
+        return listMyModel;
+      } else {
+        print('call getall api ${response.statusCode}');
+        var res = "{\"status\":" +
+            response.statusCode.toString() +
+            ",\"message\":\"error\",\"response\":" +
+            response.body +
+            "}";
+        print('call getall api error ${res}');
         throw new Exception(res);
       }
     } catch (ex) {
+      print('call getall api error ${ex.toString()}');
       throw new Exception(ex.toString());
     }
   }

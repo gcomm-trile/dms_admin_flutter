@@ -1,14 +1,14 @@
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/model/product.dart';
-import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class VisitOrder extends GetView<VisitDetailController> {
-  VisitOrder({Key key}) : super(key: key);
+class VisitOrder extends GetView<VisitController> {
+  const VisitOrder({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

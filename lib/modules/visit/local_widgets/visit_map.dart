@@ -3,11 +3,11 @@
 // // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
+import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 
-class VisitMap extends GetView<VisitDetailController> {
+class VisitMap extends GetView<VisitController> {
   const VisitMap({Key key}) : super(key: key);
   final assetCheckin = 'assets/images/marker_tim.png';
   final assetCheckOut = 'assets/images/marker_do.png';
@@ -37,6 +37,8 @@ class VisitMap extends GetView<VisitDetailController> {
 
   googleMapSection() {
     var _key = GlobalKey<GoogleMapStateBase>();
+    print(controller.visit.storeGpsLatitude);
+    print(controller.visit.storeGpsLongitude);
     return GoogleMap(
       key: _key,
       initialZoom: 18,
@@ -57,8 +59,8 @@ class VisitMap extends GetView<VisitDetailController> {
           label: 'Check out',
         ),
         Marker(
-          GeoCoord(controller.visit.store.gpsLatitude,
-              controller.visit.store.gpsLongitude),
+          GeoCoord(controller.visit.storeGpsLatitude,
+              controller.visit.storeGpsLongitude),
           icon: assetStore,
           label: 'Cửa hàng',
         )
