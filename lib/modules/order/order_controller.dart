@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/repository/order_repository.dart';
 import 'package:get/get.dart';
@@ -32,5 +33,25 @@ class OrderController extends GetxController {
     repository.getId(id).then((data) {
       order = data;
     });
+  }
+
+  approved() {}
+
+  pickStock() {
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         content: StockSearchPage(
+    //           savedData: (selectedStock) {
+    //             setState(() {
+    //               data.exportStockId = selectedStock.id;
+    //               data.exportStockName = selectedStock.name;
+    //             });
+    //           },
+    //         ),
+    //       );
+    //     });
+    Get.dialog(StockSearchPage());
   }
 }

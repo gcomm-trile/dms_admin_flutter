@@ -103,11 +103,7 @@ class _VisitDetailPageState extends State<VisitDetailPage>
               controller: _nestedTabController,
               children: <Widget>[
                 Container(
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(),
-                    //     borderRadius: BorderRadius.circular(2.5)),
-                    margin: EdgeInsets.all(5),
-                    child: const VisitCheckIn()),
+                    margin: EdgeInsets.all(5), child: const VisitCheckIn()),
                 Container(
                     padding: EdgeInsets.all(5), child: const VisitOrder()),
                 Container(
