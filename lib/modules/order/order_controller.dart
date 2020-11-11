@@ -52,6 +52,6 @@ class OrderController extends GetxController {
     //         ),
     //       );
     //     });
-    Get.dialog(StockSearchPage());
+    Get.bottomSheet(StockSearchPage());
   }
 }

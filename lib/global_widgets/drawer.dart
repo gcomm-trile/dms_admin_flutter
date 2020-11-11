@@ -2,9 +2,7 @@ import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';
-import 'package:dms_admin/modules/order/order_binding.dart';
-import 'package:dms_admin/modules/order/order_page.dart';
-import 'package:dms_admin/modules/visit/visit_page.dart';
+import 'package:dms_admin/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,14 +25,14 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.view_sidebar,
             text: 'Viếng thăm',
             onTap: () {
-              Get.to(VisitPage());
+              Get.toNamed(Routes.VISIT);
             },
           ),
           _createDrawerItem(
             icon: Icons.event_busy,
             text: 'Đơn hàng',
             onTap: () {
-              Get.to(OrderPage(), binding: OrderBinding());
+              Get.toNamed(Routes.ORDER);
               // Navigator.pushReplacement(context,
               //     MaterialPageRoute(builder: (context) => OrderPage()));
             },

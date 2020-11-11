@@ -1,15 +1,12 @@
 import 'dart:developer';
-
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/inventory.dart';
-import 'package:dms_admin/components/drawer.dart';
+import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/style.dart';
+
 import 'package:get/get.dart';
 
-import '../../utils/constants.dart';
 
 class StockCountProductPage extends StatefulWidget {
   StockCountProductPage({Key key}) : super(key: key);

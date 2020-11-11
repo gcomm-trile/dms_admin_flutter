@@ -4,7 +4,7 @@ import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_xuat.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_export_for_order_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_export_page.dart';
-import 'package:dms_admin/components/drawer.dart';
+import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/row_info_section.dart';

@@ -1,5 +1,6 @@
-import 'package:dms_admin/components/drawer.dart';
+
 import 'package:dms_admin/data/model/visit.dart';
+import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/modules/visit/visit_binding.dart';
 import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:dms_admin/modules/visit/visit_detail_page.dart';

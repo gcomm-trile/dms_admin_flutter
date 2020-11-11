@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_detail_page.dart';
-import 'package:dms_admin/components/drawer.dart';
+import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

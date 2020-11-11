@@ -12,6 +12,7 @@ class VisitApiClient {
   VisitApiClient({@required this.httpClient});
 
   getAll() async {
+    
     try {
       print('call getall api');
       var response =
