@@ -1,8 +1,5 @@
 import 'dart:developer';
-
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/product.dart';
-
 import 'package:dms_admin/components/my_checkbox.dart';
 import 'package:dms_admin/components/image_picker.dart';
 import 'package:dms_admin/components/my_textfield.dart';
@@ -15,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage(this.data, {Key key}) : super(key: key);
-  final Product data;
+  Product data;
   TextEditingController _productNoController = TextEditingController();
   TextEditingController _productNameController = TextEditingController();
   TextEditingController _productDescriptionController = TextEditingController();
@@ -152,7 +149,7 @@ class ProductDetailPage extends StatelessWidget {
     return Row(children: [
       Expanded(
           child: MyCheckbox(
-        is_active: data.isActive,
+        isActive: data.isActive,
         title: "Đang hoạt động",
         onChangedCheck: (checkedValue) {
           log("check change " + checkedValue.toString());

@@ -8,17 +8,17 @@ import 'package:get/state_manager.dart';
 class DashboardUserController extends GetxController {
   var isLoading = LoadStatus.success.obs;
 
-  var dataApi = List<DashboardUser>();
-  var data = List<DashboardUser>().obs;
+  var dataApi = <DashboardUser>[];
+  var data = <DashboardUser>[].obs;
 
   var startDate = DateTime.now().add(Duration(days: -7)).obs;
   var endDate = DateTime.now().obs;
 
-  var provinces = List<String>().obs;
+  var provinces = <String>[].obs;
   var filterProvince = ''.obs;
-  var routes = List<String>().obs;
+  var routes = <String>[].obs;
   var filterRoute = ''.obs;
-  var users = List<String>().obs;
+  var users = <String>[].obs;
   var filterUser = ''.obs;
 
   @override
@@ -46,12 +46,12 @@ class DashboardUserController extends GetxController {
   }
 
   void updateData() {
-    data.value = dataApi
+    data(dataApi
         .where((element) =>
             element.province == filterProvince.value &&
             element.routeName == filterRoute.value &&
             element.fullName == filterUser.value)
-        .toList();
+        .toList());
     log('refresh data ' + filterUser.value);
   }
 
@@ -85,18 +85,18 @@ class DashboardUserController extends GetxController {
   }
 
   void updateProvinces() {
-    List<String> result = List<String>();
+    var result = <String>[];
     for (var item in dataApi) {
       if (!result.contains(item.province)) {
         result.add(item.province);
       }
     }
-    provinces.value = result;
+    provinces(result);
   }
 
   void updateRoute() {
     log('call update route ' + filterProvince.value);
-    List<String> result = List<String>();
+    var result = <String>[];
     if (filterProvince.value.isNotEmpty) {
       for (var item in dataApi) {
         if (!result.contains(item.routeName) &&
@@ -105,13 +105,13 @@ class DashboardUserController extends GetxController {
         }
       }
     }
-    routes.value = result;
-    filterRoute.value = routes.value[0];
+    routes(result);
+    filterRoute.value = routes[0];
   }
 
   void updateUsers() {
     log('call update nvbh ' + filterProvince.value + ' | ' + filterRoute.value);
-    List<String> result = List<String>();
+    var result = <String>[];
     if (filterProvince.value.isNotEmpty && filterRoute.value.isNotEmpty) {
       for (var item in dataApi) {
         if (!result.contains(item.fullName) &&
@@ -122,8 +122,8 @@ class DashboardUserController extends GetxController {
         }
       }
     }
-    users.value = result;
-    filterUser.value = users.value[0];
+    users(result);
+    filterUser.value = users[0];
     log('filter user=' + filterUser.value);
   }
 }

@@ -3,7 +3,6 @@ import 'package:dms_admin/modules/store/store_detail.dart';
 import 'package:dms_admin/modules/visit/local_widgets/tab_header.dart';
 import 'package:dms_admin/modules/visit/local_widgets/visit_order.dart';
 import 'package:dms_admin/modules/visit/visit_controller.dart';
-import 'package:dms_admin/widgets/icon_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';

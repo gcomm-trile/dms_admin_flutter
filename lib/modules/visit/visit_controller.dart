@@ -9,9 +9,9 @@ class VisitController extends GetxController {
   final VisitRepository repository;
   VisitController({@required this.repository}) : assert(repository != null);
 
-  final _visitList = List<Visit>().obs;
-  get visitList => this._visitList.value;
-  set visitList(value) => this._visitList.value = value;
+  final _visitList = <Visit>[].obs;
+  get visitList => this._visitList;
+  set visitList(value) => this._visitList(value);
 
   final _visit = Visit().obs;
   Visit get visit => this._visit.value;

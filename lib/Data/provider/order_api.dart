@@ -30,7 +30,7 @@ class OrderApiClient {
             ",\"message\":\"error\",\"response\":" +
             response.body +
             "}";
-        print('call getall api error ${res}');
+        print('call getall api error $res');
         throw new Exception(res);
       }
     } catch (ex) {

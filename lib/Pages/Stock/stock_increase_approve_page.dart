@@ -1,11 +1,6 @@
-import 'dart:developer';
-
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/product.dart';
-import 'package:dms_admin/Pages/Product/product_search_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/header_listview_product.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -24,13 +19,13 @@ class StockIncreaseApprovePage extends StatefulWidget {
 
 class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
   final double widthQuantibox = 80.0;
-  Future<PhieuXuatDetail> f_phieuXuatDetail;
+  Future<PhieuXuatDetail> fPhieuXuatDetail;
   PhieuXuatDetail phieuXuatDetail;
-  final TextStyle _style_item = TextStyle(fontSize: 14.0);
+  final TextStyle styleItem = TextStyle(fontSize: 14.0);
   @override
   void initState() {
     super.initState();
-    f_phieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
+    fPhieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
   }
 
   Widget build(BuildContext context) {
@@ -56,7 +51,7 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
       Expanded(
         child: Text(
           product.name,
-          style: _style_item,
+          style: styleItem,
         ),
       ),
       SizedBox(
@@ -65,7 +60,7 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
               child: Text(
             product.qty.toString(),
             textAlign: TextAlign.center,
-            style: _style_item,
+            style: styleItem,
           ))),
       SizedBox(
         width: 5.0,
@@ -84,7 +79,7 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
                 children: [
                   Column(children: [
                     HeaderListViewProduct(
-                      sized_qty: 80,
+                      sizedQty: 80,
                     ),
                     Divider(
                       thickness: 1.5,
@@ -160,7 +155,7 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
 
   _buildBodySection(BuildContext context) {
     return FutureBuilder<PhieuXuatDetail>(
-      future: f_phieuXuatDetail,
+      future: fPhieuXuatDetail,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           phieuXuatDetail = snapshot.data;
@@ -218,10 +213,10 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
   _approved(int status) {
     API_HELPER.postDuyetPhieuXuat(widget.phieuXuatId, status).then((value) {
       if (value.isEmpty) {
-        UI.showSuccess( "Đã cập nhật thành công");
+        UI.showSuccess("Đã cập nhật thành công");
         Navigator.pop(context);
       } else {
-        UI.showError( value);
+        UI.showError(value);
       }
     });
   }

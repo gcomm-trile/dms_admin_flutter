@@ -1,16 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:dms_admin/my_app.dart';
 import 'package:flutter/material.dart';
-import 'package:dms_admin/router.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 import 'package:get/get.dart';
-
-import 'modules/login/login_binding.dart';
-import 'modules/login/login_page.dart';
-import 'modules/order/order_binding.dart';
-import 'modules/order/order_page.dart';
-import 'modules/visit/visit_binding.dart';
-import 'modules/visit/visit_page.dart';
 import 'routes/app_pages.dart';
 
 void main() {

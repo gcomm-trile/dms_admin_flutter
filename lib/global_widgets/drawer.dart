@@ -1,4 +1,4 @@
-import 'package:dms_admin/Pages/Dashboard/dashboard_page.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_countproduct_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_decrease_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_increase_page.dart';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class HeaderListViewProduct extends StatelessWidget {
-  final double sized_qty;
-  const HeaderListViewProduct({Key key, this.sized_qty}) : super(key: key);
+  final double sizedQty;
+  const HeaderListViewProduct({Key key, this.sizedQty}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _style_header = TextStyle(
+    TextStyle styleHeader = TextStyle(
         color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold);
 
     return Container(
@@ -19,17 +19,17 @@ class HeaderListViewProduct extends StatelessWidget {
             child: Container(
               child: Text(
                 "Tên SP",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.start,
               ),
             ),
           ),
           SizedBox(
-              width: sized_qty,
+              width: sizedQty,
               child: Container(
                   child: Text(
                 "SL",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(

@@ -35,7 +35,7 @@ class PhieuXuatDetail {
     status = json['status'];
     statusName = json['status_name'];
     if (json['products'] != null) {
-      products = new List<Product>();
+      products = <Product>[];
       json['products'].forEach((v) {
         products.add(new Product.fromJson(v));
       });

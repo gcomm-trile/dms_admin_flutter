@@ -26,10 +26,10 @@ class MainApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      // theme: ThemeData(
+      //   primarySwatch: Colors.green,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
       initialRoute: '/orders',
       getPages: [
         GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
@@ -63,10 +63,10 @@ class SecondApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

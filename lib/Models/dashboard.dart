@@ -16,37 +16,37 @@ class Dashboard {
 
   Dashboard.fromJson(Map<String, dynamic> json) {
     if (json['report_tonghop'] != null) {
-      reportTonghop = new List<ReportTonghop>();
+      reportTonghop = <ReportTonghop>[];
       json['report_tonghop'].forEach((v) {
         reportTonghop.add(new ReportTonghop.fromJson(v));
       });
     }
     if (json['report_tuyen'] != null) {
-      reportTuyen = new List<ReportTuyen>();
+      reportTuyen = <ReportTuyen>[];
       json['report_tuyen'].forEach((v) {
         reportTuyen.add(new ReportTuyen.fromJson(v));
       });
     }
     if (json['report_nvbh'] != null) {
-      reportNvbh = new List<ReportNvbh>();
+      reportNvbh = <ReportNvbh>[];
       json['report_nvbh'].forEach((v) {
         reportNvbh.add(new ReportNvbh.fromJson(v));
       });
     }
     if (json['provinces'] != null) {
-      provinces = new List<Provinces>();
+      provinces = <Provinces>[];
       json['provinces'].forEach((v) {
         provinces.add(new Provinces.fromJson(v));
       });
     }
     if (json['routes'] != null) {
-      routes = new List<Routes>();
+      routes = <Routes>[];
       json['routes'].forEach((v) {
         routes.add(new Routes.fromJson(v));
       });
     }
     if (json['routes_user'] != null) {
-      routesUser = new List<RoutesUser>();
+      routesUser = <RoutesUser>[];
       json['routes_user'].forEach((v) {
         routesUser.add(new RoutesUser.fromJson(v));
       });

@@ -9,9 +9,9 @@ class OrderController extends GetxController {
   final OrderRepository repository;
   OrderController({@required this.repository}) : assert(repository != null);
 
-  final _orderList = List<Order>().obs;
-  get orderList => this._orderList.value;
-  set orderList(value) => this._orderList.value = value;
+  final _orderList = <Order>[].obs;
+  get orderList => this._orderList;
+  set orderList(value) => this._orderList(value);
 
   final _order = Order().obs;
   Order get order => this._order.value;
@@ -38,20 +38,6 @@ class OrderController extends GetxController {
   approved() {}
 
   pickStock() {
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         content: StockSearchPage(
-    //           savedData: (selectedStock) {
-    //             setState(() {
-    //               data.exportStockId = selectedStock.id;
-    //               data.exportStockName = selectedStock.name;
-    //             });
-    //           },
-    //         ),
-    //       );
-    //     });
     Get.bottomSheet(StockSearchPage());
   }
 }

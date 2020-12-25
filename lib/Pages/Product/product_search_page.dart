@@ -5,9 +5,9 @@ import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProductSearchPage extends StatefulWidget {
-  final String stock_id;
+  final String stockId;
   final Function(Set<Inventory> selectedProducts) savedData;
-  ProductSearchPage({Key key, this.savedData, this.stock_id}) : super(key: key);
+  ProductSearchPage({Key key, this.savedData, this.stockId}) : super(key: key);
 
   @override
   _ProductSearchPageState createState() => _ProductSearchPageState();
@@ -75,25 +75,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
         ));
   }
 
-  Widget get _buildHeader {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-        ),
-        Expanded(
-          child: Text("Tên SP"),
-        ),
-        Container(
-          width: 40.0,
-          child: Text(
-            "Tồn",
-            textAlign: TextAlign.right,
-          ),
-        )
-      ],
-    );
-  }
+ 
 
   Widget _buildRow(BuildContext context, int index, Inventory product) {
     final color = index % 2 == 0 ? Colors.red : Colors.blue;

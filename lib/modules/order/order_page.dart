@@ -39,19 +39,7 @@ class OrderPage extends GetView<OrderController> {
     ));
   }
 
-  Widget _buildListViewSection(List<Order> data) {
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          return Divider(
-            thickness: 0.5,
-            color: Colors.black,
-          );
-        },
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          return _buildRowListViewSection(data[index]);
-        });
-  }
+  
 
   Widget _buildRowListViewSection(Order item) {
     return InkWell(

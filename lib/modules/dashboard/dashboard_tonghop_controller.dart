@@ -1,12 +1,12 @@
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/dashboard.dart';
+
 import 'package:dms_admin/Models/dashboard_tong_hop.dart';
-import 'package:dms_admin/Models/product2.dart';
+
 import 'package:dms_admin/share/load_status.dart';
 import 'package:get/state_manager.dart';
 
 class DashboardTongHopController extends GetxController {
-  var data = List<DashboardTongHop>().obs;
+  var data = <DashboardTongHop>[].obs;
   var startDate = DateTime.now().add(Duration(days: -7)).obs;
   var endDate = DateTime.now().obs;
   var isLoading = LoadStatus.success.obs;
@@ -21,7 +21,7 @@ class DashboardTongHopController extends GetxController {
     isLoading(LoadStatus.loading);
 
     API_HELPER.getReportTongHop(startDate.value, endDate.value).then((value) {
-      data.value = value;
+      data(value);
       isLoading(LoadStatus.success);
     }, onError: (error, stackTrace) {});
   }

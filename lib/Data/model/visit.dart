@@ -83,13 +83,13 @@ class Visit {
     createdByName = json['created_by_name'];
     order = json['order'] != null ? new Order.fromJson(json['order']) : null;
     if (json['checkin_images'] != null) {
-      checkinImages = new List<ImageS3>();
+      checkinImages = <ImageS3>[];
       json['checkin_images'].forEach((v) {
         checkinImages.add(new ImageS3.fromJson(v));
       });
     }
     if (json['checkout_images'] != null) {
-      checkoutImages = new List<ImageS3>();
+      checkoutImages = <ImageS3>[];
       json['checkout_images'].forEach((v) {
         checkoutImages.add(new ImageS3.fromJson(v));
       });

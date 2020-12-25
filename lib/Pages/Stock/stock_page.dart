@@ -19,7 +19,7 @@ class StockPage extends StatefulWidget {
 
 class _StockPageState extends State<StockPage> {
   Future<List<Stock>> stocks;
-  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +72,7 @@ class _StockPageState extends State<StockPage> {
                                         StockInfoPage(new Stock(
                                             no: "",
                                             name: "",
-                                            is_active: true,
+                                            isActive: true,
                                             id: Guid.newGuid.toString())),
                                       ],
                                     ),

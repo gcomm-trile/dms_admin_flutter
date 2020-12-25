@@ -44,7 +44,7 @@ class Order {
     exportStockId = json['export_stock_id'];
     exportStockName = json['export_stock_name'];
     if (json['products'] != null) {
-      products = new List<Product>();
+      products = <Product>[];
       json['products'].forEach((v) {
         products.add(new Product.fromJson(v));
       });

@@ -15,7 +15,6 @@ class _MyTextFieldState extends State<MyTextField> {
   TextEditingController textEditingController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     textEditingController = new TextEditingController()..text = widget.text;
   }

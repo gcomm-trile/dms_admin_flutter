@@ -1,4 +1,3 @@
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/data/model/product.dart';
 
 class PhieuNhapDetail {
@@ -48,7 +47,7 @@ class PhieuNhapDetail {
     status = json['status'];
     statusName = json['status_name'];
     if (json['products'] != null) {
-      products = new List<Product>();
+      products = <Product>[];
       json['products'].forEach((v) {
         products.add(new Product.fromJson(v));
       });

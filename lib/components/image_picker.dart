@@ -15,7 +15,7 @@ class _ImagePickerState extends State<ImagePicker> {
   String path;
   @override
   void initState() {
-    // TODO: implement initState
+  
     super.initState();
     setState(() {
       path = widget.path;

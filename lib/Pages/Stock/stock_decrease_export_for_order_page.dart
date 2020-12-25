@@ -1,15 +1,7 @@
-import 'dart:developer';
-
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
-import 'package:dms_admin/Models/order.dart';
-import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/product.dart';
-import 'package:dms_admin/Pages/Product/product_search_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
-import 'package:dms_admin/components/qty_textfield.dart';
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -18,9 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class StockDecreaseExportForOrderPage extends StatefulWidget {
-  final String order_id;
+  final String orderId;
   final String stockId;
-  StockDecreaseExportForOrderPage({Key key, this.order_id, this.stockId})
+  StockDecreaseExportForOrderPage({Key key, this.orderId, this.stockId})
       : super(key: key);
 
   @override
@@ -30,18 +22,18 @@ class StockDecreaseExportForOrderPage extends StatefulWidget {
 
 class _StockDecreaseExportForOrderPageState
     extends State<StockDecreaseExportForOrderPage> {
-  Future<Order> f_data;
+  Future<Order> fData;
   final formatter = new NumberFormat("#,###");
-  final TextStyle _style_header = TextStyle(
+  final TextStyle styleHeader = TextStyle(
       color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold);
-  final TextStyle _style_item = TextStyle(fontSize: 14.0);
-  final icon_size = 30.0;
+  final TextStyle styleItem = TextStyle(fontSize: 14.0);
+  final iconSize = 30.0;
   bool enabled = true;
   Order data;
   @override
   void initState() {
     super.initState();
-    f_data = API_HELPER.getOrder(widget.order_id);
+    fData = API_HELPER.getOrder(widget.orderId);
   }
 
   Widget get _buildDivider {
@@ -61,7 +53,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.store,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -70,7 +62,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.phone,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -83,7 +75,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.gps_fixed,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Expanded(
@@ -98,7 +90,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.person,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -107,7 +99,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.timer,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -120,7 +112,7 @@ class _StockDecreaseExportForOrderPageState
               Container(
                 child: Icon(
                   Icons.inventory,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -152,7 +144,7 @@ class _StockDecreaseExportForOrderPageState
           ],
         ),
         body: FutureBuilder<Order>(
-          future: f_data,
+          future: fData,
           builder: (context, snapshot) {
             if (snapshot.hasData == true) {
               data = snapshot.data;
@@ -206,7 +198,7 @@ class _StockDecreaseExportForOrderPageState
               child: Text(
                 "Tổng : " + formatter.format(sum) + " đ",
                 textAlign: TextAlign.end,
-                style: _style_header,
+                style: styleHeader,
               ),
             ));
           }
@@ -235,7 +227,7 @@ class _StockDecreaseExportForOrderPageState
             child: Container(
               child: Text(
                 "Tên SP",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -245,7 +237,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 "SL",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(
@@ -253,7 +245,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 "Đơn giá",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -261,7 +253,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 "Thành tiền",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -282,14 +274,14 @@ class _StockDecreaseExportForOrderPageState
                 margin: EdgeInsets.only(left: 10.0),
                 child: Text(
                   (index + 1).toString() + '.',
-                  style: _style_header,
+                  style: styleHeader,
                 )),
           ),
           Expanded(
             child: Container(
               child: Text(
                 item.name,
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -299,7 +291,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 formatter.format(item.qty),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(
@@ -307,7 +299,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 formatter.format(item.price),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -315,7 +307,7 @@ class _StockDecreaseExportForOrderPageState
               child: Container(
                   child: Text(
                 formatter.format((item.price * item.qty)),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -328,20 +320,20 @@ class _StockDecreaseExportForOrderPageState
 
   _cancel() {
     if (data.exportStockId == kDefaultGuildId) {
-      UI.showError( "Chưa chọn kho xuất");
+      UI.showError("Chưa chọn kho xuất");
       return;
     }
 
     enabled = !enabled;
 
     API_HELPER
-        .postDuyetXuatDonHang(widget.order_id, kDefaultGuildId, 2)
+        .postDuyetXuatDonHang(widget.orderId, kDefaultGuildId, 2)
         .then((value) {
       if (value.isEmpty) {
         UI.showSuccess("Đã cập nhật thành công");
         Navigator.pop(context);
       } else {
-        UI.showError( value);
+        UI.showError(value);
         enabled = !enabled;
       }
     });

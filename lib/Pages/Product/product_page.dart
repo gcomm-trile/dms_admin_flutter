@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Product/product_detail_page.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/data/model/product.dart';
@@ -18,8 +17,8 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   Future<List<Product>> products;
-  List<Product> original_products = new List<Product>();
-  List<Product> search_products = new List<Product>();
+  List<Product> originalProducts = <Product>[];
+  List<Product> searchProducts = <Product>[];
 
   final formatter = new NumberFormat("#,###");
 
@@ -62,11 +61,11 @@ class _ProductPageState extends State<ProductPage> {
           future: products,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              original_products = snapshot.data;
+              originalProducts = snapshot.data;
               if (editingController.text.isEmpty) {
-                search_products = original_products;
+                searchProducts = originalProducts;
               } else {
-                search_products = original_products
+                searchProducts = originalProducts
                     .where((element) => element.name
                         .toLowerCase()
                         .contains(editingController.text.toLowerCase()))
@@ -76,7 +75,7 @@ class _ProductPageState extends State<ProductPage> {
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
                   _searchSection,
-                  Expanded(child: _buildRowSearch(search_products))
+                  Expanded(child: _buildRowSearch(searchProducts))
                 ]),
               );
             } else if (snapshot.hasError) {
@@ -150,80 +149,19 @@ class _ProductPageState extends State<ProductPage> {
         });
   }
 
-  Widget _buildRowInit(List<Product> data) {
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          return Divider(
-            thickness: 2.0,
-          );
-        },
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-              onTap: () {
-                log("item init selected");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(data[index])),
-                ).then((value) => _getRequests());
-              },
-              child: Container(
-                child: Row(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: data[index].imagePath,
-                      placeholder: (context, url) =>
-                          new CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          new Icon(Icons.error),
-                      width: 100,
-                      height: 100,
-                    ),
-                    Expanded(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(data[index].name,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20)),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(data[index].no,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 15)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                            "Giá :" +
-                                formatter.format(data[index].price) +
-                                " đ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                color: Colors.green))
-                      ],
-                    )),
-                  ],
-                ),
-              ));
-        });
-  }
+ 
 
   void onSearchTextChanged(String value) async {
     if (value.isNotEmpty) {
       setState(() {
-        search_products = original_products
+        searchProducts = originalProducts
             .where((element) =>
                 element.name.toLowerCase().contains(value.toLowerCase()))
             .toList();
       });
     } else {
       setState(() {
-        search_products = original_products.where((element) => 1 == 1).toList();
+        searchProducts = originalProducts.where((element) => 1 == 1).toList();
       });
     }
     return;

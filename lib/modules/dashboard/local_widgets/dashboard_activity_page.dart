@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'package:dms_admin/Controllers/dashboard_activity_controller.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_activity_controller.dart';
 import 'package:dms_admin/Models/dashboard_activity.dart';
-import 'package:dms_admin/Pages/Store/store_detail_controller.dart';
 import 'package:dms_admin/Pages/Store/store_detail_page.dart';
-import 'package:dms_admin/modules/visit/visit_detail_page.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/share/load_status.dart';

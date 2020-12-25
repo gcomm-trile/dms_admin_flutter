@@ -8,8 +8,6 @@ import 'package:dms_admin/components/my_textfield.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
-
 class StockInfoPage extends StatelessWidget {
   StockInfoPage(this.data, {Key key}) : super(key: key);
   final Stock data;
@@ -56,11 +54,10 @@ class StockInfoPage extends StatelessWidget {
                   log("no: " + data.name);
 
                   if (await API_HELPER.updateStock(data) == true) {
-                    UI.showSuccess( "Đã cập nhật thành công");
+                    UI.showSuccess("Đã cập nhật thành công");
                     // Navigator.pop(context);
                   } else {
-                    UI.showError(
-                         "Có lỗi trong quá trình cập nhật dữ liệu");
+                    UI.showError("Có lỗi trong quá trình cập nhật dữ liệu");
                   }
                 }))
       ],
@@ -71,10 +68,10 @@ class StockInfoPage extends StatelessWidget {
     return Row(children: [
       Expanded(
           child: MyCheckbox(
-        is_active: data.is_active,
+        isActive: data.isActive,
         title: "Đang hoạt động",
         onChangedCheck: (checkedValue) {
-          data.is_active = checkedValue;
+          data.isActive = checkedValue;
         },
       ))
     ]);

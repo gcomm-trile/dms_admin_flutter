@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
-import 'package:dms_admin/Models/product.dart';
+
 import 'package:dms_admin/Pages/Product/product_search_page.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/error.dart';
@@ -25,18 +25,16 @@ class StockDecreaseExportPage extends StatefulWidget {
 
 class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
   final double widthQuantibox = 80.0;
-  Future<PhieuXuatDetail> f_phieuXuatDetail;
+  Future<PhieuXuatDetail> fPhieuXuatDetail;
   PhieuXuatDetail data;
   final formatter = new NumberFormat("#,###");
-  final TextStyle _style_header = TextStyle(
+  final TextStyle styleHeader = TextStyle(
       color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold);
-  final TextStyle _style_item = TextStyle(fontSize: 14.0);
-  final icon_size = 30.0;
 
   @override
   void initState() {
     super.initState();
-    f_phieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
+    fPhieuXuatDetail = API_HELPER.getPhieuXuatDetail(widget.phieuXuatId);
   }
 
   Widget _buildAppbarSection(BuildContext context, int status) {
@@ -60,10 +58,10 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                               .toList())
                       .then((value) {
                     if (value.isEmpty) {
-                      UI.showSuccess( "Đã cập nhật thành công");
+                      UI.showSuccess("Đã cập nhật thành công");
                       Navigator.pop(context);
                     } else {
-                      UI.showError( value);
+                      UI.showError(value);
                     }
                   });
                 },
@@ -82,7 +80,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
 
   Widget build(BuildContext context) {
     return FutureBuilder<PhieuXuatDetail>(
-      future: f_phieuXuatDetail,
+      future: fPhieuXuatDetail,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           data = snapshot.data;
@@ -142,7 +140,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
             child: Container(
               child: Text(
                 "Tên SP",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -152,7 +150,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
               child: Container(
                   child: Text(
                 "SL",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(
@@ -354,7 +352,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
 
   void _showPopupProduct(BuildContext context) {
     if (data.exportStockId == null || data.exportStockId == kDefaultGuildId) {
-      UI.showError( 'Chưa chọn kho xuất');
+      UI.showError('Chưa chọn kho xuất');
       return;
     }
     showDialog(
@@ -362,7 +360,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             content: ProductSearchPage(
-              stock_id: data.exportStockId,
+              stockId: data.exportStockId,
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
@@ -389,20 +387,20 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
         });
   }
 
-  void _showPopupSearchStock(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: StockSearchPage(
-              savedData: (selectedStock) {
-                setState(() {
-                  data.importStockId = selectedStock.id;
-                  data.importStockName = selectedStock.name;
-                });
-              },
-            ),
-          );
-        });
-  }
+  // void _showPopupSearchStock(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           content: StockSearchPage(
+  //             savedData: (selectedStock) {
+  //               setState(() {
+  //                 data.importStockId = selectedStock.id;
+  //                 data.importStockName = selectedStock.name;
+  //               });
+  //             },
+  //           ),
+  //         );
+  //       });
+  // }
 }

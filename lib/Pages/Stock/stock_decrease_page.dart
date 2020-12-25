@@ -183,7 +183,7 @@ class _StockDecreasePageState extends State<StockDecreasePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StockDecreaseExportForOrderPage(order_id: id),
+          builder: (context) => StockDecreaseExportForOrderPage(orderId: id),
         )).then((value) {
       setState(() {
         phieuXuat = API_HELPER.listPhieuXuat();

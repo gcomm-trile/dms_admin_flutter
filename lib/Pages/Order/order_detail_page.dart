@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
-import 'package:dms_admin/Models/order.dart';
-import 'package:dms_admin/Models/product.dart';
 import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/data/model/order.dart';
@@ -15,84 +11,33 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  final String order_id;
-  OrderDetailPage({Key key, this.order_id}) : super(key: key);
+  final String orderId;
+  OrderDetailPage({Key key, this.orderId}) : super(key: key);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  Future<Order> f_data;
+  Future<Order> fData;
   final formatter = new NumberFormat("#,###");
-  final TextStyle _style_header = TextStyle(
+  final TextStyle styleHeader = TextStyle(
       color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold);
-  final TextStyle _style_item = TextStyle(fontSize: 14.0);
-  final icon_size = 30.0;
+  final TextStyle styleItem = TextStyle(fontSize: 14.0);
+  final iconSize = 30.0;
   bool enabled = true;
   Order data;
   @override
   void initState() {
     super.initState();
-    print('run order : ' + widget.order_id);
-    f_data = API_HELPER.getOrder(widget.order_id);
+    print('run order : ' + widget.orderId);
+    fData = API_HELPER.getOrder(widget.orderId);
   }
 
   Widget get _buildDivider {
     return Divider(
       thickness: 1.5,
       color: Colors.black,
-    );
-  }
-
-  Widget _buildInfoItem(IconData iconData, String textInfo) {
-    return Container(
-      child: Row(
-        children: [
-          Icon(iconData),
-          Flexible(
-            child: Text(textInfo),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImportStockSection(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Text(
-            "Kho nhận:",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text("Hello",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold)),
-          SizedBox(
-            width: 10.0,
-          ),
-          GestureDetector(
-            onTap: () => _showPopupSearchStock(context),
-            child: Container(
-              child: Icon(
-                Icons.search,
-                size: 50,
-                color: kPrimaryColor,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -106,7 +51,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.store,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -115,7 +60,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.phone,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -128,7 +73,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.gps_fixed,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Expanded(
@@ -143,7 +88,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.person,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -152,7 +97,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.timer,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -165,7 +110,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Container(
                 child: Icon(
                   Icons.inventory,
-                  size: icon_size,
+                  size: iconSize,
                 ),
               ),
               Container(
@@ -178,7 +123,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 child: Container(
                   child: Icon(
                     Icons.search,
-                    size: icon_size,
+                    size: iconSize,
                   ),
                 ),
               ),
@@ -205,7 +150,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ],
         ),
         body: FutureBuilder<Order>(
-          future: f_data,
+          future: fData,
           builder: (context, snapshot) {
             if (snapshot.hasData == true) {
               data = snapshot.data;
@@ -259,7 +204,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Text(
                 "Tổng : " + formatter.format(sum) + " đ",
                 textAlign: TextAlign.end,
-                style: _style_header,
+                style: styleHeader,
               ),
             ));
           }
@@ -288,7 +233,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Container(
               child: Text(
                 "Tên SP",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -298,7 +243,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 "SL",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(
@@ -306,7 +251,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 "Đơn giá",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -314,7 +259,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 "Thành tiền",
-                style: _style_header,
+                style: styleHeader,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -335,14 +280,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 margin: EdgeInsets.only(left: 10.0),
                 child: Text(
                   (index + 1).toString() + '.',
-                  style: _style_header,
+                  style: styleHeader,
                 )),
           ),
           Expanded(
             child: Container(
               child: Text(
                 item.name,
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -352,7 +297,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 formatter.format(item.qty),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.center,
               ))),
           SizedBox(
@@ -360,7 +305,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 formatter.format(item.price),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -368,7 +313,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Container(
                   child: Text(
                 formatter.format((item.price * item.qty)),
-                style: _style_item,
+                style: styleItem,
                 textAlign: TextAlign.right,
               ))),
           SizedBox(
@@ -405,7 +350,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     enabled = !enabled;
 
     API_HELPER
-        .postDuyetXuatDonHang(widget.order_id, data.exportStockId, 1)
+        .postDuyetXuatDonHang(widget.orderId, data.exportStockId, 1)
         .then((value) {
       if (value.isEmpty) {
         UI.showSuccess("Đã cập nhật thành công");

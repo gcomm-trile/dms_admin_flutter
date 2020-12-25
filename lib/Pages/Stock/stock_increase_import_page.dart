@@ -53,7 +53,7 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             content: ProductSearchPage(
-              stock_id: data.importStockId,
+              stockId: data.importStockId,
               savedData: (selectedProducts) {
                 setState(() {
                   log("Đã chọn ${selectedProducts.length.toString()}");
@@ -226,7 +226,7 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
                       ),
                     )
                   : HeaderListViewProduct(
-                      sized_qty: 110.0,
+                      sizedQty: 110.0,
                     ),
               data.products.length == 0
                   ? SizedBox(

@@ -1,19 +1,21 @@
+import 'dart:developer';
+
 import 'package:dms_admin/Data/api_helper.dart';
-import 'package:dms_admin/Models/dashboard_route.dart';
+import 'package:dms_admin/Models/dashboard_activity.dart';
 import 'package:dms_admin/share/load_status.dart';
 import 'package:get/state_manager.dart';
 
-class DashboardRouteController extends GetxController {
-  var dataApi = List<DashboardRoute>();
-  var data = List<DashboardRoute>().obs;
+class DashboardActivityController extends GetxController {
+  var dataApi = <DashboardActivity>[];
+  var data = <DashboardActivity>[].obs;
   var startDate = DateTime.now().add(Duration(days: -7)).obs;
   var endDate = DateTime.now().obs;
   var isLoading = LoadStatus.success.obs;
 
-  var provinces = List<String>().obs;
+  var provinces = <String>[].obs;
   var filterProvince = ''.obs;
-  var routes = List<String>().obs;
-  var filterRoute = ''.obs;
+  var users = <String>[].obs;
+  var filterUser = ''.obs;
 
   @override
   void onInit() {
@@ -23,13 +25,13 @@ class DashboardRouteController extends GetxController {
 
   void fetchData() {
     isLoading(LoadStatus.loading);
-    API_HELPER.getReportRoute(startDate.value, endDate.value).then((value) {
+    API_HELPER.getReportActivity(startDate.value, endDate.value).then((value) {
       dataApi = value;
       if (value.length > 0) {
         updateProvinces();
         filterProvince(value[0].province);
-        updateRoute();
-        filterRoute(value[0].routeName);
+        updateUser();
+        filterUser(value[0].userFullname);
         updateData();
       }
       isLoading(LoadStatus.success);
@@ -37,11 +39,11 @@ class DashboardRouteController extends GetxController {
   }
 
   void updateData() {
-    data.value = dataApi
+    data(dataApi
         .where((element) =>
             element.province == filterProvince.value &&
-            element.routeName == filterRoute.value)
-        .toList();
+            element.userFullname == filterUser.value)
+        .toList());
   }
 
   updateDateTimeRange(List<DateTime> picked) {
@@ -53,36 +55,37 @@ class DashboardRouteController extends GetxController {
 
   void setFilterProvince(String value) {
     filterProvince(value);
-    updateRoute();
-    setFilterRoute(filterRoute.value);
+    updateUser();
+    setFilterUser(filterUser.value);
   }
 
-  void setFilterRoute(String value) {
-    filterRoute(value);
+  void setFilterUser(String value) {
+    filterUser(value);
+    log('filter user ' + filterUser.value);
     updateData();
   }
 
   void updateProvinces() {
-    List<String> result = List<String>();
+    List<String> result = <String>[];
     for (var item in dataApi) {
       if (!result.contains(item.province)) {
         result.add(item.province);
       }
     }
-    provinces.value = result;
+    provinces(result);
   }
 
-  void updateRoute() {
-    List<String> result = List<String>();
+  void updateUser() {
+    List<String> result = <String>[];
     if (filterProvince.value.isNotEmpty) {
       for (var item in dataApi) {
-        if (!result.contains(item.routeName) &&
+        if (!result.contains(item.userFullname) &&
             item.province == filterProvince.value) {
-          result.add(item.routeName);
+          result.add(item.userFullname);
         }
       }
     }
-    routes.value = result;
-    filterRoute.value = routes.value[0];
+    users(result);
+    filterUser.value = users[0];
   }
 }

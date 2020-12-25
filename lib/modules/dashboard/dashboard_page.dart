@@ -1,11 +1,11 @@
-import 'package:dms_admin/Controllers/dashboard_activity_controller.dart';
-import 'package:dms_admin/Controllers/dashboard_route_controller.dart';
-import 'package:dms_admin/Controllers/dashboard_tonghop_controller.dart';
-import 'package:dms_admin/Controllers/dashboard_user_controller.dart';
-import 'package:dms_admin/Pages/Dashboard/dashboard_activity_page.dart';
-import 'package:dms_admin/Pages/Dashboard/dashboard_user_page.dart';
-import 'package:dms_admin/Pages/Dashboard/dashboard_tonghop_page.dart';
-import 'package:dms_admin/Pages/Dashboard/dashboard_route_page.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_activity_controller.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_route_controller.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_tonghop_controller.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_user_controller.dart';
+import 'package:dms_admin/modules/dashboard/local_widgets/dashboard_activity_page.dart';
+import 'package:dms_admin/modules/dashboard/local_widgets/dashboard_user_page.dart';
+import 'package:dms_admin/modules/dashboard/local_widgets/dashboard_tonghop_page.dart';
+import 'package:dms_admin/modules/dashboard/local_widgets/dashboard_route_page.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,6 @@ class _DashboardPageState extends State<DashboardPage>
       Get.put(DashboardActivityController());
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nestedTabController = new TabController(length: 4, vsync: this);
   }
@@ -52,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage>
             _buildSectionRangeDateSection(context),
             SizedBox(height: 10.0),
             PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
+              preferredSize: const Size.fromHeight(100),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TabBar(
@@ -79,7 +78,6 @@ class _DashboardPageState extends State<DashboardPage>
                         child: Column(
                           children: [
                             Text('TỔNG HỢP'),
-                            Icon(Icons.smart_button_sharp)
                           ],
                         ),
                       ),
@@ -89,7 +87,9 @@ class _DashboardPageState extends State<DashboardPage>
                         padding: EdgeInsets.only(top: 5),
                         width: 100,
                         child: Column(
-                          children: [Text('TUYẾN'), Icon(Icons.router)],
+                          children: [
+                            Text('TUYẾN'),
+                          ],
                         ),
                       ),
                     ),
@@ -98,7 +98,7 @@ class _DashboardPageState extends State<DashboardPage>
                         padding: EdgeInsets.only(top: 5),
                         width: 100,
                         child: Column(
-                          children: [Text('NVBH'), Icon(Icons.person)],
+                          children: [Text('NVBH')],
                         ),
                       ),
                     ),
@@ -107,7 +107,7 @@ class _DashboardPageState extends State<DashboardPage>
                         padding: EdgeInsets.only(top: 5),
                         width: 100,
                         child: Column(
-                          children: [Text('HOẠT ĐỘNG'), Icon(Icons.person)],
+                          children: [Text('HOẠT ĐỘNG')],
                         ),
                       ),
                     ),

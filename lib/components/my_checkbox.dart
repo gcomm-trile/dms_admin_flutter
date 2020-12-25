@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MyCheckbox extends StatefulWidget {
-  final bool is_active;
+  final bool isActive;
   final String title;
   final Function(bool checkedValue) onChangedCheck;
 
-  MyCheckbox({this.onChangedCheck, this.is_active, this.title});
+  MyCheckbox({this.onChangedCheck, this.isActive, this.title});
   @override
   _MyCheckboxState createState() => _MyCheckboxState();
 }
@@ -15,10 +15,9 @@ class _MyCheckboxState extends State<MyCheckbox> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
-      checkedValue = widget.is_active;
+      checkedValue = widget.isActive;
     });
   }
 

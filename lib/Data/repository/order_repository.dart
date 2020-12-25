@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -24,7 +24,7 @@ class OrderRepository {
             ",\"message\":\"error\",\"response\":" +
             response.data +
             "}";
-        print('call getall api error ${res}');
+        print('call getall api error $res');
         throw new Exception(res);
       }
     } catch (ex) {
