@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/phieu_nhap.dart';
-import 'package:dms_admin/Pages/Stock/stock_increase_approve_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_increase_import_page.dart';
+import 'package:dms_admin/modules/stock/stock_increase_approve_page.dart';
+import 'package:dms_admin/modules/stock/stock_increase_import_page.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/row_info_section.dart';

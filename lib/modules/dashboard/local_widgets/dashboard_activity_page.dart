@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:dms_admin/modules/dashboard/dashboard_activity_controller.dart';
 import 'package:dms_admin/Models/dashboard_activity.dart';
-import 'package:dms_admin/Pages/Store/store_detail_page.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/share/load_status.dart';
+import 'package:dms_admin/modules/store/store_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';

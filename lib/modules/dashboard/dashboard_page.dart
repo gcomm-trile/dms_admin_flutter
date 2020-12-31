@@ -41,7 +41,7 @@ class _DashboardPageState extends State<DashboardPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Báo cáo'),
+        title: Text('Report'),
       ),
       drawer: AppDrawer(),
       body: Container(

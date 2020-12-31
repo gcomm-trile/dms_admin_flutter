@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:dms_admin/Data/api_helper.dart';
 
 import 'package:dms_admin/Models/stock.dart';
-import 'package:dms_admin/Pages/Stock/stock_detail_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_info_page.dart';
+import 'package:dms_admin/modules/stock/stock_detail_page.dart';
+import 'package:dms_admin/modules/stock/stock_info_page.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';

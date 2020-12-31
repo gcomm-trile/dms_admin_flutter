@@ -4,8 +4,8 @@ import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/Models/phieu_xuat_detail.dart';
 
-import 'package:dms_admin/Pages/Product/product_search_page.dart';
-import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
+import 'package:dms_admin/modules/product/product_search_page.dart';
+import 'package:dms_admin/modules/stock/stock_search_page.dart';
 import 'package:dms_admin/components/error.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/components/qty_textfield.dart';

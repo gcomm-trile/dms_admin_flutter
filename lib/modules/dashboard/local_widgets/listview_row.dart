@@ -32,12 +32,13 @@ class ListViewRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            child: Container(
-          child: Text(
-            this.content,
-            style: textStyle,
+          child: Container(
+            child: Text(
+              this.content,
+              style: textStyle,
+            ),
           ),
-        )),
+        ),
         Container(
             width: 70.0,
             child: Text(

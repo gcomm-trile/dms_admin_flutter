@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:dms_admin/Pages/Stock/stock_search_page.dart';
+import 'package:dms_admin/modules/stock/stock_search_page.dart';
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/repository/order_repository.dart';
 import 'package:get/get.dart';
