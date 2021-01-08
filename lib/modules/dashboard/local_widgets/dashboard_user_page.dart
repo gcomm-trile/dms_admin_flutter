@@ -17,7 +17,7 @@ class DashboardUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build tuyen');
+    print('build nvbh');
 
     return GetX<DashboardUserController>(builder: (controller) {
       return controller.isLoading.value == LoadStatus.loading

@@ -21,11 +21,7 @@ class DashboardRoutePage extends StatelessWidget {
 
     return GetX<DashboardRouteController>(builder: (controller) {
       return controller.isLoading.value == LoadStatus.loading
-          ? Expanded(
-              child: Center(
-                child: LoadingControl(),
-              ),
-            )
+          ? LoadingControl()
           : Column(children: [
               SizedBox(
                 height: 5.0,
@@ -83,28 +79,25 @@ class DashboardRoutePage extends StatelessWidget {
               ),
               Container(
                 decoration: kBoxDecorationTable,
-                child: Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        if (index == 0) return DividerHeader();
-                        return DividerRow();
-                      },
-                      itemCount: controller.data.length + 1,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        if (index == 0) return ListViewHeader();
-                        return ListViewRow(
-                          content: controller.data[index - 1].routeName,
-                          countOrder: controller.data[index - 1].countOrder,
-                          countStoreOrder:
-                              controller.data[index - 1].countStoreOrder,
-                          countVisit: controller.data[index - 1].countVisit,
-                          sumOrderPrice:
-                              controller.data[index - 1].sumOrderPrice,
-                        );
-                      }),
-                ),
-              )
+                child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      if (index == 0) return DividerHeader();
+                      return DividerRow();
+                    },
+                    itemCount: controller.data.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index == 0) return ListViewHeader();
+                      return ListViewRow(
+                        content: controller.data[index - 1].routeName,
+                        countOrder: controller.data[index - 1].countOrder,
+                        countStoreOrder:
+                            controller.data[index - 1].countStoreOrder,
+                        countVisit: controller.data[index - 1].countVisit,
+                        sumOrderPrice: controller.data[index - 1].sumOrderPrice,
+                      );
+                    }),
+              ),
             ]);
     });
   }

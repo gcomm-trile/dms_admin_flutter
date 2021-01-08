@@ -17,7 +17,7 @@ class DashboardActivityPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    print('build activity');
 
     return GetX<DashboardActivityController>(builder: (controller) {
       return controller.isLoading.value == LoadStatus.loading
