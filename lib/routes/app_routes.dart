@@ -5,4 +5,5 @@ abstract class Routes {
   static const VISIT = '/visits';
   static const ORDER = '/orders';
   static const DASHBOARD = '/dashboards';
+  static const INVENTORY_TRANSACTIONS = '/inventory/transactions';
 }

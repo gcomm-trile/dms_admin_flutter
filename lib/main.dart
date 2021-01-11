@@ -7,6 +7,8 @@ import 'routes/app_pages.dart';
 void main() {
   GoogleMap.init('AIzaSyCT1bnH6x0wAPaqG7PIdusRiTPNzqLqqeM');
   Get.lazyPut(() => Dio());
+  Dio dio = Get.find();
+  dio.options.headers["Session-ID"] = '2EF87A1E-5C47-4784-B9E7-5A2438DE308F';
   // Get.put(DashboardTongHopController());
   runApp(MyApp());
 }
@@ -27,6 +29,19 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      // builder: (context, widget) => ResponsiveWrapper.builder(
+      //     BouncingScrollWrapper.builder(context, widget),
+      //     maxWidth: 1200,
+      //     minWidth: 450,
+      //     defaultScale: true,
+      //     breakpoints: [
+      //       ResponsiveBreakpoint.resize(450, name: MOBILE),
+      //       ResponsiveBreakpoint.autoScale(800, name: TABLET),
+      //       ResponsiveBreakpoint.autoScale(1000, name: TABLET),
+      //       ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+      //       ResponsiveBreakpoint.autoScale(2460, name: "4K"),
+      //     ],
+      // background: Container(color: Color(0xFFF5F5F5))),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
