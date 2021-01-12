@@ -1,12 +1,28 @@
 import 'package:dio/dio.dart';
+import 'package:dms_admin/data/provider/inventory_purchase_order_api.dart';
+import 'package:dms_admin/data/provider/inventory_transaction_api.dart';
+import 'package:dms_admin/data/repository/inventory_transaction.dart';
+import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 import 'package:get/get.dart';
+import 'data/repository/inventory_purchase_order.dart';
+
+import 'modules/inventory/purchaseOrders/inventory_purchase_order_controller.dart';
 import 'routes/app_pages.dart';
 
 void main() {
   GoogleMap.init('AIzaSyCT1bnH6x0wAPaqG7PIdusRiTPNzqLqqeM');
   Get.lazyPut(() => Dio());
+
+  Get.lazyPut(() => InventoryTransactionApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => InventoryTransactionRepository(apiClient: Get.find()));
+  Get.lazyPut(() => InventoryTransactionController(repository: Get.find()));
+
+  Get.lazyPut(() => InventoryPurchaseOrderApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => InventoryPurchaseOrderRepository(apiClient: Get.find()));
+  Get.lazyPut(() => InventoryPurchaseOrderController(repository: Get.find()));
+
   Dio dio = Get.find();
   dio.options.headers["Session-ID"] = '2EF87A1E-5C47-4784-B9E7-5A2438DE308F';
   // Get.put(DashboardTongHopController());

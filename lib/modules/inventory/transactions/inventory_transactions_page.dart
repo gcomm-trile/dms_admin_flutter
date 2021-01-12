@@ -1,4 +1,5 @@
 import 'package:dms_admin/data/model/inventory_transaction.dart';
+import 'package:dms_admin/data/repository/inventory_transaction.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -8,7 +9,11 @@ import 'package:get/get.dart';
 import 'local_widgets/card.dart';
 
 class InventoryTransactionPage extends StatelessWidget {
-  final InventoryTransactionsController controller = Get.find();
+  final InventoryTransactionController controller =
+      InventoryTransactionController(
+          repository: InventoryTransactionRepository(
+    apiClient: Get.find(),
+  ));
   InventoryTransactionPage({Key key}) : super(key: key);
   cardRow(int numItemPerRow) {
     var card1 = CardInventoryTransaction(
@@ -55,7 +60,7 @@ class InventoryTransactionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Chi tiết tồn kho')),
       drawer: AppDrawer(),
-      body: GetX<InventoryTransactionsController>(
+      body: GetX<InventoryTransactionController>(
         init: controller,
         initState: (state) => controller.getAll(),
         builder: (_) {

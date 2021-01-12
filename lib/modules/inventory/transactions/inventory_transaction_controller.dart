@@ -1,15 +1,15 @@
 import 'dart:developer';
 
 import 'package:dms_admin/data/model/inventory_transaction.dart';
-import 'package:dms_admin/data/repository/inventory_transactions.dart';
+import 'package:dms_admin/data/repository/inventory_transaction.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-class InventoryTransactionsController extends GetxController {
-  final InventoryTransactionsRepository repository;
-  InventoryTransactionsController({@required this.repository})
+class InventoryTransactionController extends GetxController {
+  final InventoryTransactionRepository repository;
+  InventoryTransactionController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;

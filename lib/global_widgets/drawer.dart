@@ -42,10 +42,14 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.inventory,
             text: 'Tồn kho',
             onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => StockCountProductPage()));
+              Get.toNamed(Routes.INVENTORY_TRANSACTIONS);
+            },
+          ),
+          _createDrawerItem(
+            icon: Icons.call_received,
+            text: 'Mua hàng',
+            onTap: () {
+              Get.toNamed(Routes.INVENTORY_PURCHASE_ORDERS);
             },
           ),
           _createDrawerItem(
