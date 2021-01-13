@@ -1,5 +1,5 @@
 import 'package:dms_admin/data/model/inventory_transaction.dart';
-import 'package:dms_admin/data/repository/inventory_transaction.dart';
+import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
 import 'package:dms_admin/utils/constants.dart';

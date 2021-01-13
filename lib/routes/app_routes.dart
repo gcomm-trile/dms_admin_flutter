@@ -7,4 +7,5 @@ abstract class Routes {
   static const DASHBOARD = '/dashboards';
   static const INVENTORY_TRANSACTIONS = '/inventory/transactions';
   static const INVENTORY_PURCHASE_ORDERS = '/inventory/purchaseorders';
+  static const INVENTORY_PURCHASE_ORDERS_NEW = '/inventory/purchaseorders_new';
 }

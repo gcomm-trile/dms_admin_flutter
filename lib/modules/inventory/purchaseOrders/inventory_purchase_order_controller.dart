@@ -1,5 +1,5 @@
 import 'package:dms_admin/data/model/inventory_purchase_order.dart';
-import 'package:dms_admin/data/repository/inventory_purchase_order.dart';
+import 'package:dms_admin/data/repository/inventory_purchase_order_repository.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
@@ -30,6 +30,8 @@ class InventoryPurchaseOrderController extends GetxController {
   }
 
   void create_purchase_order() {
-    Get.to(InventoryPurchaseOrderNewPage());
+    Get.to(InventoryPurchaseOrderNewPage(
+      purchaseOrderId: '89F18C5C-2A76-4B24-977B-5AF9D590C1CE',
+    ));
   }
 }

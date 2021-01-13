@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dms_admin/data/model/inventory_transaction.dart';
-import 'package:dms_admin/data/repository/inventory_transaction.dart';
+import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

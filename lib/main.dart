@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:dms_admin/data/provider/inventory_purchase_order_api.dart';
 import 'package:dms_admin/data/provider/inventory_transaction_api.dart';
-import 'package:dms_admin/data/repository/inventory_transaction.dart';
+import 'package:dms_admin/data/provider/product_api.dart';
+import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
+import 'package:dms_admin/data/repository/product_repository.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
+import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 import 'package:get/get.dart';
-import 'data/repository/inventory_purchase_order.dart';
+import 'data/repository/inventory_purchase_order_repository.dart';
 
 import 'modules/inventory/purchaseOrders/inventory_purchase_order_controller.dart';
 import 'routes/app_pages.dart';
@@ -22,6 +25,10 @@ void main() {
   Get.lazyPut(() => InventoryPurchaseOrderApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryPurchaseOrderRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryPurchaseOrderController(repository: Get.find()));
+
+  Get.lazyPut(() => ProductApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => ProductRepository(apiClient: Get.find()));
+  Get.lazyPut(() => ProductSearchController(repository: Get.find()));
 
   Dio dio = Get.find();
   dio.options.headers["Session-ID"] = '2EF87A1E-5C47-4784-B9E7-5A2438DE308F';

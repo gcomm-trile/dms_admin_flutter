@@ -10,4 +10,8 @@ class InventoryPurchaseOrderRepository {
   getAll() {
     return apiClient.getAll();
   }
+
+  getId(String purchaseOrderId) {
+    return apiClient.getId(purchaseOrderId);
+  }
 }
