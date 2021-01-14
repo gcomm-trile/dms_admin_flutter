@@ -1,20 +1,34 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class RxProductModel {
-  Rx<bool> checked;
-  Rx<int> id;
-  Rx<String> no;
-  Rx<String> name;
-  Rx<String> unit;
-  Rx<String> description;
-  Rx<int> price;
-  Rx<bool> isActive;
-  Rx<int> qty;
-  Rx<String> imagePath;
-  Rx<int> total;
+  RxBool checked = false.obs;
+  RxInt id = 0.obs;
+  RxString no = ''.obs;
+  RxString name = ''.obs;
+  RxString unit = ''.obs;
+  RxString description = ''.obs;
+  RxInt price = 0.obs;
+  RxBool isActive = false.obs;
+  RxInt qty = 0.obs;
+  RxString imagePath = ''.obs;
+  RxInt total = 0.obs;
 }
 
 class Product {
+  bool checked;
+  int id;
+  String no;
+  String name;
+  String unit;
+  String description;
+  int price;
+  bool isActive;
+  int qty;
+  String imagePath;
+  int total;
+
+  TextEditingController controller = new TextEditingController(text: '1');
   Product(
       {checked,
       id,
@@ -27,43 +41,10 @@ class Product {
       qty,
       imagePath,
       total});
-  final rx = RxProductModel();
-
-  get checked => rx.checked.value;
-  set checked(value) => rx.checked.value = value;
-
-  get id => rx.id.value;
-  set id(value) => rx.id.value = value;
-
-  get no => rx.no.value;
-  set no(value) => rx.no.value = value;
-
-  get name => rx.name.value;
-  set name(value) => rx.name.value = value;
-
-  get unit => rx.unit.value;
-  set unit(value) => rx.unit.value = value;
-
-  get description => rx.description.value;
-  set description(value) => rx.description.value = value;
-
-  get price => rx.price.value;
-  set price(value) => rx.price.value = value;
-
-  get isActive => rx.isActive.value;
-  set isActive(value) => rx.isActive.value = value;
-
-  get qty => rx.qty.value;
-  set qty(value) => rx.qty.value = value;
-
-  get imagePath => rx.imagePath.value;
-  set imagePath(value) => rx.imagePath.value = value;
-
-  get total => rx.total.value;
-  set total(value) => rx.total.value = value;
 
   Product.fromJson(Map<String, dynamic> json) {
-    checked.value = false;
+    // print(json['id'].toString());
+    checked = false;
     id = json['id'];
     no = json['no'];
     name = json['name'];

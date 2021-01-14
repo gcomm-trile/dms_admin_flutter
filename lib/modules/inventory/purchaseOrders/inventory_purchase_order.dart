@@ -12,81 +12,108 @@ class InventoryPurchaseOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Mua hàng')),
-        drawer: AppDrawer(),
-        body: GetX<InventoryPurchaseOrderController>(
+        body: Row(
+      children: [
+        AppDrawer(),
+        GetX<InventoryPurchaseOrderController>(
           init: controller,
           initState: (state) => controller.getAll(),
           builder: (_) {
             if (controller.isBusy.value == true)
               return Center(child: CircularProgressIndicator());
             else {
-              return Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
+              return Expanded(
+                child: Stack(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Danh sách phiếu mua hàng',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            controller.create_purchase_order();
-                          },
-                          child: Container(
-                            height: 37,
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.add_circle_outline,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  'Tạo phiếu mua',
-                                  style: TextStyle(
-                                    color: Colors.white,
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Danh sách phiếu mua hàng',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              RaisedButton(
+                                color: Colors.blue,
+                                onPressed: () {
+                                  controller.createPurchaseOrder();
+                                },
+                                child: Container(
+                                  height: 37,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add_circle_outline,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        'Tạo phiếu mua',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
+                          Row(
+                            children: [
+                              Text('Mã'),
+                              Text('Ngày dự kiến'),
+                              Text('Nhà phân phối'),
+                              Text('Số tham chiếu'),
+                              Text('Kho'),
+                              Text('Tình trạng'),
+                              Text('Số lượng'),
+                              Text('Tổng tiền'),
+                            ],
+                          ),
+                          controller.result.value.length == 0
+                              ? Center(child: Text('Không có dữ liệu'))
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: controller.result.value.length,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        Text(controller
+                                            .result.value[index].no),
+                                        Text(controller
+                                            .result.value[index].planImportDate
+                                            .toString()),
+                                        Text(controller
+                                            .result.value[index].vendorName),
+                                        Text(controller.result.value[index]
+                                            .importStockName),
+                                        Text(controller
+                                            .result.value[index].statusName),
+                                        Text(controller
+                                            .result.value[index].totalImportQty
+                                            .toString()),
+                                      ],
+                                    );
+                                  },
+                                )
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text('Mã'),
-                        Text('Ngày dự kiến'),
-                        Text('Nhà phân phối'),
-                        Text('Số tham chiếu'),
-                        Text('Kho'),
-                        Text('Tình trạng'),
-                        Text('Số lượng'),
-                        Text('Tổng tiền'),
-                      ],
-                    ),
-                    controller.result.value.length == 0
-                        ? Center(child: Text('Không có dữ liệu'))
-                        : ListView.builder(
-                            itemCount: controller.result.value.length,
-                            itemBuilder: (context, index) {
-                              return Text(index.toString());
-                            },
-                          )
                   ],
                 ),
               );
             }
           },
-        ));
+        )
+      ],
+    ));
   }
 }

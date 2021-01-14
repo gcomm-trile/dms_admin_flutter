@@ -14,7 +14,9 @@ class ProductApiClient {
   getAll() async {
     print('session id ${httpClient.options.headers['Session-ID']}');
     try {
+      print(SERVER_URL + baseUrl);
       var response = await httpClient.get(SERVER_URL + baseUrl);
+
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((x) => Product.fromJson(x)).toList();

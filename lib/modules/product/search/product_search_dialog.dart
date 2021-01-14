@@ -1,6 +1,4 @@
-import 'package:dms_admin/Data/api_helper.dart';
 import 'package:dms_admin/Models/inventory.dart';
-import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -11,112 +9,175 @@ class ProductSearchDialog extends StatelessWidget {
   final ProductSearchController controller =
       ProductSearchController(repository: Get.find());
   final String stockId;
-  final Function(Set<Inventory> selectedProducts) savedData;
+  final Function(Set<Product> selectedProducts) savedData;
   ProductSearchDialog({Key key, this.savedData, this.stockId})
       : super(key: key);
 
-  final _checkedProduct = new Set<Inventory>();
-  Future<List<Inventory>> products;
-
-  Widget get _buildAPI {
-    return GetX<ProductSearchController>(
-      init: controller,
-      initState: controller.getAll(),
-      builder: (_) {
-        if (controller.isBusy.value == true)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        else {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                    shrinkWrap: true,
-                    itemCount: controller.result.value.length,
-                    itemBuilder: (context, index) {
-                      return _buildRow(
-                          context, index, controller.result.value[index]);
-                    }),
-              )
-            ],
-          );
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 300.0,
-        height: double.infinity,
-        child: Column(
-          children: [
-            Expanded(child: _buildAPI),
-            RaisedButton(
-              child: Icon(
-                Icons.done,
-                color: Colors.white,
-              ),
-              color: kPrimaryColor,
-              onPressed: () {
-                // setState(() {
-                //   widget.savedData(_checkedProduct);
-                //   Navigator.pop(context);
-                // });
-              },
-            )
-          ],
-        ));
-  }
+    return GetX<ProductSearchController>(
+        init: controller,
+        initState: (state) => controller.getAll(),
+        builder: (_) {
+          return Container(
+              width: 500.0,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: controller.isBusy.value == true
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Column(
+                            children: [
+                              TextField(
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black),
+                                decoration: InputDecoration(
+                                    labelText: 'Tìm kiếm sản phẩm',
+                                    prefixIcon: Container(
+                                        width: 50, child: Icon(Icons.search)),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffCED0D2), width: 1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(6)))),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Tên sản phẩm',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Tồn kho đến',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      )),
+                                ],
+                              ),
+                              Divider(
+                                // endIndent: 5,
+                                // indent: 5,
+                                thickness: 2,
+                              ),
+                              Expanded(
+                                child: ListView.separated(
+                                    separatorBuilder: (context, index) {
+                                      return Divider();
+                                    },
+                                    shrinkWrap: true,
+                                    itemCount: controller.result.value.length,
+                                    itemBuilder: (context, index) {
+                                      var product =
+                                          controller.result.value[index];
 
-  Widget _buildRow(BuildContext context, int index, Product product) {
-    print('come here');
-    final color = index % 2 == 0 ? Colors.red : Colors.blue;
-    final isChecked = _checkedProduct.contains(product);
-    return GestureDetector(
-      onTap: () {
-        controller.setChecked(product);
-        // setState(() {
-        //   if (isChecked)
-        //     _checkedProduct.remove(product);
-        //   else {
-        //     _checkedProduct.add(product);
-        //   }
-        // });
-      },
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            child: Icon(
-              Icons.check_box,
-              // product.checked.value
-              //     ? Icons.check_box
-              //     : Icons.check_box_outline_blank,
-              color: color,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              product.name,
-              style: TextStyle(color: color),
-            ),
-          ),
-          Container(
-            width: 40.0,
-            child: Text(
-              '0',
-              textAlign: TextAlign.right,
-              style: TextStyle(color: color),
-            ),
-          )
-        ],
-      ),
-    );
+                                      return Row(
+                                        children: [
+                                          Container(
+                                              width: 40,
+                                              child: Checkbox(
+                                                value: product.checked,
+                                                checkColor: Colors.white,
+                                                activeColor: Colors.blue,
+                                                onChanged: (value) {
+                                                  controller
+                                                      .setChecked(product);
+                                                },
+                                              )),
+                                          Image.network(
+                                            product.imagePath,
+                                            width: kSizeProductImageWidth,
+                                            height: kSizeProductImageHeight,
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              product.name,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 40.0,
+                                            child: Text(
+                                              '0',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }),
+                              )
+                            ],
+                          ),
+                  ),
+                  Divider(
+                    thickness: 2,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${controller.countChecked()} sản phẩm đã được chọn',
+                        style: TextStyle(
+                            color: controller.countChecked() > 0
+                                ? Colors.blue
+                                : Colors.black),
+                      ),
+                      Expanded(child: Container()),
+                      controller.countChecked() > 0
+                          ? Container(
+                              height: 40,
+                              child: RaisedButton(
+                                child: Text(
+                                  'Hoàn tất chọn',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  this.savedData(
+                                      controller.getSelectedProduct());
+                                  Navigator.pop(context);
+                                  // setState(() {
+                                  //   widget.savedData(_checkedProduct);
+                                  //   Navigator.pop(context);
+                                  // });
+                                },
+                              ),
+                            )
+                          : Container(
+                              height: 40,
+                              child: RaisedButton(
+                                child: Text(
+                                  'Hoàn tất chọn',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.blue,
+                              ),
+                            ),
+                    ],
+                  )
+                ],
+              ));
+        });
   }
 }

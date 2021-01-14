@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return Container(
+      width: 200,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[

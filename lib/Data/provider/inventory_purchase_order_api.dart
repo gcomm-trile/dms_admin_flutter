@@ -20,7 +20,7 @@ class InventoryPurchaseOrderApiClient {
       var response = await httpClient.get(SERVER_URL + baseUrl);
       if (response.statusCode == 200) {
         var result = (response.data as List)
-            .map((x) => InventoryPurchaseOrder.fromJson(x))
+            .map((x) => PurchaseOrder.fromJson(x))
             .toList();
         print('result count ' + result.length.toString());
         return result;
@@ -44,6 +44,25 @@ class InventoryPurchaseOrderApiClient {
         print('error -get');
     } catch (_) {
       print(_.toString());
+    }
+  }
+
+  add(PurchaseOrder value) async {
+    final jobsListAPIUrl = SERVER_URL +
+        baseUrl +
+        '/add?id=${value.purchaseOrderId}&import_stock_id=${value.importStockId}&plan_import_date=${value.planImportDate}&ref_document_note=${value.refDocumentNote}&vendor_id=${value.vendorId}';
+    print("POST $jobsListAPIUrl");
+
+    final response =
+        await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      if (response.data == 'Ok')
+        return '';
+      else
+        return response.data;
+    } else {
+      return response.data;
     }
   }
 }

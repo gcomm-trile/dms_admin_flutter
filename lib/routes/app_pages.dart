@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.INVENTORY_PURCHASE_ORDERS_NEW;
+  static const INITIAL = Routes.INVENTORY_PURCHASE_ORDERS;
 
   static final routes = [
     GetPage(

@@ -1,36 +1,62 @@
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/model/vendor.dart';
+import 'package:intl/intl.dart';
 
 class PurchaseOrder {
   String purchaseOrderId;
   String importStockId;
   String importStockName;
-  String seqNo;
+  String no;
   String vendorId;
   String vendorName;
+  String note;
+  int status;
+  String statusName;
+  DateTime planImportDate;
+  String refDocumentNote;
   List<Product> products;
   List<Vendor> vendors;
   List<Stock> stocks;
+  int totalOrderQty;
+  int totalImportQty;
 
-  PurchaseOrder(
-      {this.purchaseOrderId,
-      this.importStockId,
-      this.importStockName,
-      this.seqNo,
-      this.vendorId,
-      this.vendorName,
-      this.products,
-      this.vendors,
-      this.stocks});
+  PurchaseOrder({
+    this.purchaseOrderId,
+    this.importStockId,
+    this.importStockName,
+    this.no,
+    this.vendorId,
+    this.vendorName,
+    this.products,
+    this.vendors,
+    this.stocks,
+    this.note,
+    this.status,
+    this.statusName,
+    this.totalImportQty,
+    this.totalOrderQty,
+  });
 
   PurchaseOrder.fromJson(Map<String, dynamic> json) {
     purchaseOrderId = json['purchase_order_id'];
     importStockId = json['import_stock_id'];
     importStockName = json['import_stock_name'];
-    seqNo = json['seq_no'];
+    no = json['no'];
     vendorId = json['vendor_id'];
     vendorName = json['vendor_name'];
+    status = json['status'];
+    statusName = json['status_name'];
+
+    print(json['plan_import_date'].toString().substring(0, 10));
+    planImportDate =
+        DateTime.parse(json['plan_import_date'].toString().substring(0, 10));
+
+    ;
+    totalImportQty = json['total_import_qty'];
+    totalOrderQty = json['total_order_qty'];
+    note = json['note'];
+
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {
