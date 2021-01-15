@@ -71,8 +71,8 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
                           id: selectedProduct.productId,
                           no: selectedProduct.productNo,
                           name: selectedProduct.productName,
-                          price: selectedProduct.productPrice,
-                          qty: 0));
+                          priceImported: selectedProduct.productPrice,
+                          qtyOrder: 0));
                     }
                   }
                 });
@@ -101,7 +101,7 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
                       widget.phieuNhapId,
                       '00000000-0000-0000-0000-000000000000',
                       data.products
-                          .where((element) => element.qty > 0)
+                          .where((element) => element.qtyOrder > 0)
                           .toList())
                   .then((value) {
                 if (value.isEmpty) {
@@ -147,11 +147,11 @@ class _StockIncreaseImportPageState extends State<StockIncreaseImportPage> {
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: QtyTextField(
-          value: product.qty,
+          value: product.qtyOrder,
           minValue: 0,
           maxValue: 9999,
           onChangedValue: (value) {
-            product.qty = value;
+            product.qtyOrder = value;
           },
         ),
       )

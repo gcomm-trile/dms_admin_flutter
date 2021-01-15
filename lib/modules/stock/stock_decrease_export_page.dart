@@ -54,7 +54,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                           '00000000-0000-0000-0000-000000000000',
                           widget.phieuXuatId,
                           data.products
-                              .where((element) => element.qty > 0)
+                              .where((element) => element.qtyOrder > 0)
                               .toList())
                       .then((value) {
                     if (value.isEmpty) {
@@ -184,11 +184,11 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
       Container(
         width: 110,
         child: QtyTextField(
-          value: product.qty,
+          value: product.qtyOrder,
           minValue: 0,
           maxValue: 9999,
           onChangedValue: (value) {
-            product.qty = value;
+            product.qtyOrder = value;
           },
         ),
       ),
@@ -376,8 +376,8 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                           id: selectedProduct.productId,
                           no: selectedProduct.productNo,
                           name: selectedProduct.productName,
-                          price: selectedProduct.productPrice,
-                          qty: 0));
+                          priceImported: selectedProduct.productPrice,
+                          qtyOrder: 0));
                     }
                   }
                 });

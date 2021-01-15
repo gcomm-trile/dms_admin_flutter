@@ -1,10 +1,9 @@
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/model/vendor.dart';
-import 'package:intl/intl.dart';
 
 class PurchaseOrder {
-  String purchaseOrderId;
+  String id;
   String importStockId;
   String importStockName;
   String no;
@@ -19,10 +18,10 @@ class PurchaseOrder {
   List<Vendor> vendors;
   List<Stock> stocks;
   int totalOrderQty;
-  int totalImportQty;
+  int totalImportedQty;
 
   PurchaseOrder({
-    this.purchaseOrderId,
+    this.id,
     this.importStockId,
     this.importStockName,
     this.no,
@@ -34,12 +33,12 @@ class PurchaseOrder {
     this.note,
     this.status,
     this.statusName,
-    this.totalImportQty,
+    this.totalImportedQty,
     this.totalOrderQty,
   });
 
   PurchaseOrder.fromJson(Map<String, dynamic> json) {
-    purchaseOrderId = json['purchase_order_id'];
+    id = json['id'];
     importStockId = json['import_stock_id'];
     importStockName = json['import_stock_name'];
     no = json['no'];
@@ -47,13 +46,13 @@ class PurchaseOrder {
     vendorName = json['vendor_name'];
     status = json['status'];
     statusName = json['status_name'];
+    refDocumentNote = json['ref_document_note'];
 
-    print(json['plan_import_date'].toString().substring(0, 10));
     planImportDate =
         DateTime.parse(json['plan_import_date'].toString().substring(0, 10));
 
     ;
-    totalImportQty = json['total_import_qty'];
+    totalImportedQty = json['total_imported_qty'];
     totalOrderQty = json['total_order_qty'];
     note = json['note'];
 

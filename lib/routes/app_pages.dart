@@ -1,5 +1,5 @@
-import 'package:dms_admin/modules/inventory/purchaseOrders/inventory_purchase_order.dart';
-import 'package:dms_admin/modules/inventory/purchaseOrders/inventory_purchase_order_new.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_order.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/modules/login/login_binding.dart';
 import 'package:dms_admin/modules/login/login_page.dart';

@@ -1,11 +1,12 @@
-import 'package:dms_admin/data/model/inventory_purchase_order.dart';
+
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/data/repository/inventory_purchase_order_repository.dart';
 
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_guid/flutter_guid.dart';
-import 'inventory_purchase_order_new.dart';
+import '../import/inventory_purchase_order_import.dart';
+import '../new/inventory_purchase_order_new.dart';
 
 class InventoryPurchaseOrderController extends GetxController {
   final InventoryPurchaseOrderRepository repository;
@@ -34,6 +35,12 @@ class InventoryPurchaseOrderController extends GetxController {
   void createPurchaseOrder() {
     Get.to(InventoryPurchaseOrderNewPage(
       purchaseOrderId: Guid.newGuid.toString(),
+    ));
+  }
+
+  void goToDetail(PurchaseOrder data) {
+    Get.to(InventoryPurchaseOrderImportPage(
+      purchaseOrderId: data.id,
     ));
   }
 }

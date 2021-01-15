@@ -51,6 +51,7 @@ dependencies:
   keyboard_dismisser: ^1.0.2
   motion_tab_bar: ^0.1.5
   number_inc_dec: ^0.6.6
+  percent_indicator: ^2.1.9
   pluto_grid: ^1.0.0
   queries: ^0.1.14
   responsive_framework: ^0.0.14

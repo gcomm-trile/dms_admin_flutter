@@ -135,7 +135,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Text(
                             "Giá : " +
-                                formatter.format(data[index].price) +
+                                formatter.format(data[index].priceImported) +
                                 " đ",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -148,8 +148,6 @@ class _ProductPageState extends State<ProductPage> {
               ));
         });
   }
-
- 
 
   void onSearchTextChanged(String value) async {
     if (value.isNotEmpty) {

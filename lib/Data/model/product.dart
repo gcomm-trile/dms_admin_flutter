@@ -1,19 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-
-class RxProductModel {
-  RxBool checked = false.obs;
-  RxInt id = 0.obs;
-  RxString no = ''.obs;
-  RxString name = ''.obs;
-  RxString unit = ''.obs;
-  RxString description = ''.obs;
-  RxInt price = 0.obs;
-  RxBool isActive = false.obs;
-  RxInt qty = 0.obs;
-  RxString imagePath = ''.obs;
-  RxInt total = 0.obs;
-}
 
 class Product {
   bool checked;
@@ -22,13 +7,25 @@ class Product {
   String name;
   String unit;
   String description;
-  int price;
+  int priceImported;
+  int priceSell;
   bool isActive;
-  int qty;
+  int qtyOrder;
+  int qtyImported;
+  int qtyRemaining;
+  int qtyCurrentStock;
+  int qtyAfterImport;
   String imagePath;
-  int total;
+  int totalImported;
 
-  TextEditingController controller = new TextEditingController(text: '1');
+  TextEditingController qtyTextEditingController =
+      new TextEditingController(text: '1');
+  TextEditingController priceTextEditingController =
+      new TextEditingController(text: '0');
+
+  TextEditingController qtyImportedTextEditingController =
+      new TextEditingController();
+
   Product(
       {checked,
       id,
@@ -36,9 +33,13 @@ class Product {
       name,
       unit,
       description,
-      price,
+      priceSell,
+      priceImported,
       isActive,
-      qty,
+      qtyOrder,
+      qtyImported,
+      qtyRemaining,
+      currentStock,
       imagePath,
       total});
 
@@ -50,11 +51,21 @@ class Product {
     name = json['name'];
     unit = json['unit'];
     description = json['description'];
-    price = json['price'];
+    priceImported = json['price_imported'];
+    priceSell = json['price_sell'];
     isActive = json['is_active'];
-    qty = json['qty'];
+    qtyOrder = json['qty_order'];
+    qtyImported = json['qty_imported'];
+    qtyRemaining = json['qty_remaining'];
+    qtyCurrentStock = json['qty_current_stock'];
+    qtyAfterImport = qtyRemaining + qtyCurrentStock;
     imagePath = json['image_path'];
     total = json['total'];
+    qtyImportedTextEditingController.text = qtyImported.toString();
+    qtyImportedTextEditingController.addListener(() {
+      print('value change ' + qtyImportedTextEditingController.text);
+      qtyImported = int.parse(qtyImportedTextEditingController.text);
+    });
   }
 
   Map<String, dynamic> toJson() {
@@ -64,67 +75,15 @@ class Product {
     data['name'] = this.name;
     data['unit'] = this.unit;
     data['description'] = this.description;
-    data['price'] = this.price;
+    data['price_imported'] = this.priceImported;
+    data['price_sell'] = this.priceSell;
     data['is_active'] = this.isActive;
-    data['qty'] = this.qty;
+    data['qty_order'] = this.qtyOrder;
+    data['qty_imported'] = this.qtyImported;
+    data['qty_remaining'] = this.qtyRemaining;
+    data['qty_current_stock'] = this.qtyCurrentStock;
     data['image_path'] = this.imagePath;
     data['total'] = this.total;
     return data;
   }
 }
-
-// class Product {
-//   Rx<bool> checked;
-//   int id;
-//   String no;
-//   String name;
-//   String unit;
-//   String description;
-//   int price;
-//   bool isActive;
-//   int qty;
-//   String imagePath;
-//   int total;
-
-//   Product(
-//       {this.checked,
-//       this.id,
-//       this.no,
-//       this.name,
-//       this.unit,
-//       this.description,
-//       this.price,
-//       this.isActive,
-//       this.qty,
-//       this.imagePath,
-//       this.total});
-
-//   Product.fromJson(Map<String, dynamic> json) {
-//     checked.value = false;
-//     id = json['id'];
-//     no = json['no'];
-//     name = json['name'];
-//     unit = json['unit'];
-//     description = json['description'];
-//     price = json['price'];
-//     isActive = json['is_active'];
-//     qty = json['qty'];
-//     imagePath = json['image_path'];
-//     total = json['total'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['id'] = this.id;
-//     data['no'] = this.no;
-//     data['name'] = this.name;
-//     data['unit'] = this.unit;
-//     data['description'] = this.description;
-//     data['price'] = this.price;
-//     data['is_active'] = this.isActive;
-//     data['qty'] = this.qty;
-//     data['image_path'] = this.imagePath;
-//     data['total'] = this.total;
-//     return data;
-//   }
-// }

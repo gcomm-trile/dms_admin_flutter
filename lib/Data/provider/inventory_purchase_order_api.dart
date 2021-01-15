@@ -31,12 +31,10 @@ class InventoryPurchaseOrderApiClient {
     }
   }
 
-  getId(String purchaseOrderId) async {
-    print('session id ${httpClient.options.headers['Session-ID']}');
+  getId(String id) async {
     try {
-      print('call ' + SERVER_URL + baseUrl + '/' + purchaseOrderId);
-      var response =
-          await httpClient.get(SERVER_URL + baseUrl + '/' + purchaseOrderId);
+      print('call ' + SERVER_URL + baseUrl + '/' + id);
+      var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
         print(response.data);
         return PurchaseOrder.fromJson(response.data);
@@ -50,7 +48,7 @@ class InventoryPurchaseOrderApiClient {
   add(PurchaseOrder value) async {
     final jobsListAPIUrl = SERVER_URL +
         baseUrl +
-        '/add?id=${value.purchaseOrderId}&import_stock_id=${value.importStockId}&plan_import_date=${value.planImportDate}&ref_document_note=${value.refDocumentNote}&vendor_id=${value.vendorId}';
+        '/add?id=${value.id}&import_stock_id=${value.importStockId}&plan_import_date=${value.planImportDate}&ref_document_note=${value.refDocumentNote}&vendor_id=${value.vendorId}';
     print("POST $jobsListAPIUrl");
 
     final response =

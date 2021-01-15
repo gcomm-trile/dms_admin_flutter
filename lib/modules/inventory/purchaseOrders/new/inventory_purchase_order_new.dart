@@ -1,5 +1,5 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/modules/inventory/purchaseOrders/inventory_purchase_order_new_controller.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -34,45 +34,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppbarSection(BuildContext context) {
-    return AppBar(
-      title: Text("CHI TIẾT MUA HÀNG"),
-      actions: [
-        InkWell(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Icon(Icons.save),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'TẠO MỚI',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              controller.save();
-            }),
-      ],
-    );
-  }
-
   final double widthQuantibox = 80.0;
-
-  void _removeProduct(Product product) {
-    // setState(() {
-    //   data.products.remove(product);
-    // });
-  }
 
   Widget _buildListViewRowSection(Product product) {
     return Row(children: <Widget>[
@@ -87,16 +49,38 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
       Expanded(
         child: Container(child: Text(product.name)),
       ),
+      SizedBox(
+        width: 10,
+      ),
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
-          controller: product.controller,
+          controller: product.qtyTextEditingController,
           min: 1,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: int.parse(product.controller.text),
+          initialValue: int.parse(product.qtyTextEditingController.text),
         ),
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: NumberInputWithIncrementDecrement(
+          controller: product.priceTextEditingController,
+          min: 1,
+          max: 999999,
+          numberFieldDecoration: InputDecoration(border: InputBorder.none),
+          initialValue: int.parse(product.priceTextEditingController.text),
+          incIcon: null,
+          decIcon: null,
+        ),
+      ),
+      SizedBox(
+        width: 10,
       ),
       InkWell(
         child: Container(
@@ -219,17 +203,38 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              width: 10,
+            ),
             Container(
-              width: 140,
+              width: 110,
               child: Text(
                 'Số lượng',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              width: 110,
+              child: Text(
+                'Đơn giá',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 40,
             ),
           ],
         ),
@@ -250,284 +255,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         Divider(
           thickness: 2,
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children: [
-        //     Text(
-        //       'Tổng số lượng ',
-        //       style: TextStyle(
-        //         color: Colors.black,
-        //         fontSize: 17,
-        //       ),
-        //     ),
-        //     Text(
-        //       controller.getCountSelectedProduct().toString(),
-        //       style: TextStyle(
-        //         color: Colors.black,
-        //         fontSize: 17,
-        //         fontWeight: FontWeight.bold,
-        //       ),
-        //     ),
-        //     SizedBox(
-        //       width: 30,
-        //     ),
-        //   ],
-        // ),
       ],
-    );
-    // return Container(
-    //   padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     children: [
-    //       RaisedButton(
-    //         onPressed: () => controller.addProducts(),
-    //         color: Colors.blue,
-    //         child: Container(
-    //           height: 40,
-    //           width: 150,
-    //           child: Row(
-    //             children: [
-    //               Icon(
-    //                 Icons.add,
-    //                 color: Colors.white,
-    //               ),
-    //               Text(
-    //                 'Thêm sản phẩm',
-    //                 style: TextStyle(
-    //                   color: Colors.white,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       SizedBox(
-    //         height: 10,
-    //       ),
-    //       controller.result.value.products == null ||
-    //               controller.result.value.products.length == 0
-    //           // ? Text('abc')
-    //           // : Text('xyz')
-    //           ? Expanded(
-    //               child: ListView.separated(
-    //                   shrinkWrap: true,
-    //                   separatorBuilder: (context, index) {
-    //                     return Divider(
-    //                       color: Colors.black,
-    //                       thickness: 0.2,
-    //                     );
-    //                   },
-    //                   itemBuilder: (context, index) {
-    //                     return Text('');
-    //                   },
-    //                   itemCount: 1),
-    //             )
-    //           : Column(
-    //               children: [
-    //                 Row(
-    //                   children: [
-    //                     Expanded(
-    //                       child: Text(
-    //                         'Sản phẩm',
-    //                         style: TextStyle(
-    //                           color: Colors.black,
-    //                           fontWeight: FontWeight.bold,
-    //                           fontSize: 15,
-    //                         ),
-    //                       ),
-    //                     ),
-    //                     Container(
-    //                       width: 140,
-    //                       child: Text(
-    //                         'Số lượng',
-    //                         textAlign: TextAlign.center,
-    //                         style: TextStyle(
-    //                           color: Colors.black,
-    //                           fontWeight: FontWeight.bold,
-    //                           fontSize: 15,
-    //                         ),
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //                 Divider(
-    //                   thickness: 2,
-    //                 ),
-    //                 Expanded(
-    //                   child: ListView.separated(
-    //                       separatorBuilder: (context, index) {
-    //                         return Divider(
-    //                           color: Colors.black,
-    //                           thickness: 0.2,
-    //                         );
-    //                       },
-    //                       shrinkWrap: true,
-    //                       itemBuilder: (context, index) {
-    //                         return _buildListViewRowSection(
-    //                             controller.result.value.products[index]);
-    //                       },
-    //                       itemCount: controller.result.value.products.length),
-    //                 ),
-    //                 Divider(
-    //                   thickness: 2,
-    //                 ),
-    //                 Row(
-    //                   mainAxisAlignment: MainAxisAlignment.end,
-    //                   crossAxisAlignment: CrossAxisAlignment.end,
-    //                   children: [
-    //                     Text(
-    //                       'Tổng số lượng ',
-    //                       style: TextStyle(
-    //                         color: Colors.black,
-    //                         fontSize: 17,
-    //                       ),
-    //                     ),
-    //                     Text(
-    //                       controller.getCountSelectedProduct().toString(),
-    //                       style: TextStyle(
-    //                         color: Colors.black,
-    //                         fontSize: 17,
-    //                         fontWeight: FontWeight.bold,
-    //                       ),
-    //                     ),
-    //                     SizedBox(
-    //                       width: 30,
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ],
-    //             ),
-    //     ],
-    //   ),
-    // );
-  }
-
-  _buildProductSection2() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          RaisedButton(
-            onPressed: () => controller.addProducts(),
-            color: Colors.blue,
-            child: Container(
-              height: 40,
-              width: 150,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    'Thêm sản phẩm',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          controller.result.value.products == null ||
-                  controller.result.value.products.length == 0
-              // ? Text('abc')
-              // : Text('xyz')
-              ? ListView.separated(
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) {
-                    return Divider(
-                      color: Colors.black,
-                      thickness: 0.2,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return Text('');
-                  },
-                  itemCount: 1)
-              : Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Sản phẩm',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 140,
-                          child: Text(
-                            'Số lượng',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    ListView.separated(
-                        separatorBuilder: (context, index) {
-                          return Divider(
-                            color: Colors.black,
-                            thickness: 0.2,
-                          );
-                        },
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return _buildListViewRowSection(
-                              controller.result.value.products[index]);
-                        },
-                        itemCount: controller.result.value.products.length),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Tổng số lượng ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                          ),
-                        ),
-                        Text(
-                          controller.getCountSelectedProduct().toString(),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-        ],
-      ),
     );
   }
 
@@ -566,22 +294,6 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.all(10),
-                  //   color: Color.fromRGBO(213, 220, 230, 1),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //       Expanded(
-                  //         child: _buildProductSection(),
-                  //       ),
-                  //       ListView(
-                  //         children: _buildInformationSection(),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               );
       },
@@ -665,7 +377,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(10),
       width: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -911,7 +623,6 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
             'Số tham chiếu',
             style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.bold,
               color: Colors.grey,
             ),
           ),

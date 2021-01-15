@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-class InventoryPurchaseOrderNewController extends GetxController {
+class InventoryPurchaseOrderImportController extends GetxController {
   final InventoryPurchaseOrderRepository repository;
 
   TextEditingController thongTinGhiChuTextEditController =
       TextEditingController();
   TextEditingController soThamChieuTextEditController = TextEditingController();
-  InventoryPurchaseOrderNewController({@required this.repository})
+  InventoryPurchaseOrderImportController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;
@@ -28,21 +28,22 @@ class InventoryPurchaseOrderNewController extends GetxController {
   final stock = Rx<Stock>();
 
   void getId(String purchaseOrderId) {
-    print('run');
+    print(purchaseOrderId);
+    print('run import');
     isBusy(true);
     repository.getId(purchaseOrderId).then((data) {
-      if (data == null) {
-        var item = new PurchaseOrder(
-            purchaseOrderId: purchaseOrderId, products: List<Product>());
-        result.value = item;
-      } else {
-        result.value = data;
-        thongTinGhiChuTextEditController =
-            TextEditingController(text: result.value.note);
-        soThamChieuTextEditController =
-            TextEditingController(text: result.value.refDocumentNote);
-      }
-      result.value.purchaseOrderId = purchaseOrderId;
+      print('return data import');
+      result.value = data;
+      vendor.value = result.value.vendors
+          .where((element) => element.id == result.value.vendorId)
+          .first;
+      stock.value = result.value.stocks
+          .where((element) => element.id == result.value.importStockId)
+          .first;
+      thongTinGhiChuTextEditController =
+          TextEditingController(text: result.value.note);
+      soThamChieuTextEditController =
+          TextEditingController(text: result.value.refDocumentNote);
       isBusy(false);
     }).catchError((e) {
       print(e.toString());
@@ -98,7 +99,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
   addProducts() {
     if (result.value.products != null) {
       for (var item in result.value.products) {
-        print(item.name + ' ' + item.controller.text);
+        print(item.name + ' ' + item.qtyTextEditingController.text);
       }
     }
     Get.dialog(
@@ -116,7 +117,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
                       .where((element) => element.id == selectedProduct.id)
                       .length ==
                   0) {
-                selectedProduct.qty = 1;
+                selectedProduct.qtyOrder = 1;
                 result.value.products.add(selectedProduct);
               }
             }
@@ -125,13 +126,6 @@ class InventoryPurchaseOrderNewController extends GetxController {
         ),
       ),
     );
-  }
-
-  removeProduct(Product product) {
-    isBusy(true);
-    print('remove ' + product.name.toString() + product.controller.text);
-    result.value.products.removeWhere((element) => element.id == product.id);
-    isBusy(false);
   }
 
   int getCountSelectedProduct() {
