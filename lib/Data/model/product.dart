@@ -60,7 +60,6 @@ class Product {
     qtyCurrentStock = json['qty_current_stock'];
     qtyAfterImport = qtyRemaining + qtyCurrentStock;
     imagePath = json['image_path'];
-    total = json['total'];
     qtyImportedTextEditingController.text = qtyImported.toString();
     qtyImportedTextEditingController.addListener(() {
       print('value change ' + qtyImportedTextEditingController.text);
@@ -83,7 +82,7 @@ class Product {
     data['qty_remaining'] = this.qtyRemaining;
     data['qty_current_stock'] = this.qtyCurrentStock;
     data['image_path'] = this.imagePath;
-    data['total'] = this.total;
+
     return data;
   }
 }

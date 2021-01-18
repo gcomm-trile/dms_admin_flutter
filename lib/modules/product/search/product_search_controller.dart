@@ -9,7 +9,7 @@ class ProductSearchController extends GetxController {
       : assert(repository != null);
   final isBusy = true.obs;
 
-  var result = Rx<List<Product>>();
+  var result = List<Product>().obs;
 
   void getAll() {
     isBusy(true);
@@ -24,22 +24,25 @@ class ProductSearchController extends GetxController {
   }
 
   int countChecked() {
-    return result.value == null
+    return result == null
         ? 0
-        : result.value.where((element) => element.checked == true).length;
+        : result.where((element) => element.checked == true).length;
   }
 
-  void setChecked(Product product) {
-    isBusy(true);
-    var a = result;
-    for (var item in a.value) {
-      if (item.id == product.id) {
-        item.checked = !product.checked;
-      }
-    }
+  void setChecked(int index, bool value) {
+    var product = result[index];
+    product.checked = value;
+    result[index] = product;
+    // isBusy(true);
+    // var a = result;
+    // for (var item in a.value) {
+    //   if (item.id == product.id) {
+    //     item.checked = !product.checked;
+    //   }
+    // }
 
-    result(a.value);
-    isBusy(false);
+    // result(a.value);
+    // isBusy(false);
   }
 
   Set<Product> getSelectedProduct() {

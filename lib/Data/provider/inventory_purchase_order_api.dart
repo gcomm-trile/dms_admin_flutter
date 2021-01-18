@@ -36,7 +36,7 @@ class InventoryPurchaseOrderApiClient {
       print('call ' + SERVER_URL + baseUrl + '/' + id);
       var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
-        print(response.data);
+        //print(response.data);
         return PurchaseOrder.fromJson(response.data);
       } else
         print('error -get');

@@ -19,12 +19,13 @@ class _QtyTextFieldState extends State<QtyTextField> {
   @override
   void initState() {
     super.initState();
-    textEditingController = new TextEditingController()
-      ..text = widget.value.toString();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('rebuild qty controller');
+    textEditingController = new TextEditingController()
+      ..text = widget.value.toString();
     return Container(
       width: 150,
       child: Row(
@@ -37,6 +38,10 @@ class _QtyTextFieldState extends State<QtyTextField> {
             child: TextField(
               textAlign: TextAlign.center,
               onChanged: (value) {
+                if (int.parse(value) > widget.maxValue)
+                  value = widget.maxValue.toString();
+                if (int.parse(value) < widget.minValue)
+                  value = widget.minValue.toString();
                 widget.onChangedValue(int.parse(value));
               },
               controller: textEditingController,

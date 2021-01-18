@@ -1,4 +1,3 @@
-import 'package:dms_admin/Models/inventory.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -82,10 +81,9 @@ class ProductSearchDialog extends StatelessWidget {
                                       return Divider();
                                     },
                                     shrinkWrap: true,
-                                    itemCount: controller.result.value.length,
+                                    itemCount: controller.result.length,
                                     itemBuilder: (context, index) {
-                                      var product =
-                                          controller.result.value[index];
+                                      var product = controller.result[index];
 
                                       return Row(
                                         children: [
@@ -96,8 +94,8 @@ class ProductSearchDialog extends StatelessWidget {
                                                 checkColor: Colors.white,
                                                 activeColor: Colors.blue,
                                                 onChanged: (value) {
-                                                  controller
-                                                      .setChecked(product);
+                                                  controller.setChecked(
+                                                      index, value);
                                                 },
                                               )),
                                           Image.network(
