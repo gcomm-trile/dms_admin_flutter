@@ -4,7 +4,6 @@ import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/data/model/vendor.dart';
 import 'package:dms_admin/data/repository/inventory_purchase_order_repository.dart';
-import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,39 +48,11 @@ class InventoryPurchaseOrderImportController extends GetxController {
     isExpandedVendor(value);
   }
 
-  int getCountSelectedProduct() {
-    return result.value.products
-        .where((element) => element.checked == true)
-        .length;
-  }
-
-  void save() {
-    if (result.value.products == null || result.value.products.length == 0) {
-      UI.showError('Chọn sản phẩm cần mua hàng');
-      return;
-    }
-
-    if (stock.value == null || stock.value.id == null) {
-      UI.showError('Chọn kho cần mua hàng');
-      return;
-    } else {
-      result.value.importStockId = stock.value.id;
-    }
-    if (vendor.value == null || vendor.value.id == null) {
-      UI.showError('Chọn nhà cung cấp cần mua hàng');
-      return;
-    } else {
-      result.value.vendorId = vendor.value.id;
-    }
-
-    print('stock ' + result.value.importStockId);
-    print('vendor ' + result.value.vendorId);
-    print('vendor ' + result.value.planImportDate.toString());
-
-    repository.add(result.value).then((data) {
+  void import() {
+    repository.import(result.value).then((data) {
       print(data);
       if (data.toString().isEmpty) {
-        UI.showSuccess('Đã tạo thành công');
+        UI.showSuccess('Đã cập nhật thành công');
         Get.offAndToNamed(Routes.INVENTORY_PURCHASE_ORDERS);
       } else {
         UI.showError(data.toString());
@@ -93,11 +64,11 @@ class InventoryPurchaseOrderImportController extends GetxController {
   }
 
   void setImportedQty(int index, int newValue) {
-    print('imported qty at ${index} change to $newValue');
+    print('imported qty at $index change to $newValue');
     var product = products[index];
     product.qtyImported = newValue;
     product.qtyAfterImport = newValue + product.qtyCurrentStock;
-
+    product.qtyImportedTextEditingController.text = newValue.toString();
     products[index] = product;
   }
 
@@ -121,11 +92,17 @@ class InventoryPurchaseOrderImportController extends GetxController {
     return result;
   }
 
+  int getCountSelectedProduct() {
+    return result.value.products
+        .where((element) => element.checked == true)
+        .length;
+  }
+
   getTotalMoneyImported() {
     int result = 0;
     for (var product in products) {
       if (product.qtyImported > 0)
-        result += product.qtyImported * product.priceImported;
+        result += product.qtyImported * product.priceOrder;
     }
     return result;
   }

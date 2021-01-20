@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dms_admin/global_widgets/price_editing_controller.dart';
+import 'package:flutter/material.dart';
 
 class Product {
   bool checked;
@@ -7,7 +8,7 @@ class Product {
   String name;
   String unit;
   String description;
-  int priceImported;
+  int priceOrder;
   int priceSell;
   bool isActive;
   int qtyOrder;
@@ -16,12 +17,11 @@ class Product {
   int qtyCurrentStock;
   int qtyAfterImport;
   String imagePath;
-  int totalImported;
-
+  int totalPriceImported;
   TextEditingController qtyTextEditingController =
       new TextEditingController(text: '1');
-  TextEditingController priceTextEditingController =
-      new TextEditingController(text: '0');
+  PriceEditingController priceOrderEditingController =
+      new PriceEditingController('0');
 
   TextEditingController qtyImportedTextEditingController =
       new TextEditingController();
@@ -51,7 +51,7 @@ class Product {
     name = json['name'];
     unit = json['unit'];
     description = json['description'];
-    priceImported = json['price_imported'];
+    priceOrder = json['price_order'];
     priceSell = json['price_sell'];
     isActive = json['is_active'];
     qtyOrder = json['qty_order'];
@@ -61,10 +61,6 @@ class Product {
     qtyAfterImport = qtyRemaining + qtyCurrentStock;
     imagePath = json['image_path'];
     qtyImportedTextEditingController.text = qtyImported.toString();
-    qtyImportedTextEditingController.addListener(() {
-      print('value change ' + qtyImportedTextEditingController.text);
-      qtyImported = int.parse(qtyImportedTextEditingController.text);
-    });
   }
 
   Map<String, dynamic> toJson() {
@@ -74,7 +70,7 @@ class Product {
     data['name'] = this.name;
     data['unit'] = this.unit;
     data['description'] = this.description;
-    data['price_imported'] = this.priceImported;
+    data['price_order'] = this.priceOrder;
     data['price_sell'] = this.priceSell;
     data['is_active'] = this.isActive;
     data['qty_order'] = this.qtyOrder;

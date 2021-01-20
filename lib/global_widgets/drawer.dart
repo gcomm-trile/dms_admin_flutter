@@ -9,7 +9,10 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      decoration: BoxDecoration(
+          //border: Border.all(),
+          ),
+      width: 150,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -93,7 +96,7 @@ class AppDrawer extends StatelessWidget {
               child: Text("EZ Solution",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 30.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.w500))),
         ]));
   }

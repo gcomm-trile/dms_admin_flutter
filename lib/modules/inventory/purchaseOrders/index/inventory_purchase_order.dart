@@ -2,6 +2,7 @@ import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -73,18 +74,6 @@ class InventoryPurchaseOrderPage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 15,
-                      ),
-                      TextField(
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                        decoration: InputDecoration(
-                            labelText: 'Nhập mã phiếu',
-                            prefixIcon:
-                                Container(width: 50, child: Icon(Icons.search)),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xffCED0D2), width: 1),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)))),
                       ),
                       SizedBox(
                         height: 15,
@@ -234,7 +223,7 @@ class InventoryPurchaseOrderPage extends StatelessWidget {
           sizedBox,
           Expanded(
             child: Container(
-              child: Text(data.vendorName),
+              child: Text(TextHelper.toSafeString(data.vendorName)),
             ),
           ),
           sizedBox,

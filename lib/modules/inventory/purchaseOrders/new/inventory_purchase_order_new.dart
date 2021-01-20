@@ -1,14 +1,21 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/global_widgets/mask_text_controller.dart';
+import 'package:dms_admin/global_widgets/price_editing_controller.dart';
+import 'package:dms_admin/global_widgets/money_format.dart';
+import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
-import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-import 'package:number_inc_dec/number_inc_dec.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class InventoryPurchaseOrderNewPage extends StatelessWidget {
+  var sizedBox = SizedBox(
+    width: 10,
+  );
   final purchaseOrderId;
   dp.DatePickerStyles styles;
   InventoryPurchaseOrderNewController controller =
@@ -36,7 +43,9 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
 
   final double widthQuantibox = 80.0;
 
-  Widget _buildListViewRowSection(Product product) {
+  _buildRowListViewSection(int index) {
+    var product = controller.products[index];
+
     return Row(children: <Widget>[
       Image.network(
         product.imagePath,
@@ -49,42 +58,53 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
       Expanded(
         child: Container(child: Text(product.name)),
       ),
-      SizedBox(
-        width: 10,
-      ),
+      sizedBox,
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
-          controller: product.qtyTextEditingController,
+          controller: TextEditingController(),
+          // controller: product.qtyTextEditingController,
           min: 1,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: int.parse(product.qtyTextEditingController.text),
+          initialValue: product.qtyOrder,
+          onValueChanged: (value) {
+            controller.setQtyOrder(index, value);
+          },
         ),
       ),
-      SizedBox(
-        width: 10,
-      ),
+      sizedBox,
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
-        child: NumberInputWithIncrementDecrement(
-          controller: product.priceTextEditingController,
-          min: 1,
-          max: 999999,
-          numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: int.parse(product.priceTextEditingController.text),
-          incIcon: null,
-          decIcon: null,
+        child: TextFormField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: BorderSide(color: Colors.blueGrey, width: 2.0)),
+          ),
+          controller: product.priceOrderEditingController,
+          onChanged: (value) {
+            product.priceOrderEditingController.text = value;
+            controller.setPriceImported(index, value);
+          },
+          keyboardType: TextInputType.number,
         ),
       ),
-      SizedBox(
-        width: 10,
+      sizedBox,
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: Text(
+          kNumberFormat.format(product.totalPriceImported) + ' đ',
+          textAlign: TextAlign.end,
+        ),
       ),
+      sizedBox,
       InkWell(
         child: Container(
-          width: 30,
+          width: 40,
           padding: EdgeInsets.only(left: 2.0),
           child: Icon(
             Icons.close,
@@ -96,7 +116,67 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
     ]);
   }
 
-  List<Widget> _buildInformationSection() {
+  Widget _buildHeaderListViewSection() {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            'Sản phẩm',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        sizedBox,
+        Container(
+          width: 110,
+          child: Text(
+            'Số lượng',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        sizedBox,
+        Container(
+          width: 110,
+          child: Text(
+            'Đơn giá',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        sizedBox,
+        Container(
+          width: 110,
+          child: Text(
+            'Thành tiền',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        sizedBox,
+        SizedBox(
+          width: 40,
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildInformationSection(int width) {
     return [
       vendorSection(),
       SizedBox(
@@ -191,69 +271,79 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                'Sản phẩm',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 110,
-              child: Text(
-                'Số lượng',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 110,
-              child: Text(
-                'Đơn giá',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 40,
-            ),
-          ],
-        ),
+        _buildHeaderListViewSection(),
         Divider(
           thickness: 2,
         ),
         Expanded(
-          child: controller.result.value.products == null
+          child: controller.products == null
               ? Container()
               : ListView.builder(
-                  itemCount: controller.result.value.products.length,
+                  itemCount: controller.products.length,
                   itemBuilder: (context, index) {
-                    return _buildListViewRowSection(
-                        controller.result.value.products[index]);
+                    return _buildRowListViewSection(index);
                   },
                 ),
         ),
         Divider(
           thickness: 2,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'Số sản phẩm: ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 17,
+              ),
+            ),
+            Text(
+              '${controller.getProductOrder()}',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'Số lượng nhập: ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 17,
+              ),
+            ),
+            Text(
+              '${controller.getQtyOrder()}',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'Tổng tiền: ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 17,
+              ),
+            ),
+            Text(
+              '${kNumberFormat.format(controller.getTotalMoneyOrder())} đ',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
         ),
       ],
     );
@@ -284,9 +374,10 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
                           ),
                           Container(
                             padding: EdgeInsets.all(10),
+                            width: 200,
                             child: SingleChildScrollView(
                               child: Column(
-                                children: _buildInformationSection(),
+                                children: _buildInformationSection(200),
                               ),
                             ),
                           )
@@ -307,7 +398,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(5),
       width: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,8 +468,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(10),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -548,8 +638,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -579,8 +668,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -601,15 +689,15 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
             ),
           ),
           Container(
-            height: 250,
+            height: 150,
             child: dp.DayPicker.single(
               selectedDate: controller.planImportDate.value,
               onChanged: (value) {
                 print(value.toString());
                 controller.setPlanImportDate(value);
               },
-              firstDate: DateTime.now().add(new Duration(days: -1000)),
-              lastDate: DateTime.now().add(new Duration(days: 1000)),
+              firstDate: DateTime.now().add(new Duration(days: -30)),
+              lastDate: DateTime.now().add(new Duration(days: 30)),
               datePickerStyles: styles,
               datePickerLayoutSettings: dp.DatePickerLayoutSettings(
                   maxDayPickerRowCount: 2,

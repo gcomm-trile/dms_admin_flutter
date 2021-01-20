@@ -135,7 +135,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Text(
                             "Giá : " +
-                                formatter.format(data[index].priceImported) +
+                                formatter.format(data[index].priceOrder) +
                                 " đ",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,

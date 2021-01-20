@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:dms_admin/data/model/inventory_purchase_order.dart';
+
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
@@ -51,6 +51,23 @@ class InventoryPurchaseOrderApiClient {
         '/add?id=${value.id}&import_stock_id=${value.importStockId}&plan_import_date=${value.planImportDate}&ref_document_note=${value.refDocumentNote}&vendor_id=${value.vendorId}';
     print("POST $jobsListAPIUrl");
 
+    final response =
+        await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      if (response.data == 'Ok')
+        return '';
+      else
+        return response.data;
+    } else {
+      return response.data;
+    }
+  }
+
+  import(PurchaseOrder value) async {
+    final jobsListAPIUrl = SERVER_URL + baseUrl + '/import?id=${value.id}';
+    print("POST $jobsListAPIUrl");
+    print(jsonEncode(value.products));
     final response =
         await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
     print(response.statusCode);

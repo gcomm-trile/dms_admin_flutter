@@ -1,12 +1,11 @@
-import 'package:dms_admin/components/qty_textfield.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/data/model/product.dart';
+import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-import 'package:number_inc_dec/number_inc_dec.dart';
+
 import 'inventory_purchase_order_import_controller.dart';
 
 class InventoryPurchaseOrderImportPage extends StatelessWidget {
@@ -41,21 +40,17 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
   );
   _buildRowListViewSection(int index) {
     var product = controller.result.value.products[index];
-    var importQtyTextEditController = TextEditingController(text: '0');
-
-    importQtyTextEditController.addListener(() {
-      print('run textchange');
-      // if (importQtyTextEditController.text != null)
-      //   controller.setImportedQty(
-      //       index, int.parse(importQtyTextEditController.text));
-    });
-
+    print('rebuild data ' +
+        controller.result.value.products[index].qtyImported.toString());
+    var textController = TextEditingController();
     return Row(children: <Widget>[
       Checkbox(
         value: product.qtyImported > 0 ? true : false,
         onChanged: (value) {
           print(value);
           controller.setChecked(index, value);
+          textController.text =
+              controller.products[index].qtyImported.toString();
         },
       ),
       Image.network(
@@ -71,58 +66,70 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
       Container(
           width: 40,
           child: Text(
-            kNumberFormat.format(product.qtyRemaining),
+            kNumberFormat.format(product.qtyOrder),
           )),
       sizedBox,
       Container(
         width: 120,
         padding: EdgeInsets.all(2.0),
-        child: QtyTextField(
-          value: product.qtyImported,
-          maxValue: product.qtyOrder,
-          minValue: 0,
-          onChangedValue: (value) {
-            print('value change to ${value}');
+        child: NumberInputWithIncrementDecrement(
+          controller:
+              TextEditingController(), // product.qtyImportedTextEditingController,
+          min: 0,
+          max: product.qtyOrder,
+          numberFieldDecoration: InputDecoration(border: InputBorder.none),
+          initialValue: product.qtyImported,
+          onValueChanged: (value) {
+            print(value);
             controller.setImportedQty(index, value);
+            textController.text = value.toString();
           },
         ),
-        // child: NumberInputWithIncrementDecrement(
-        //   controller:
-        //       importQtyTextEditController, // product.qtyImportedTextEditingController,
-        //   min: 1,
-        //   max: 999999,
-        //   numberFieldDecoration: InputDecoration(border: InputBorder.none),
-        //   initialValue: product.qtyImported,
-        // ),
       ),
       sizedBox,
       Container(
         width: 80,
         child: Row(
           children: [
-            Text(
-              '${product.qtyCurrentStock}',
+            Container(
+              width: 25,
+              child: Text(
+                '${product.qtyCurrentStock}',
+                textAlign: TextAlign.end,
+              ),
             ),
-            Icon(Icons.arrow_right_alt),
-            Text(
-              '${product.qtyCurrentStock + product.qtyImported}',
+            SizedBox(
+              width: 5,
+            ),
+            Container(
+              width: 20,
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Container(
+              width: 25,
+              child: Text(
+                '${product.qtyCurrentStock + product.qtyImported}',
+                textAlign: TextAlign.start,
+              ),
             ),
           ],
         ),
       ),
       sizedBox,
       Container(
-        width: 90,
+        width: 80,
         child: Text(
-          kNumberFormat.format(product.priceImported) + ' đ',
+          kNumberFormat.format(product.priceOrder) + ' đ',
         ),
       ),
       sizedBox,
       Container(
         width: 100,
         child: Text(
-          kNumberFormat.format(product.priceImported * product.qtyImported) +
-              ' đ',
+          kNumberFormat.format(product.priceOrder * product.qtyImported) + ' đ',
         ),
       )
     ]);
@@ -143,7 +150,6 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         ),
         sizedBox,
         Container(
-          color: Colors.red,
           width: 40,
           child: Text(
             'Đặt',
@@ -157,10 +163,10 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         ),
         sizedBox,
         Container(
-          width: 80,
+          width: 120,
           child: Text(
             'Nhận',
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -183,7 +189,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         ),
         sizedBox,
         Container(
-          width: 90,
+          width: 80,
           child: Text(
             'Giá',
             textAlign: TextAlign.start,
@@ -249,7 +255,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
           Expanded(child: Container()),
           RaisedButton(
             onPressed: () {
-              controller.save();
+              controller.import();
             },
             color: Colors.blue,
             child: Container(
@@ -364,8 +370,6 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
       init: controller,
       initState: (state) => controller.getId(purchaseOrderId),
       builder: (_) {
-        print('rebuild');
-
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())
             : Column(

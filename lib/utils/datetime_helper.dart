@@ -2,6 +2,9 @@ import 'package:intl/intl.dart';
 
 class DateTimeHelper {
   static day2Text(DateTime date) {
+    if (date == null) {
+      return '[NULL';
+    }
     var today = DateTime.now();
     if (date.day == today.day) {
       return 'Hôm nay';
@@ -12,7 +15,7 @@ class DateTimeHelper {
         if (date.day == today.add(Duration(days: -1)).day) {
           return 'Hôm qua';
         } else {
-          DateFormat('yyyy-MM-dd').format(date);
+          return DateFormat('yyyy-MM-dd').format(date);
         }
       }
     }

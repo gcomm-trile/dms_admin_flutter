@@ -24,6 +24,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
   final note = ''.obs;
   Rx<PurchaseOrder> result = Rx<PurchaseOrder>();
   Rx<DateTime> planImportDate = DateTime.now().obs;
+  var products = <Product>[].obs;
   final vendor = Rx<Vendor>();
   final stock = Rx<Stock>();
 
@@ -105,22 +106,19 @@ class InventoryPurchaseOrderNewController extends GetxController {
         content: ProductSearchDialog(
           stockId: '41B6F379-2254-462A-8472-1C08A4D6D3B2',
           savedData: (selectedProducts) {
-            isBusy(true);
             print('return data ' + selectedProducts.length.toString());
-            if (result.value.products == null) {
-              result.value.products = List<Product>();
-            }
+
             for (var selectedProduct in selectedProducts) {
-              if (result.value.products
+              if (products
                       .where((element) => element.id == selectedProduct.id)
                       .length ==
                   0) {
                 selectedProduct.qtyOrder = 1;
-                selectedProduct.priceImported = 0;
-                result.value.products.add(selectedProduct);
+                selectedProduct.priceOrder = 0;
+                selectedProduct.totalPriceImported = 0;
+                products.add(selectedProduct);
               }
             }
-            isBusy(false);
           },
         ),
       ),
@@ -128,12 +126,10 @@ class InventoryPurchaseOrderNewController extends GetxController {
   }
 
   removeProduct(Product product) {
-    isBusy(true);
     print('remove ' +
         product.name.toString() +
         product.qtyTextEditingController.text);
-    result.value.products.removeWhere((element) => element.id == product.id);
-    isBusy(false);
+    products.removeWhere((element) => element.id == product.id);
   }
 
   int getCountSelectedProduct() {
@@ -143,17 +139,19 @@ class InventoryPurchaseOrderNewController extends GetxController {
   }
 
   void save() {
-    if (result.value.products == null || result.value.products.length == 0) {
+    if (products == null || products.length == 0) {
       UI.showError('Chọn sản phẩm cần mua hàng');
       return;
     } else {
+      result.value.products = products;
+      // for (var product in result.value.products) {
+      //   print('${product.id} : ${product.qtyOrder} - ${product.priceImported}');
+      //   product.qtyOrder = int.parse(product.qtyTextEditingController.text);
+      //   product.priceImported =
+      //       int.parse(product.priceTextEditingController.text);
+      // }
       for (var product in result.value.products) {
-        print('${product.id} : ${product.qtyOrder} - ${product.priceImported}');
-        product.qtyOrder = int.parse(product.qtyTextEditingController.text);
-        product.priceImported = int.parse(product.priceTextEditingController.text);
-      }
-      for (var product in result.value.products) {
-        print('${product.id} : ${product.qtyOrder} - ${product.priceImported}');
+        print('${product.id} : ${product.qtyOrder} - ${product.priceOrder}');
       }
     }
 
@@ -188,5 +186,62 @@ class InventoryPurchaseOrderNewController extends GetxController {
       print(e.toString());
       Get.snackbar('Error', e.toString());
     });
+  }
+
+  void setPriceImported(int index, String value) {
+    int price = 0;
+    if (value == null || value.isEmpty)
+      price = 0;
+    else
+      price = int.parse(value.replaceAll(',', ''));
+    var item = products[index];
+    item.priceOrder = price;
+    item.totalPriceImported = item.qtyOrder * item.priceOrder;
+    products[index] = item;
+  }
+
+  void setQtyOrder(int index, int value) {
+    var item = products[index];
+
+    print('set QtyOrder at index $index value $value');
+    item.qtyOrder = value;
+    item.totalPriceImported = item.qtyOrder * item.priceOrder;
+    products[index] = item;
+    print(item.qtyOrder);
+    printAllProduct();
+  }
+
+  printAllProduct() {
+    if (products != null) {
+      for (var product in products) {
+        print(
+            'id: ${product.id} qtyImported: ${product.qtyImported} priceImported:${product.priceOrder} totalPriceImported:${product.totalPriceImported}');
+      }
+    } else {
+      print('product null');
+    }
+  }
+
+  getProductOrder() {
+    printAllProduct();
+    print('call getProductImported');
+    return products.where((e) => e.qtyOrder > 0).length;
+  }
+
+  getQtyOrder() {
+    int result = 0;
+    for (var product in products) {
+      if (product.qtyOrder > 0) result += product.qtyOrder;
+    }
+    return result;
+  }
+
+  getTotalMoneyOrder() {
+    int result = 0;
+    for (var product in products) {
+      if (product.qtyOrder > 0)
+        result += product.qtyOrder * product.priceOrder;
+    }
+    return result;
   }
 }

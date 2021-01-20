@@ -24,6 +24,7 @@ class _QtyTextFieldState extends State<QtyTextField> {
   @override
   Widget build(BuildContext context) {
     print('rebuild qty controller');
+    print(widget.value.toString());
     textEditingController = new TextEditingController()
       ..text = widget.value.toString();
     return Container(
