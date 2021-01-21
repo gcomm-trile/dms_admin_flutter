@@ -5,7 +5,6 @@ import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-
 import 'inventory_purchase_order_import_controller.dart';
 
 class InventoryPurchaseOrderImportPage extends StatelessWidget {
@@ -49,8 +48,8 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         onChanged: (value) {
           print(value);
           controller.setChecked(index, value);
-          textController.text =
-              controller.products[index].qtyImported.toString();
+          // textController.text =
+          //     controller.products[index].qtyImported.toString();
         },
       ),
       Image.network(
@@ -389,6 +388,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
                                 child: _buildProductSection()),
                           ),
                           Container(
+                            width: 200,
                             padding: EdgeInsets.all(10),
                             child: SingleChildScrollView(
                               child: Column(
@@ -415,8 +415,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -452,8 +451,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(10),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -587,8 +585,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -622,8 +619,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
       ),
-      padding: EdgeInsets.all(20),
-      width: 250,
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

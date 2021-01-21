@@ -49,15 +49,15 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           _createDrawerItem(
-            icon: Icons.call_received,
+            icon: Icons.ac_unit,
             text: 'Mua hàng',
             onTap: () {
               Get.toNamed(Routes.INVENTORY_PURCHASE_ORDERS);
             },
           ),
           _createDrawerItem(
-            icon: Icons.call_received,
-            text: 'Nhập kho',
+            icon: Icons.swap_horiz,
+            text: 'Điều chuyển',
             onTap: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => StockIncreasePage()));
@@ -109,7 +109,12 @@ class AppDrawer extends StatelessWidget {
           Icon(icon),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: Text(text),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 11,
+              ),
+            ),
           )
         ],
       ),

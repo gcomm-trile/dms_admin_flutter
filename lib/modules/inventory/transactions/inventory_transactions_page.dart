@@ -58,127 +58,131 @@ class InventoryTransactionPage extends StatelessWidget {
         MediaQuery.of(context).size; // need for active change width of screen ;
     print(Get.width);
     return Scaffold(
-      appBar: AppBar(title: Text('Chi tiết tồn kho')),
-      drawer: AppDrawer(),
-      body: GetX<InventoryTransactionController>(
-        init: controller,
-        initState: (state) => controller.getAll(),
-        builder: (_) {
-          if (controller.isBusy.value == true)
-            return Center(child: CircularProgressIndicator());
-          else
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+        body: Row(
+      children: [
+        AppDrawer(),
+        Expanded(
+          child: GetX<InventoryTransactionController>(
+            init: controller,
+            initState: (state) => controller.getAll(),
+            builder: (_) {
+              if (controller.isBusy.value == true)
+                return Center(child: CircularProgressIndicator());
+              else
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Chi tiết tồn kho',
-                          textAlign: TextAlign.start,
+                        Row(
+                          children: [
+                            Text(
+                              'Chi tiết tồn kho',
+                              textAlign: TextAlign.start,
+                            ),
+                            Expanded(
+                              child: Container(),
+                            ),
+                            RaisedButton(
+                              color: Colors.blue,
+                              child: Text(
+                                'Xuất file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                print(Get.width);
+                              },
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: Container(),
+                        SizedBox(
+                          height: 5,
                         ),
-                        RaisedButton(
-                          color: Colors.blue,
-                          child: Text(
-                            'Xuất file',
-                            style: TextStyle(
-                              color: Colors.white,
+                        Container(
+                          height: Get.width > 750
+                              ? 65.0
+                              : Get.width > 520
+                                  ? 140
+                                  : (65.0 * 4 + 30),
+                          child: Get.width > 750
+                              ? cardRow(4)
+                              : Get.width > 520
+                                  ? cardRow(2)
+                                  : cardRow(1),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        DataTable(columns: <DataColumn>[
+                          DataColumn(
+                            tooltip: 'Kho chứa sản phẩm',
+                            label: Container(
+                              width: 70,
+                              child: Text(
+                                'Kho',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            print(Get.width);
-                          },
-                        ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                child: Text(
+                                  'Sản phẩm ',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: 25,
+                              child: Text(
+                                'Tồn',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: 65,
+                              child: Text(
+                                'Khả dụng',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: 25,
+                              child: Text(
+                                'Đặt',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              // width: 40,
+                              child: Text(
+                                'Giá(vnđ)',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ], rows: controller.createDataSource()),
                       ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      height: Get.width > 750
-                          ? 65.0
-                          : Get.width > 520
-                              ? 140
-                              : (65.0 * 4 + 30),
-                      child: Get.width > 750
-                          ? cardRow(4)
-                          : Get.width > 520
-                              ? cardRow(2)
-                              : cardRow(1),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    DataTable(columns: <DataColumn>[
-                      DataColumn(
-                        tooltip: 'Kho chứa sản phẩm',
-                        label: Container(
-                          width: 70,
-                          child: Text(
-                            'Kho',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Container(
-                            child: Text(
-                              'Sản phẩm ',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Container(
-                          width: 25,
-                          child: Text(
-                            'Tồn',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Container(
-                          width: 65,
-                          child: Text(
-                            'Khả dụng',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Container(
-                          width: 25,
-                          child: Text(
-                            'Đặt',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Container(
-                          // width: 40,
-                          child: Text(
-                            'Giá(vnđ)',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ], rows: controller.createDataSource()),
-                  ],
-                ),
-              ),
-            );
-        },
-      ),
-    );
+                  ),
+                );
+            },
+          ),
+        ),
+      ],
+    ));
   }
 }

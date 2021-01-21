@@ -115,7 +115,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
                   0) {
                 selectedProduct.qtyOrder = 1;
                 selectedProduct.priceOrder = 0;
-                selectedProduct.totalPriceImported = 0;
+                selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
               }
             }
@@ -196,7 +196,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
       price = int.parse(value.replaceAll(',', ''));
     var item = products[index];
     item.priceOrder = price;
-    item.totalPriceImported = item.qtyOrder * item.priceOrder;
+    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
     products[index] = item;
   }
 
@@ -205,7 +205,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
 
     print('set QtyOrder at index $index value $value');
     item.qtyOrder = value;
-    item.totalPriceImported = item.qtyOrder * item.priceOrder;
+    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
     products[index] = item;
     print(item.qtyOrder);
     printAllProduct();
@@ -215,7 +215,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
     if (products != null) {
       for (var product in products) {
         print(
-            'id: ${product.id} qtyImported: ${product.qtyImported} priceImported:${product.priceOrder} totalPriceImported:${product.totalPriceImported}');
+            'id: ${product.id} qtyImported: ${product.qtyImported} priceImported:${product.priceOrder} totalPriceImported:${product.totalPriceAvg}');
       }
     } else {
       print('product null');

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dms_admin/data/model/inventory_transaction.dart';
+import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +14,14 @@ class InventoryTransactionController extends GetxController {
       : assert(repository != null);
 
   final isBusy = true.obs;
-  Rx<List<InventoryTransaction>> result = Rx<List<InventoryTransaction>>();
+  var result = List<Product>().obs;
 
   void getAll() {
-    log('run');
-    // log('busy' + isBusy.value.toString());
     isBusy(true);
-    // log('busy' + isBusy.value.toString());
     repository.getAll().then((data) {
-      result.value = data;
+      result(data);
       isBusy(false);
-      // log('busy' + isBusy.value.toString());
+
       log('return data  ');
     }).catchError((e) {
       Get.snackbar('Error', e.toString());
@@ -32,26 +30,27 @@ class InventoryTransactionController extends GetxController {
   }
 
   int getTongTon() {
-    return result.value
-        .map((expense) => expense.currentQty)
+    return result
+        .map((expense) => expense.qtyCurrentStock)
         .fold(0, (prev, amount) => prev + amount);
   }
 
   getTongGiaBan() {
-    return result.value
-        .map((expense) => expense.currentQty * expense.productPrice)
+    return result
+        .map((expense) => expense.qtyCurrentStock * expense.priceSell)
         .fold(0, (prev, amount) => prev + amount);
   }
 
   getTongGiaTri() {
-    return result.value
-        .map((expense) => expense.currentQty * expense.productPrice)
+    return result
+        .map((expense) => expense.totalPriceAvg)
         .fold(0, (prev, amount) => prev + amount);
   }
 
   getTongLoiNhuan() {
-    return result.value
-        .map((expense) => expense.currentQty * expense.productPrice)
+    return result
+        .map((expense) =>
+            expense.qtyCurrentStock * expense.priceSell - expense.totalPriceAvg)
         .fold(0, (prev, amount) => prev + amount);
   }
 
@@ -61,11 +60,22 @@ class InventoryTransactionController extends GetxController {
       dataSource.add(DataRow(
         cells: <DataCell>[
           DataCell(Text(item.stockName)),
-          DataCell(Text(item.productName)),
-          DataCell(Text(item.currentQty.toString())),
-          DataCell(Text(item.currentQty.toString())),
-          DataCell(Text(item.currentQty.toString())),
-          DataCell(Text(kNumberFormat.format(item.productPrice))),
+          DataCell(Row(
+            children: [
+              Image.network(
+                item.imagePath,
+                width: kSizeProductImageWidth,
+                height: kSizeProductImageHeight,
+              ),
+              Expanded(
+                child: Text(item.name),
+              )
+            ],
+          )),
+          DataCell(Text(item.qtyCurrentStock.toString())),
+          DataCell(Text(item.qtyCurrentStock.toString())),
+          DataCell(Text(item.qtyCurrentStock.toString())),
+          DataCell(Text(kNumberFormat.format(item.priceSell))),
         ],
       ));
     }

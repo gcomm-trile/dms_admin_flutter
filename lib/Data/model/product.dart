@@ -17,7 +17,9 @@ class Product {
   int qtyCurrentStock;
   int qtyAfterImport;
   String imagePath;
-  int totalPriceImported;
+  int totalPriceAvg;
+  String stockId;
+  String stockName;
   TextEditingController qtyTextEditingController =
       new TextEditingController(text: '1');
   PriceEditingController priceOrderEditingController =
@@ -58,8 +60,11 @@ class Product {
     qtyImported = json['qty_imported'];
     qtyRemaining = json['qty_remaining'];
     qtyCurrentStock = json['qty_current_stock'];
+    totalPriceAvg = json['total_price_avg'];
     qtyAfterImport = qtyRemaining + qtyCurrentStock;
     imagePath = json['image_path'];
+    stockId = json['stock_id'];
+    stockName = json['stock_name'];
     qtyImportedTextEditingController.text = qtyImported.toString();
   }
 

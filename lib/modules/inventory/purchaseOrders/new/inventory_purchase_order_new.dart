@@ -1,7 +1,4 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/global_widgets/mask_text_controller.dart';
-import 'package:dms_admin/global_widgets/price_editing_controller.dart';
-import 'package:dms_admin/global_widgets/money_format.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -10,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class InventoryPurchaseOrderNewPage extends StatelessWidget {
   var sizedBox = SizedBox(
@@ -97,7 +93,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: Text(
-          kNumberFormat.format(product.totalPriceImported) + ' đ',
+          kNumberFormat.format(product.totalPriceAvg) + ' đ',
           textAlign: TextAlign.end,
         ),
       ),

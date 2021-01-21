@@ -642,26 +642,8 @@ class _NumberInputWithIncrementDecrementState
   int oldValue;
   @override
   void initState() {
+    print('run initState');
     super.initState();
-    _controller = widget.controller;
-    //  Setting the initial value for the field.
-    _controller.text = widget.isInt
-        ? widget.initialValue.toString()
-        : widget.initialValue.toStringAsFixed(widget.fractionDigits);
-    oldValue = widget.initialValue;
-    _controller.addListener(() {
-      int newValue = 0;
-
-      if (_controller.text == null || _controller.text.isEmpty)
-        newValue = 0;
-      else
-        newValue = int.parse(_controller.text);
-      print('new value' + newValue.toString());
-      if (newValue > widget.max || newValue < widget.min) {
-        _controller.text = oldValue.toString();
-      } else
-        widget.onValueChanged(newValue);
-    });
   }
 
   String _minMaxValidator(String value) {
@@ -674,6 +656,25 @@ class _NumberInputWithIncrementDecrementState
 
   @override
   Widget build(BuildContext context) {
+    _controller = widget.controller;
+    //  Setting the initial value for the field.
+    _controller.text = widget.isInt
+        ? widget.initialValue.toString()
+        : widget.initialValue.toStringAsFixed(widget.fractionDigits);
+    oldValue = widget.initialValue;
+    _controller.addListener(() {
+      int newValue = 0;
+      if (_controller.text == null || _controller.text.isEmpty)
+        newValue = 0;
+      else
+        newValue = int.parse(_controller.text);
+      print('new value' + newValue.toString());
+      if (newValue > widget.max || newValue < widget.min) {
+        _controller.text = oldValue.toString();
+      } else
+        widget.onValueChanged(newValue);
+    });
+    print('run build number in_de');
     return Transform(
       transform:
           Matrix4.diagonal3Values(widget.scaleWidth, widget.scaleHeight, 1.0),

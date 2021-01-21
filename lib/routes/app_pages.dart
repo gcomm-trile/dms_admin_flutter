@@ -44,11 +44,11 @@ class AppPages {
       name: Routes.INVENTORY_PURCHASE_ORDERS,
       page: () => InventoryPurchaseOrderPage(),
     ),
-    GetPage(
-      name: Routes.INVENTORY_PURCHASE_ORDERS_NEW,
-      page: () => InventoryPurchaseOrderNewPage(
-        purchaseOrderId: '89F18C5C-2A76-4B24-977B-5AF9D590C1CE',
-      ),
-    ),
+    // GetPage(
+    //   name: Routes.INVENTORY_PURCHASE_ORDERS_NEW,
+    //   page: () => InventoryPurchaseOrderNewPage(
+    //     purchaseOrderId: '89F18C5C-2A76-4B24-977B-5AF9D590C1CE',
+    //   ),
+    // ),
   ];
 }
