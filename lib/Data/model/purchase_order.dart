@@ -51,7 +51,6 @@ class PurchaseOrder {
     planImportDate =
         DateTime.parse(json['plan_import_date'].toString().substring(0, 10));
 
-    ;
     totalImportedQty = json['total_imported_qty'];
     totalOrderQty = json['total_order_qty'];
     note = json['note'];

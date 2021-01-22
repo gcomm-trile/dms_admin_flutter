@@ -6,9 +6,9 @@ import 'package:meta/meta.dart';
 // const baseUrl = 'inventory/transactions';
 const baseUrl = 'inventory';
 
-class InventoryTransactionApiClient {
+class InventoryTransactionsApiClient {
   final Dio httpClient;
-  InventoryTransactionApiClient({@required this.httpClient});
+  InventoryTransactionsApiClient({@required this.httpClient});
 
   getAll() async {
     try {

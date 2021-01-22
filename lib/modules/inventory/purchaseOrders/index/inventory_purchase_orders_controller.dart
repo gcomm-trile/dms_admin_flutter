@@ -1,6 +1,5 @@
-
 import 'package:dms_admin/data/model/purchase_order.dart';
-import 'package:dms_admin/data/repository/inventory_purchase_order_repository.dart';
+import 'package:dms_admin/data/repository/inventory_purchase_orders_repository.dart';
 
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -8,9 +7,9 @@ import 'package:flutter_guid/flutter_guid.dart';
 import '../import/inventory_purchase_order_import.dart';
 import '../new/inventory_purchase_order_new.dart';
 
-class InventoryPurchaseOrderController extends GetxController {
-  final InventoryPurchaseOrderRepository repository;
-  InventoryPurchaseOrderController({@required this.repository})
+class InventoryPurchaseOrdersController extends GetxController {
+  final InventoryPurchaseOrdersRepository repository;
+  InventoryPurchaseOrdersController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;

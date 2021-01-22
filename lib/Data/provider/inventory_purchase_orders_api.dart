@@ -9,9 +9,9 @@ import 'package:meta/meta.dart';
 // const baseUrl = 'inventory/transactions';
 const baseUrl = 'inventory/purchaseorders';
 
-class InventoryPurchaseOrderApiClient {
+class InventoryPurchaseOrdersApiClient {
   final Dio httpClient;
-  InventoryPurchaseOrderApiClient({@required this.httpClient});
+  InventoryPurchaseOrdersApiClient({@required this.httpClient});
 
   getAll() async {
     print('session id ${httpClient.options.headers['Session-ID']}');

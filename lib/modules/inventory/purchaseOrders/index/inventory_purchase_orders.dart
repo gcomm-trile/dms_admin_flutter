@@ -7,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import 'inventory_purchase_order_controller.dart';
+import 'inventory_purchase_orders_controller.dart';
 
-class InventoryPurchaseOrderPage extends StatelessWidget {
-  final InventoryPurchaseOrderController controller =
-      InventoryPurchaseOrderController(repository: Get.find());
-  InventoryPurchaseOrderPage({Key key}) : super(key: key);
+class InventoryPurchaseOrdersPage extends StatelessWidget {
+  final InventoryPurchaseOrdersController controller =
+      InventoryPurchaseOrdersController(repository: Get.find());
+  InventoryPurchaseOrdersPage({Key key}) : super(key: key);
 
-  var sizedBox = SizedBox(
+  final sizedBox = SizedBox(
     width: 10,
   );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class InventoryPurchaseOrderPage extends StatelessWidget {
       children: [
         AppDrawer(),
         Expanded(
-          child: GetX<InventoryPurchaseOrderController>(
+          child: GetX<InventoryPurchaseOrdersController>(
             init: controller,
             initState: (state) => controller.getAll(),
             builder: (_) {

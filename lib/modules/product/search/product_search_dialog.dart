@@ -61,7 +61,7 @@ class ProductSearchDialog extends StatelessWidget {
                                   SizedBox(
                                       width: 100,
                                       child: Text(
-                                        'Tồn kho đến',
+                                        'Tồn kho',
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,

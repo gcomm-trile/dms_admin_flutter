@@ -1,32 +1,43 @@
 import 'package:dio/dio.dart';
-import 'package:dms_admin/data/provider/inventory_purchase_order_api.dart';
-import 'package:dms_admin/data/provider/inventory_transaction_api.dart';
+
+import 'package:dms_admin/data/provider/inventory_transactions_api.dart';
+import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
 import 'package:dms_admin/data/provider/product_api.dart';
-import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
+import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
-import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
+import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
+import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_controller.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 import 'package:get/get.dart';
-import 'data/repository/inventory_purchase_order_repository.dart';
 
-import 'modules/inventory/purchaseOrders/index/inventory_purchase_order_controller.dart';
+import 'data/provider/inventory_purchase_orders_api.dart';
+import 'data/repository/inventory_purchase_orders_repository.dart';
+import 'data/repository/inventory_transfers_repository.dart';
 import 'modules/inventory/purchaseOrders/import/inventory_purchase_order_import_controller.dart';
+import 'modules/inventory/purchaseOrders/index/inventory_purchase_orders_controller.dart';
 import 'modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
+
+import 'modules/inventory/transfers/index/inventory_transfers_controller.dart';
 import 'routes/app_pages.dart';
 
 void main() {
   GoogleMap.init('AIzaSyCT1bnH6x0wAPaqG7PIdusRiTPNzqLqqeM');
   Get.lazyPut(() => Dio());
 
-  Get.lazyPut(() => InventoryTransactionApiClient(httpClient: Get.find()));
-  Get.lazyPut(() => InventoryTransactionRepository(apiClient: Get.find()));
-  Get.lazyPut(() => InventoryTransactionController(repository: Get.find()));
+  Get.lazyPut(() => InventoryTransfersApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => InventoryTransfersRepository(apiClient: Get.find()));
+  Get.lazyPut(() => InventoryTransfersController(repository: Get.find()));
+  Get.lazyPut(() => InventoryTransferNewController(repository: Get.find()));
 
-  Get.lazyPut(() => InventoryPurchaseOrderApiClient(httpClient: Get.find()));
-  Get.lazyPut(() => InventoryPurchaseOrderRepository(apiClient: Get.find()));
-  Get.lazyPut(() => InventoryPurchaseOrderController(repository: Get.find()));
+  Get.lazyPut(() => InventoryTransactionsApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => InventoryTransactionsRepository(apiClient: Get.find()));
+  Get.lazyPut(() => InventoryTransactionsController(repository: Get.find()));
+
+  Get.lazyPut(() => InventoryPurchaseOrdersApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => InventoryPurchaseOrdersRepository(apiClient: Get.find()));
+  Get.lazyPut(() => InventoryPurchaseOrdersController(repository: Get.find()));
   Get.lazyPut(
       () => InventoryPurchaseOrderImportController(repository: Get.find()));
   Get.lazyPut(

@@ -1,20 +1,19 @@
-import 'package:dms_admin/data/model/inventory_transaction.dart';
-import 'package:dms_admin/data/repository/inventory_transaction_repository.dart';
+import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/modules/inventory/transactions/inventory_transaction_controller.dart';
-import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
+
 import 'package:dms_admin/widgets/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'local_widgets/card.dart';
 
-class InventoryTransactionPage extends StatelessWidget {
-  final InventoryTransactionController controller =
-      InventoryTransactionController(
-          repository: InventoryTransactionRepository(
+class InventoryTransactionsPage extends StatelessWidget {
+  final InventoryTransactionsController controller =
+      InventoryTransactionsController(
+          repository: InventoryTransactionsRepository(
     apiClient: Get.find(),
   ));
-  InventoryTransactionPage({Key key}) : super(key: key);
+  InventoryTransactionsPage({Key key}) : super(key: key);
   cardRow(int numItemPerRow) {
     var card1 = CardInventoryTransaction(
       title: 'TỔNG LƯỢNG TỒN',
@@ -62,7 +61,7 @@ class InventoryTransactionPage extends StatelessWidget {
       children: [
         AppDrawer(),
         Expanded(
-          child: GetX<InventoryTransactionController>(
+          child: GetX<InventoryTransactionsController>(
             init: controller,
             initState: (state) => controller.getAll(),
             builder: (_) {

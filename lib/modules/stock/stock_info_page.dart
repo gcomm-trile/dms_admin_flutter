@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 class StockInfoPage extends StatelessWidget {
   StockInfoPage(this.data, {Key key}) : super(key: key);
   final Stock data;
-  TextEditingController _noController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _noController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

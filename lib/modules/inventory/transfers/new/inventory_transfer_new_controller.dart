@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-class InventoryPurchaseOrderNewController extends GetxController {
+class InventoryTransferNewController extends GetxController {
   final InventoryPurchaseOrdersRepository repository;
 
   TextEditingController thongTinGhiChuTextEditController =
       TextEditingController();
   TextEditingController soThamChieuTextEditController = TextEditingController();
-  InventoryPurchaseOrderNewController({@required this.repository})
+  InventoryTransferNewController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;

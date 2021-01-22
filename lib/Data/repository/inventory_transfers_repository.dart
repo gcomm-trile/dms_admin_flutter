@@ -1,11 +1,11 @@
 import 'package:dms_admin/data/model/purchase_order.dart';
-import 'package:dms_admin/data/provider/inventory_purchase_order_api.dart';
+import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
 import 'package:meta/meta.dart';
 
-class InventoryPurchaseOrderRepository {
-  final InventoryPurchaseOrderApiClient apiClient;
+class InventoryTransfersRepository {
+  final InventoryTransfersApiClient apiClient;
 
-  InventoryPurchaseOrderRepository({@required this.apiClient})
+  InventoryTransfersRepository({@required this.apiClient})
       : assert(apiClient != null);
 
   getAll() {

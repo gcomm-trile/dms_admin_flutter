@@ -1,6 +1,5 @@
 import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
 import 'package:dms_admin/modules/stock/stock_decrease_page.dart';
-import 'package:dms_admin/modules/stock/stock_increase_page.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,8 +58,7 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.swap_horiz,
             text: 'Điều chuyển',
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => StockIncreasePage()));
+              Get.toNamed(Routes.INVENTORY_TRANSFERS);
             },
           ),
           _createDrawerItem(
