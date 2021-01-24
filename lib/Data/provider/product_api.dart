@@ -10,11 +10,12 @@ class ProductApiClient {
   final Dio httpClient;
   ProductApiClient({@required this.httpClient});
 
-  getAll() async {
-    print('session id ${httpClient.options.headers['Session-ID']}');
+  getAll(String stockIdIn, String stockIdOut) async {
     try {
       print(SERVER_URL + baseUrl);
-      var response = await httpClient.get(SERVER_URL + baseUrl);
+      var response = await httpClient.get(SERVER_URL +
+          baseUrl +
+          '?stock_id_in=$stockIdIn&stock_id_out=$stockIdOut');
 
       if (response.statusCode == 200) {
         var result =

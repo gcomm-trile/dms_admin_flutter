@@ -27,6 +27,11 @@ class InventoryTransferNewController extends GetxController {
   var products = <Product>[].obs;
   final vendor = Rx<Vendor>();
   final stock = Rx<Stock>();
+  final selectedOutStock = ''.obs;
+  final selectedInStock = ''.obs;
+
+  final outStocks = <String>[].obs;
+  final inStocks = <String>[].obs;
 
   void getId(String id) {
     print('run');
@@ -43,6 +48,16 @@ class InventoryTransferNewController extends GetxController {
             TextEditingController(text: result.value.refDocumentNote);
       }
       result.value.id = id;
+
+      for (var item in result.value.stocks) {
+        outStocks.add(item.name);
+      }
+      selectedOutStock(outStocks[0]);
+
+      for (var item in result.value.stocks) {
+        if (item.name != selectedOutStock.value) inStocks.add(item.name);
+      }
+      selectedInStock(inStocks[0]);
       isBusy(false);
     }).catchError((e) {
       print(e.toString());
@@ -78,6 +93,7 @@ class InventoryTransferNewController extends GetxController {
     for (var item in result.value.stocks) {
       stocks.add(item.name);
     }
+
     return stocks;
   }
 
@@ -101,10 +117,19 @@ class InventoryTransferNewController extends GetxController {
         print(item.name + ' ' + item.qtyTextEditingController.text);
       }
     }
+
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
           stockId: '41B6F379-2254-462A-8472-1C08A4D6D3B2',
+          stockIdIn: result.value.stocks
+              .where((element) => element.name == selectedInStock.value)
+              .first
+              .id,
+          stockIdOut: result.value.stocks
+              .where((element) => element.name == selectedOutStock.value)
+              .first
+              .id,
           savedData: (selectedProducts) {
             print('return data ' + selectedProducts.length.toString());
 
@@ -114,6 +139,8 @@ class InventoryTransferNewController extends GetxController {
                       .length ==
                   0) {
                 selectedProduct.qtyOrder = 1;
+                selectedProduct.qtyIn = 0;
+                selectedProduct.qtyOut = 1;
                 selectedProduct.priceOrder = 0;
                 selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
@@ -215,7 +242,7 @@ class InventoryTransferNewController extends GetxController {
     if (products != null) {
       for (var product in products) {
         print(
-            'id: ${product.id} qtyImported: ${product.qtyImported} priceImported:${product.priceOrder} totalPriceImported:${product.totalPriceAvg}');
+            'id: ${product.id} qtyIn: ${product.qtyIn} qtyOut:${product.qtyOut} totalPriceImported:${product.totalPriceAvg}');
       }
     } else {
       print('product null');
@@ -223,8 +250,6 @@ class InventoryTransferNewController extends GetxController {
   }
 
   getProductOrder() {
-    printAllProduct();
-    print('call getProductImported');
     return products.where((e) => e.qtyOrder > 0).length;
   }
 
@@ -242,5 +267,41 @@ class InventoryTransferNewController extends GetxController {
       if (product.qtyOrder > 0) result += product.qtyOrder * product.priceOrder;
     }
     return result;
+  }
+
+  setStockExport(String value) {
+    print('call setStockExport');
+    var oldValue = selectedInStock.value;
+    inStocks.clear();
+
+    selectedOutStock(value);
+    for (var item in result.value.stocks) {
+      if (item.name != selectedOutStock.value) inStocks.add(item.name);
+    }
+    if (!inStocks.contains(oldValue)) {
+      print('!contains');
+      print('set ' + inStocks[0]);
+      selectedInStock(inStocks[0]);
+    } else {
+      print('contains');
+      selectedInStock(oldValue);
+    }
+  }
+
+  void setStockImport(String newValue) {
+    selectedInStock(newValue);
+  }
+
+  void setQtyOut(int index, int value) {
+    var item = products[index];
+    print('set qty_out at index $index value $value');
+    item.qtyOut = value;
+    products[index] = item;
+  }
+
+  getQtyOut() {
+    return products.fold(
+        0, (previousValue, element) => previousValue + element.qtyOut);
+    // return result;
   }
 }

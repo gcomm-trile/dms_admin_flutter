@@ -14,8 +14,10 @@ class Product {
   int qtyOrder;
   int qtyImported;
   int qtyRemaining;
-  int qtyCurrentStock;
-  int qtyAfterImport;
+  int qtyIn;
+  int qtyOut;
+  int qtyStockIn;
+  int qtyStockOut;
   String imagePath;
   int totalPriceAvg;
   String stockId;
@@ -59,12 +61,14 @@ class Product {
     qtyOrder = json['qty_order'];
     qtyImported = json['qty_imported'];
     qtyRemaining = json['qty_remaining'];
-    qtyCurrentStock = json['qty_current_stock'];
+
     totalPriceAvg = json['total_price_avg'];
-    qtyAfterImport = qtyRemaining + qtyCurrentStock;
+
     imagePath = json['image_path'];
     stockId = json['stock_id'];
     stockName = json['stock_name'];
+    qtyStockIn = json['qty_stock_in'];
+    qtyStockOut = json['qty_stock_out'];
     qtyImportedTextEditingController.text = qtyImported.toString();
   }
 
@@ -81,7 +85,7 @@ class Product {
     data['qty_order'] = this.qtyOrder;
     data['qty_imported'] = this.qtyImported;
     data['qty_remaining'] = this.qtyRemaining;
-    data['qty_current_stock'] = this.qtyCurrentStock;
+
     data['image_path'] = this.imagePath;
 
     return data;

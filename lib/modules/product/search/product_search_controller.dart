@@ -11,9 +11,9 @@ class ProductSearchController extends GetxController {
 
   var result = List<Product>().obs;
 
-  void getAll() {
+  void getAll(String stockIdIn, String stockIdOut) {
     isBusy(true);
-    repository.getAll().then((data) {
+    repository.getAll(stockIdIn, stockIdOut).then((data) {
       result(data);
       isBusy(false);
     }).catchError((e) {

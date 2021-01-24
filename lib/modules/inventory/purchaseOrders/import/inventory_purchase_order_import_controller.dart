@@ -67,7 +67,7 @@ class InventoryPurchaseOrderImportController extends GetxController {
     print('imported qty at $index change to $newValue');
     var product = products[index];
     product.qtyImported = newValue;
-    product.qtyAfterImport = newValue + product.qtyCurrentStock;
+
     product.qtyImportedTextEditingController.text = newValue.toString();
     products[index] = product;
   }
@@ -75,7 +75,7 @@ class InventoryPurchaseOrderImportController extends GetxController {
   void setChecked(int index, bool value) {
     var product = products[index];
     product.qtyImported = value == true ? product.qtyOrder : 0;
-    product.qtyAfterImport = product.qtyImported + product.qtyCurrentStock;
+
     print(product.qtyImported);
     products[index] = product;
   }

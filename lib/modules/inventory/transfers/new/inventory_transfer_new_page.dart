@@ -3,7 +3,6 @@ import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.d
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
 
@@ -64,9 +63,9 @@ class InventoryTransferNewPage extends StatelessWidget {
           min: 1,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: product.qtyOrder,
+          initialValue: product.qtyOut,
           onValueChanged: (value) {
-            controller.setQtyOrder(index, value);
+            controller.setQtyOut(index, value);
           },
         ),
       ),
@@ -74,33 +73,58 @@ class InventoryTransferNewPage extends StatelessWidget {
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
-        child: TextFormField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.blueGrey, width: 2.0)),
-          ),
-          controller: product.priceOrderEditingController,
-          onChanged: (value) {
-            product.priceOrderEditingController.text = value;
-            controller.setPriceImported(index, value);
-          },
-          keyboardType: TextInputType.number,
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.qtyStockOut),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.qtyStockOut - product.qtyOut),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
         ),
       ),
       sizedBox,
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
-        child: Text(
-          kNumberFormat.format(product.totalPriceAvg) + ' đ',
-          textAlign: TextAlign.end,
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.qtyStockIn),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.qtyStockIn + product.qtyOut),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
         ),
       ),
       sizedBox,
       InkWell(
         child: Container(
-          width: 40,
+          width: 30,
           padding: EdgeInsets.only(left: 2.0),
           child: Icon(
             Icons.close,
@@ -156,7 +180,7 @@ class InventoryTransferNewPage extends StatelessWidget {
           width: 110,
           child: Text(
             'Kho nhập',
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -166,7 +190,7 @@ class InventoryTransferNewPage extends StatelessWidget {
         ),
         sizedBox,
         SizedBox(
-          width: 40,
+          width: 30,
         ),
       ],
     );
@@ -303,33 +327,14 @@ class InventoryTransferNewPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              'Số lượng nhập: ',
+              'Tổng số lượng: ',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 17,
               ),
             ),
             Text(
-              '${controller.getQtyOrder()}',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Tổng tiền: ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 17,
-              ),
-            ),
-            Text(
-              '${kNumberFormat.format(controller.getTotalMoneyOrder())} đ',
+              '${controller.getQtyOut()}',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
@@ -346,11 +351,11 @@ class InventoryTransferNewPage extends StatelessWidget {
       init: controller,
       initState: (state) => controller.getId(id),
       builder: (_) {
-        print('rebuild');
-
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())
             : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildHeaderBarSection(),
                   Expanded(
@@ -369,6 +374,8 @@ class InventoryTransferNewPage extends StatelessWidget {
                             width: 200,
                             child: SingleChildScrollView(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: _buildInformationSection(200),
                               ),
                             ),
@@ -395,59 +402,67 @@ class InventoryTransferNewPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                'Kho',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              controller.stock.value == null
-                  ? Container(
-                      width: 40,
-                      height: 40,
-                    )
-                  : Container(
-                      width: 40,
-                      height: 40,
-                      child: RaisedButton(
-                        onPressed: () => controller.setStock(''),
-                        child: Icon(
-                          Icons.close,
-                        ),
-                      ),
-                    ),
-            ],
+          Text(
+            'Kho',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           Divider(),
-          controller.stock.value == null
-              ? DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  showSelectedItem: true,
-                  items: controller.getAllStocks(),
-                  label: "",
-                  hint: "",
-                  // popupItemDisabled: (String s) => s.startsWith('I'),
-                  onChanged: (value) => controller.setStock(value),
-                  showSearchBox: true,
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.stock.value.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                )
+          Container(
+            padding: EdgeInsets.fromLTRB(10, 2, 5, 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Kho xuất'),
+                DropdownButton<String>(
+                  value: controller.selectedOutStock.value,
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String newValue) {
+                    controller.setStockExport(newValue);
+                  },
+                  items: controller.outStocks
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                Text('Kho nhận'),
+                DropdownButton<String>(
+                  value: controller.selectedInStock.value,
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String newValue) {
+                    controller.setStockImport(newValue);
+                  },
+                  items: controller.inStocks
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

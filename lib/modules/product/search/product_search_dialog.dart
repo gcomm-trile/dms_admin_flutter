@@ -8,15 +8,20 @@ class ProductSearchDialog extends StatelessWidget {
   final ProductSearchController controller =
       ProductSearchController(repository: Get.find());
   final String stockId;
+  final String stockIdIn;
+  final String stockIdOut;
   final Function(Set<Product> selectedProducts) savedData;
-  ProductSearchDialog({Key key, this.savedData, this.stockId})
+  ProductSearchDialog(
+      {Key key, this.savedData, this.stockId, this.stockIdIn, this.stockIdOut})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(stockIdIn);
+    print(stockIdOut);
     return GetX<ProductSearchController>(
         init: controller,
-        initState: (state) => controller.getAll(),
+        initState: (state) => controller.getAll(stockIdIn, stockIdOut),
         builder: (_) {
           return Container(
               width: 500.0,
@@ -59,15 +64,27 @@ class ProductSearchDialog extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
-                                      width: 100,
-                                      child: Text(
-                                        'Tồn kho',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      )),
+                                    width: 100,
+                                    child: Text(
+                                      'Kho xuất',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                      'Kho nhập',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Divider(
@@ -114,10 +131,21 @@ class ProductSearchDialog extends StatelessWidget {
                                             ),
                                           ),
                                           Container(
-                                            width: 40.0,
+                                            width: 100.0,
                                             child: Text(
-                                              '0',
-                                              textAlign: TextAlign.right,
+                                              kNumberFormat
+                                                  .format(product.qtyStockOut),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 100.0,
+                                            child: Text(
+                                              kNumberFormat
+                                                  .format(product.qtyStockIn),
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.black),
                                             ),

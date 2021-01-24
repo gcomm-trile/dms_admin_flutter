@@ -93,7 +93,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
             Container(
               width: 25,
               child: Text(
-                '${product.qtyCurrentStock}',
+                '${product.qtyStockIn}',
                 textAlign: TextAlign.end,
               ),
             ),
@@ -110,7 +110,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
             Container(
               width: 25,
               child: Text(
-                '${product.qtyCurrentStock + product.qtyImported}',
+                '${product.qtyStockIn + product.qtyImported}',
                 textAlign: TextAlign.start,
               ),
             ),

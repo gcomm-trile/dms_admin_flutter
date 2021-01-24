@@ -6,7 +6,7 @@ class ProductRepository {
 
   ProductRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  getAll() {
-    return apiClient.getAll();
+  getAll(String stockIdIn, String stockIdOut) {
+    return apiClient.getAll(stockIdIn, stockIdOut);
   }
 }

@@ -642,7 +642,6 @@ class _NumberInputWithIncrementDecrementState
   int oldValue;
   @override
   void initState() {
-    print('run initState');
     super.initState();
   }
 
@@ -668,13 +667,13 @@ class _NumberInputWithIncrementDecrementState
         newValue = 0;
       else
         newValue = int.parse(_controller.text);
-      print('new value' + newValue.toString());
+
       if (newValue > widget.max || newValue < widget.min) {
         _controller.text = oldValue.toString();
       } else
         widget.onValueChanged(newValue);
     });
-    print('run build number in_de');
+
     return Transform(
       transform:
           Matrix4.diagonal3Values(widget.scaleWidth, widget.scaleHeight, 1.0),
