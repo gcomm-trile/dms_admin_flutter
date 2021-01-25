@@ -1,11 +1,11 @@
 import 'package:dms_admin/data/model/purchase_order.dart';
+import 'package:dms_admin/data/model/transfer.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'inventory_transfers_controller.dart';
 
 class InventoryTransfersPage extends StatelessWidget {
@@ -133,6 +133,7 @@ class InventoryTransfersPage extends StatelessWidget {
               child: Text(
                 'Kho',
                 style: kStyleListViewHeader,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
@@ -161,7 +162,7 @@ class InventoryTransfersPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRowListViewSection(PurchaseOrder data) {
+  Widget _buildRowListViewSection(Transfer data) {
     var color = data.status == 2
         ? Colors.blue
         : (data.status == 0 ? Colors.red : Colors.green);
@@ -197,7 +198,7 @@ class InventoryTransfersPage extends StatelessWidget {
           Container(
             width: 90,
             child: Text(
-              DateTimeHelper.day2Text(data.planImportDate),
+              DateTimeHelper.day2Text(data.planDate),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 15,
@@ -206,8 +207,17 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
           sizedBox,
           Expanded(
-            child: Container(
-              child: Text(TextHelper.toSafeString(data.vendorName)),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(TextHelper.toSafeString(data.outStockName)),
+                  Container(
+                    child: Icon(Icons.arrow_right_alt),
+                  ),
+                  Text(TextHelper.toSafeString(data.inStockName)),
+                ],
+              ),
             ),
           ),
           sizedBox,

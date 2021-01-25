@@ -8,7 +8,6 @@ class StockSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       height: 100,
       child: Text('abc'),

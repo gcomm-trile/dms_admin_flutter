@@ -46,6 +46,6 @@ class ProductSearchController extends GetxController {
   }
 
   Set<Product> getSelectedProduct() {
-    return result.value.where((element) => element.checked == true).toSet();
+    return result.where((element) => element.checked == true).toSet();
   }
 }

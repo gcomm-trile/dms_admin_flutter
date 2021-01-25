@@ -1,6 +1,7 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
@@ -12,6 +13,7 @@ class InventoryTransferNewPage extends StatelessWidget {
   final sizedBox = SizedBox(
     width: 10,
   );
+  final double widthQuantibox = 80.0;
   final id;
   dp.DatePickerStyles styles;
   InventoryTransferNewController controller =
@@ -36,8 +38,6 @@ class InventoryTransferNewPage extends StatelessWidget {
     );
   }
 
-  final double widthQuantibox = 80.0;
-
   _buildRowListViewSection(int index) {
     var product = controller.products[index];
 
@@ -50,89 +50,89 @@ class InventoryTransferNewPage extends StatelessWidget {
       SizedBox(
         width: 10,
       ),
-      Expanded(
-        child: Container(child: Text(product.name)),
-      ),
-      sizedBox,
-      Container(
-        width: 110,
-        padding: EdgeInsets.all(2.0),
-        child: NumberInputWithIncrementDecrement(
-          controller: TextEditingController(),
-          // controller: product.qtyTextEditingController,
-          min: 1,
-          max: 999999,
-          numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: product.qtyOut,
-          onValueChanged: (value) {
-            controller.setQtyOut(index, value);
-          },
-        ),
-      ),
-      sizedBox,
-      Container(
-        width: 110,
-        padding: EdgeInsets.all(2.0),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              child: Text(
-                kNumberFormat.format(product.qtyStockOut),
-                textAlign: TextAlign.end,
-              ),
-            ),
-            Container(
-              child: Icon(Icons.arrow_right_alt),
-            ),
-            Container(
-              width: 40,
-              child: Text(
-                kNumberFormat.format(product.qtyStockOut - product.qtyOut),
-                textAlign: TextAlign.start,
-              ),
-            ),
-          ],
-        ),
-      ),
-      sizedBox,
-      Container(
-        width: 110,
-        padding: EdgeInsets.all(2.0),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              child: Text(
-                kNumberFormat.format(product.qtyStockIn),
-                textAlign: TextAlign.end,
-              ),
-            ),
-            Container(
-              child: Icon(Icons.arrow_right_alt),
-            ),
-            Container(
-              width: 40,
-              child: Text(
-                kNumberFormat.format(product.qtyStockIn + product.qtyOut),
-                textAlign: TextAlign.start,
-              ),
-            ),
-          ],
-        ),
-      ),
-      sizedBox,
-      InkWell(
-        child: Container(
-          width: 30,
-          padding: EdgeInsets.only(left: 2.0),
-          child: Icon(
-            Icons.close,
-            color: Colors.red,
-          ),
-        ),
-        onTap: () => controller.removeProduct(product),
-      ),
+      // Expanded(
+      //   child: Container(child: Text(TextHelper.toSafeString(product.name))),
+      // ),
+      // sizedBox,
+      // Container(
+      //   width: 110,
+      //   padding: EdgeInsets.all(2.0),
+      //   child: NumberInputWithIncrementDecrement(
+      //     controller: TextEditingController(),
+      //     // controller: product.qtyTextEditingController,
+      //     min: 1,
+      //     max: 999999,
+      //     numberFieldDecoration: InputDecoration(border: InputBorder.none),
+      //     initialValue: product.qtyOut,
+      //     onValueChanged: (value) {
+      //       controller.setQtyOut(index, value);
+      //     },
+      //   ),
+      // ),
+      // sizedBox,
+      // Container(
+      //   width: 110,
+      //   padding: EdgeInsets.all(2.0),
+      //   child: Row(
+      //     children: [
+      //       Container(
+      //         width: 40,
+      //         child: Text(
+      //           kNumberFormat.format(product.qtyStockOut),
+      //           textAlign: TextAlign.end,
+      //         ),
+      //       ),
+      //       Container(
+      //         child: Icon(Icons.arrow_right_alt),
+      //       ),
+      //       Container(
+      //         width: 40,
+      //         child: Text(
+      //           kNumberFormat.format(product.qtyStockOut - product.qtyOut),
+      //           textAlign: TextAlign.start,
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // sizedBox,
+      // Container(
+      //   width: 110,
+      //   padding: EdgeInsets.all(2.0),
+      //   child: Row(
+      //     children: [
+      //       Container(
+      //         width: 40,
+      //         child: Text(
+      //           kNumberFormat.format(product.qtyStockIn),
+      //           textAlign: TextAlign.end,
+      //         ),
+      //       ),
+      //       Container(
+      //         child: Icon(Icons.arrow_right_alt),
+      //       ),
+      //       Container(
+      //         width: 40,
+      //         child: Text(
+      //           kNumberFormat.format(product.qtyStockIn + product.qtyOut),
+      //           textAlign: TextAlign.start,
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // sizedBox,
+      // InkWell(
+      //   child: Container(
+      //     width: 30,
+      //     padding: EdgeInsets.only(left: 2.0),
+      //     child: Icon(
+      //       Icons.close,
+      //       color: Colors.red,
+      //     ),
+      //   ),
+      //   onTap: () => controller.removeProduct(product),
+      // ),
     ]);
   }
 
@@ -258,6 +258,12 @@ class InventoryTransferNewPage extends StatelessWidget {
   }
 
   _buildProductSection() {
+    if (controller.products == null) {
+      print('nukk');
+    } else {
+      print('nukk');
+      print(controller.products.length);
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -292,11 +298,12 @@ class InventoryTransferNewPage extends StatelessWidget {
           thickness: 2,
         ),
         Expanded(
-          child: controller.products == null
+          child: controller.products == null || controller.products.length == 0
               ? Container()
               : ListView.builder(
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
+                    print('_buildRowListViewSection');
                     return _buildRowListViewSection(index);
                   },
                 ),
@@ -315,7 +322,7 @@ class InventoryTransferNewPage extends StatelessWidget {
               ),
             ),
             Text(
-              '${controller.getProductOrder()}',
+              '${controller.products.length}',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
@@ -362,6 +369,8 @@ class InventoryTransferNewPage extends StatelessWidget {
                     child: Container(
                       color: Color.fromRGBO(213, 220, 230, 1),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Container(
@@ -463,176 +472,6 @@ class InventoryTransferNewPage extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  vendorSection() {
-    return Container(
-      decoration: BoxDecoration(
-        // border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white70,
-      ),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'Nhà Phân Phối',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              controller.vendor.value == null
-                  ? Container(
-                      width: 40,
-                      height: 40,
-                    )
-                  : Container(
-                      width: 40,
-                      height: 40,
-                      child: RaisedButton(
-                        onPressed: () => controller.setVendor(''),
-                        child: Icon(
-                          Icons.close,
-                        ),
-                      ),
-                    ),
-            ],
-          ),
-          Divider(),
-          controller.vendor.value == null
-              ? DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  showSelectedItem: true,
-                  items: controller.getAllVendors(),
-                  label: "",
-                  hint: "",
-                  // popupItemDisabled: (String s) => s.startsWith('I'),
-                  onChanged: (value) => controller.setVendor(value),
-                  showClearButton: true,
-                  showSearchBox: true,
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.vendor.value.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    controller.isExpandedVendor.value == false
-                        ? FlatButton(
-                            onPressed: () => controller.setExpandedVendor(true),
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: Colors.blue,
-                                  ),
-                                  Text(
-                                    'Xem thêm',
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FlatButton(
-                                onPressed: () =>
-                                    controller.setExpandedVendor(false),
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.format_indent_decrease,
-                                        color: Colors.blue,
-                                      ),
-                                      Text(
-                                        'Thu gọn',
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Divider(),
-                              Text(
-                                'Thông tin nhà phân phối',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.phone,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.address,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.ward,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.district,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.province,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.country,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            ],
-                          ),
-                  ],
-                )
         ],
       ),
     );
