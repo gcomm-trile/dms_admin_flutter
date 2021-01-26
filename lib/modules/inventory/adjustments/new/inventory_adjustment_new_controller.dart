@@ -49,14 +49,6 @@ class InventoryAdjustmentNewController extends GetxController {
     });
   }
 
-  getAllStocks() {
-    List<String> stocks = List<String>();
-    for (var item in result.value.stocks) {
-      stocks.add(item.name);
-    }
-    return stocks;
-  }
-
   setStock(String value) {
     print('setStock =' + value);
     stock.value =
@@ -72,21 +64,18 @@ class InventoryAdjustmentNewController extends GetxController {
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
-          stockIdOut: TextHelper.getDefaultGuidString(),
-          stockIdIn: stock.value == null
+          outStockId: TextHelper.getDefaultGuidString(),
+          inStockId: stock.value == null
               ? TextHelper.getDefaultGuidString()
               : stock.value.id,
+          titleInStockQty: 'Tồn',
           savedData: (selectedProducts) {
-            print('return data ' + selectedProducts.length.toString());
-
             for (var selectedProduct in selectedProducts) {
               if (products
                       .where((element) => element.id == selectedProduct.id)
                       .length ==
                   0) {
-                selectedProduct.orderQty = 1;
-                selectedProduct.orderPrice = 0;
-                selectedProduct.totalPriceAvg = 0;
+                selectedProduct.inQty = 1;
                 products.add(selectedProduct);
               }
             }
@@ -97,16 +86,7 @@ class InventoryAdjustmentNewController extends GetxController {
   }
 
   removeProduct(Product product) {
-    print('remove ' +
-        product.name.toString() +
-        product.qtyTextEditingController.text);
     products.removeWhere((element) => element.id == product.id);
-  }
-
-  int getCountSelectedProduct() {
-    return result.value.products
-        .where((element) => element.checked == true)
-        .length;
   }
 
   void save() {
@@ -142,14 +122,11 @@ class InventoryAdjustmentNewController extends GetxController {
     });
   }
 
-  void setQtyOrder(int index, int value) {
+  void setInQty(int index, int value) {
     var item = products[index];
-
-    print('set QtyOrder at index $index value $value');
-    item.orderQty = value;
-    item.totalPriceAvg = item.orderQty * item.orderPrice;
+    print('set setInQty at index $index value $value');
+    item.inQty = value;
     products[index] = item;
-    print(item.orderQty);
     printAllProduct();
   }
 
@@ -162,27 +139,5 @@ class InventoryAdjustmentNewController extends GetxController {
     } else {
       print('product null');
     }
-  }
-
-  getProductOrder() {
-    printAllProduct();
-    print('call getProductImported');
-    return products.where((e) => e.orderQty > 0).length;
-  }
-
-  getQtyOrder() {
-    int result = 0;
-    for (var product in products) {
-      if (product.orderQty > 0) result += product.orderQty;
-    }
-    return result;
-  }
-
-  getTotalMoneyOrder() {
-    int result = 0;
-    for (var product in products) {
-      if (product.orderQty > 0) result += product.orderQty * product.orderPrice;
-    }
-    return result;
   }
 }

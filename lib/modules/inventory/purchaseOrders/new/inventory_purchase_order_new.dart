@@ -6,28 +6,19 @@ import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
+
 import 'package:get/get.dart';
 
 class InventoryPurchaseOrderNewPage extends StatelessWidget {
-  var sizedBox = SizedBox(
+  final sizedBox = SizedBox(
     width: 10,
   );
   final purchaseOrderId;
-  dp.DatePickerStyles styles;
-  InventoryPurchaseOrderNewController controller =
+  final InventoryPurchaseOrderNewController controller =
       InventoryPurchaseOrderNewController(repository: Get.find());
   InventoryPurchaseOrderNewPage({Key key, @required this.purchaseOrderId})
       : super(key: key);
   Widget build(BuildContext context) {
-    styles = dp.DatePickerRangeStyles(
-        selectedDateStyle: Theme.of(context)
-            .accentTextTheme
-            .bodyText1
-            .copyWith(color: Colors.white),
-        selectedSingleDateDecoration:
-            BoxDecoration(color: Colors.blue, shape: BoxShape.circle));
-
     return Scaffold(
       body: Row(
         children: [

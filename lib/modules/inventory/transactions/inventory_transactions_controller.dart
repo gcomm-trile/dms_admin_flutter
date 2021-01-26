@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:dms_admin/data/model/inventory_transactions.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -56,7 +54,7 @@ class InventoryTransactionsController extends GetxController {
 
   createDataSource() {
     var dataSource = <DataRow>[];
-    for (var item in result.value) {
+    for (var item in result) {
       dataSource.add(DataRow(
         cells: <DataCell>[
           DataCell(Text(item.stockName)),

@@ -643,18 +643,6 @@ class _NumberInputWithIncrementDecrementState
   @override
   void initState() {
     super.initState();
-  }
-
-  String _minMaxValidator(String value) {
-    return value != null &&
-            value.isNotEmpty &&
-            (num.parse(value) < widget.min || num.parse(value) > widget.max)
-        ? 'Value should be between ${widget.min} and ${widget.max}'
-        : null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     _controller = widget.controller;
     //  Setting the initial value for the field.
     _controller.text = widget.isInt
@@ -673,7 +661,18 @@ class _NumberInputWithIncrementDecrementState
       } else
         widget.onValueChanged(newValue);
     });
+  }
 
+  String _minMaxValidator(String value) {
+    return value != null &&
+            value.isNotEmpty &&
+            (num.parse(value) < widget.min || num.parse(value) > widget.max)
+        ? 'Value should be between ${widget.min} and ${widget.max}'
+        : null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Transform(
       transform:
           Matrix4.diagonal3Values(widget.scaleWidth, widget.scaleHeight, 1.0),

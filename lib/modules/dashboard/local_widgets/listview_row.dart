@@ -13,6 +13,11 @@ class ListViewRow extends StatelessWidget {
   @required
   final int sumOrderPrice;
   final formatNumber = new NumberFormat('#,###,###,###', 'en_US');
+  final textStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 20.0,
+  );
   ListViewRow(
       {Key key,
       this.content,
@@ -22,11 +27,6 @@ class ListViewRow extends StatelessWidget {
       this.sumOrderPrice})
       : super(key: key);
 
-  var textStyle = TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontSize: 20.0,
-  );
   @override
   Widget build(BuildContext context) {
     return Row(

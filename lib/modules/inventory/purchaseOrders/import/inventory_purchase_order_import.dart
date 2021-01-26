@@ -3,26 +3,18 @@ import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.d
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
+
 import 'package:get/get.dart';
 import 'inventory_purchase_order_import_controller.dart';
 
 class InventoryPurchaseOrderImportPage extends StatelessWidget {
-  final purchaseOrderId;
-  dp.DatePickerStyles styles;
-  InventoryPurchaseOrderImportController controller =
+  final id;
+
+  final InventoryPurchaseOrderImportController controller =
       InventoryPurchaseOrderImportController(repository: Get.find());
-  InventoryPurchaseOrderImportPage({Key key, @required this.purchaseOrderId})
+  InventoryPurchaseOrderImportPage({Key key, @required this.id})
       : super(key: key);
   Widget build(BuildContext context) {
-    styles = dp.DatePickerRangeStyles(
-        selectedDateStyle: Theme.of(context)
-            .accentTextTheme
-            .bodyText1
-            .copyWith(color: Colors.white),
-        selectedSingleDateDecoration:
-            BoxDecoration(color: Colors.blue, shape: BoxShape.circle));
-
     return Scaffold(
       body: Row(
         children: [
@@ -34,7 +26,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
   }
 
   final double widthQuantibox = 80.0;
-  var sizedBox = SizedBox(
+  final sizedBox = SizedBox(
     width: 10,
   );
   _buildRowListViewSection(int index) {
@@ -363,7 +355,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
   _buildBodySection() {
     return GetX<InventoryPurchaseOrderImportController>(
       init: controller,
-      initState: (state) => controller.getId(purchaseOrderId),
+      initState: (state) => controller.getId(id),
       builder: (_) {
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())

@@ -98,8 +98,8 @@ class InventoryPurchaseOrderNewController extends GetxController {
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
-          stockIdOut: TextHelper.getDefaultGuidString(),
-          stockIdIn: stock.value == null
+          outStockId: TextHelper.getDefaultGuidString(),
+          inStockId: stock.value == null
               ? TextHelper.getDefaultGuidString()
               : stock.value.id,
           savedData: (selectedProducts) {

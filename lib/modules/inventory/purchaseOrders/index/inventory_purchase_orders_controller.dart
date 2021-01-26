@@ -39,7 +39,7 @@ class InventoryPurchaseOrdersController extends GetxController {
 
   void goToDetail(PurchaseOrder data) {
     Get.to(InventoryPurchaseOrderImportPage(
-      purchaseOrderId: data.id,
+      id: data.id,
     ));
   }
 }

@@ -3,10 +3,8 @@ import 'package:dms_admin/data/model/adjustment.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'inventory_adjustments_controller.dart';
 
 class InventoryAdjustmentsPage extends StatelessWidget {
@@ -180,7 +178,6 @@ class InventoryAdjustmentsPage extends StatelessWidget {
   }
 
   Widget _buildRowListViewSection(Adjustment data) {
-    var color = Colors.blue;
     return Container(
       child: Row(
         children: [

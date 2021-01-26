@@ -1,7 +1,10 @@
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_page.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/import/inventory_purchase_order_import.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
+import 'package:dms_admin/modules/inventory/transfers/import/inventory_transfer_import_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_page.dart';
+import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_page.dart';
 import 'package:dms_admin/modules/login/login_binding.dart';
 import 'package:dms_admin/modules/login/login_page.dart';
 import 'package:dms_admin/modules/order/order_binding.dart';
@@ -13,7 +16,7 @@ import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.INVENTORY_ADJUSTMENTS;
+  static const INITIAL = Routes.INVENTORY_PURCHASE_ORDERS_NEW;
 
   static final routes = [
     GetPage(
@@ -52,6 +55,18 @@ class AppPages {
     GetPage(
       name: Routes.INVENTORY_ADJUSTMENTS,
       page: () => InventoryAdjustmentsPage(),
+    ),
+    GetPage(
+      name: Routes.INVENTORY_TRANSFERS_NEW,
+      page: () => InventoryTransferNewPage(
+        id: '8c6e643c-be53-4392-b848-3b65b269bb47',
+      ),
+    ),
+    GetPage(
+      name: Routes.INVENTORY_PURCHASE_ORDERS_NEW,
+      page: () => InventoryPurchaseOrderImportPage(
+        id: '876848c0-6073-4ffb-9b45-eb32c3842a57',
+      ),
     ),
   ];
 }

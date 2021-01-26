@@ -86,11 +86,11 @@ class InventoryTransferNewController extends GetxController {
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
-          stockIdIn: result.value.inStocks
+          inStockId: result.value.inStocks
               .where((element) => element.name == selectedInStock.value)
               .first
               .id,
-          stockIdOut: result.value.outStocks
+          outStockId: result.value.outStocks
               .where((element) => element.name == selectedOutStock.value)
               .first
               .id,

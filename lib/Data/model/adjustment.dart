@@ -1,6 +1,5 @@
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
-import 'package:dms_admin/data/model/vendor.dart';
 
 class Adjustment {
   String id;

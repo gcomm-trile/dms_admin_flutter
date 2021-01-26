@@ -1,4 +1,3 @@
-import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/data/model/transfer.dart';
 import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
 import 'package:meta/meta.dart';

@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/utils/color_helper.dart';
@@ -9,7 +7,6 @@ import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import 'inventory_transfer_new_controller.dart';
 
@@ -63,7 +60,7 @@ class InventoryTransferNewPage extends StatelessWidget {
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
           controller: TextEditingController(),
-          min: 1,
+          min: 0,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.outQty,

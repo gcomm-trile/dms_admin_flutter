@@ -1,36 +1,23 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
-import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dms_admin/utils/text_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
-
 import 'inventory_adjustment_new_controller.dart';
 
 class InventoryAdjustmentNewPage extends StatelessWidget {
-  var sizedBox = SizedBox(
+  final sizedBox = SizedBox(
     width: 10,
   );
   final purchaseOrderId;
-  dp.DatePickerStyles styles;
-  InventoryAdjustmentNewController controller =
+
+  final InventoryAdjustmentNewController controller =
       InventoryAdjustmentNewController(repository: Get.find());
   InventoryAdjustmentNewPage({Key key, @required this.purchaseOrderId})
       : super(key: key);
   Widget build(BuildContext context) {
-    styles = dp.DatePickerRangeStyles(
-        selectedDateStyle: Theme.of(context)
-            .accentTextTheme
-            .bodyText1
-            .copyWith(color: Colors.white),
-        selectedSingleDateDecoration:
-            BoxDecoration(color: Colors.blue, shape: BoxShape.circle));
-
     return Scaffold(
       body: Row(
         children: [
@@ -65,12 +52,12 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
         child: NumberInputWithIncrementDecrement(
           controller: TextEditingController(),
           // controller: product.qtyTextEditingController,
-          min: 1,
-          max: 999999,
+          min: -1000,
+          max: 1000,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: product.orderQty,
+          initialValue: product.inQty,
           onValueChanged: (value) {
-            controller.setQtyOrder(index, value);
+            controller.setInQty(index, value);
           },
         ),
       ),
@@ -78,33 +65,32 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
       Container(
         width: 110,
         padding: EdgeInsets.all(2.0),
-        child: TextFormField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(color: Colors.blueGrey, width: 2.0)),
-          ),
-          controller: product.priceOrderEditingController,
-          onChanged: (value) {
-            product.priceOrderEditingController.text = value;
-            // controller.setPriceImported(index, value);
-          },
-          keyboardType: TextInputType.number,
-        ),
-      ),
-      sizedBox,
-      Container(
-        width: 110,
-        padding: EdgeInsets.all(2.0),
-        child: Text(
-          kNumberFormat.format(product.totalPriceAvg) + ' đ',
-          textAlign: TextAlign.end,
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.inStockQty),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.inStockQty + product.inQty),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
         ),
       ),
       sizedBox,
       InkWell(
         child: Container(
-          width: 40,
+          width: 25,
           padding: EdgeInsets.only(left: 2.0),
           child: Icon(
             Icons.close,
@@ -146,7 +132,7 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
         Container(
           width: 110,
           child: Text(
-            'Đơn giá',
+            'Tồn kho',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -155,38 +141,11 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
             ),
           ),
         ),
-        sizedBox,
-        Container(
-          width: 110,
-          child: Text(
-            'Thành tiền',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-          ),
-        ),
-        sizedBox,
         SizedBox(
-          width: 40,
+          width: 25,
         ),
       ],
     );
-  }
-
-  List<Widget> _buildInformationSection(int width, BuildContext context) {
-    return [
-      stockSection(),
-      SizedBox(
-        height: 10,
-      ),
-      additionalSection(context),
-      SizedBox(
-        height: 10,
-      )
-    ];
   }
 
   _buildHeaderBarSection() {
@@ -196,7 +155,7 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'Chi tiết phiếu mua hàng',
+            'Chi tiết phiếu điều chỉnh',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 20,
@@ -270,7 +229,10 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
         Expanded(
           child: controller.products == null
               ? Container()
-              : ListView.builder(
+              : ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                    thickness: 0.7,
+                  ),
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
                     return _buildRowListViewSection(index);
@@ -291,45 +253,7 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
               ),
             ),
             Text(
-              '${controller.getProductOrder()}',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Số lượng nhập: ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 17,
-              ),
-            ),
-            Text(
-              '${controller.getQtyOrder()}',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Tổng tiền: ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 17,
-              ),
-            ),
-            Text(
-              '${kNumberFormat.format(controller.getTotalMoneyOrder())} đ',
+              '${controller.products.where((e) => e.inQty != 0).toList().length}',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
@@ -347,7 +271,6 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
       initState: (state) => controller.getId(purchaseOrderId),
       builder: (_) {
         print('rebuild');
-
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())
             : Column(
@@ -367,15 +290,92 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
                                 child: _buildProductSection()),
                           ),
                           Container(
+                            margin: EdgeInsets.all(10),
                             padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              // border: Border.all(width: 2),
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white70,
+                            ),
                             width: 200,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children:
-                                    _buildInformationSection(200, context),
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Kho',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                DropdownButton<String>(
+                                  value: controller.stock.value.id,
+                                  icon: Icon(Icons.arrow_downward),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: TextStyle(color: Colors.deepPurple),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.deepPurpleAccent,
+                                  ),
+                                  onChanged: (newValue) {
+                                    controller.setStock(newValue);
+                                  },
+                                  items: controller.result.value.stocks
+                                      .map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value.id,
+                                      child: Text(value.name),
+                                    );
+                                  }).toList(),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(),
+                                Text(
+                                  'Ngày dự kiến',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RaisedButton(
+                                        child: Text(
+                                          DateTimeHelper.day2Text(
+                                              controller.planDate.value),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          final DateTime pickedDate =
+                                              await showDatePicker(
+                                                  context: context,
+                                                  initialDate:
+                                                      controller.planDate.value,
+                                                  firstDate: DateTime(2015),
+                                                  lastDate: DateTime(2050));
+                                          if (pickedDate != null &&
+                                              pickedDate !=
+                                                  controller.planDate.value)
+                                            controller.planDate(pickedDate);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

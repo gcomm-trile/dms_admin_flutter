@@ -1,20 +1,31 @@
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class ProductSearchController extends GetxController {
+  var searchTextEditController = TextEditingController();
   final ProductRepository repository;
   ProductSearchController({@required this.repository})
-      : assert(repository != null);
+      : assert(repository != null) {}
   final isBusy = true.obs;
-
-  var result = List<Product>().obs;
+  var sourceData = List<Product>();
+  var searchData = List<Product>().obs;
 
   void getAll(String stockIdIn, String stockIdOut) {
     isBusy(true);
     repository.getAll(stockIdIn, stockIdOut).then((data) {
-      result(data);
+      sourceData = data;
+      searchData(sourceData);
+      searchTextEditController.addListener(() {
+        print('search text change ' + searchTextEditController.text);
+        searchData(sourceData
+            .where((element) => element.name
+                .toLowerCase()
+                .contains(searchTextEditController.text.trim().toLowerCase()))
+            .toList());
+      });
       isBusy(false);
     }).catchError((e) {
       Get.snackbar('Error', e.toString());
@@ -24,28 +35,25 @@ class ProductSearchController extends GetxController {
   }
 
   int countChecked() {
-    return result == null
+    return sourceData == null
         ? 0
-        : result.where((element) => element.checked == true).length;
+        : sourceData.where((element) => element.checked == true).length;
   }
 
-  void setChecked(int index, bool value) {
-    var product = result[index];
-    product.checked = value;
-    result[index] = product;
-    // isBusy(true);
-    // var a = result;
-    // for (var item in a.value) {
-    //   if (item.id == product.id) {
-    //     item.checked = !product.checked;
-    //   }
-    // }
+  void setChecked(Product product, bool value) {
+    var item = sourceData.where((element) => element.id == product.id).first;
+    item.checked = value;
 
-    // result(a.value);
-    // isBusy(false);
+    for (int i = 0; i < searchData.length; i++) {
+      if (searchData[i].id == product.id) {
+        var item = searchData[i];
+        item.checked = value;
+        searchData[i] = item;
+      }
+    }
   }
 
   Set<Product> getSelectedProduct() {
-    return result.where((element) => element.checked == true).toSet();
+    return sourceData.where((element) => element.checked == true).toSet();
   }
 }

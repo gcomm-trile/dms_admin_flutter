@@ -9,20 +9,25 @@ class ProductSearchDialog extends StatelessWidget {
   final ProductSearchController controller =
       ProductSearchController(repository: Get.find());
 
-  final String stockIdIn;
-  final String stockIdOut;
+  final String inStockId;
+  final String outStockId;
+  final String titleInStockQty;
+  final String titleOutStockQty;
   final Function(Set<Product> selectedProducts) savedData;
   ProductSearchDialog(
-      {Key key, this.savedData, this.stockIdIn, this.stockIdOut})
+      {Key key,
+      this.savedData,
+      @required this.inStockId,
+      this.titleInStockQty = 'Kho nhập',
+      @required this.outStockId,
+      this.titleOutStockQty = 'Kho xuất'})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(stockIdIn);
-    print(stockIdOut);
     return GetX<ProductSearchController>(
         init: controller,
-        initState: (state) => controller.getAll(stockIdIn, stockIdOut),
+        initState: (state) => controller.getAll(inStockId, outStockId),
         builder: (_) {
           return Container(
               width: 500.0,
@@ -37,6 +42,7 @@ class ProductSearchDialog extends StatelessWidget {
                         : Column(
                             children: [
                               TextField(
+                                controller: controller.searchTextEditController,
                                 style: TextStyle(
                                     fontSize: 18, color: Colors.black),
                                 decoration: InputDecoration(
@@ -64,13 +70,13 @@ class ProductSearchDialog extends StatelessWidget {
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
-                                  stockIdOut ==
+                                  outStockId ==
                                           TextHelper.getDefaultGuidString()
                                       ? Container()
                                       : SizedBox(
                                           width: 100,
                                           child: Text(
-                                            'Kho xuất',
+                                            titleOutStockQty,
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
@@ -78,12 +84,12 @@ class ProductSearchDialog extends StatelessWidget {
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
-                                  stockIdIn == TextHelper.getDefaultGuidString()
+                                  inStockId == TextHelper.getDefaultGuidString()
                                       ? Container()
                                       : SizedBox(
                                           width: 100,
                                           child: Text(
-                                            'Kho nhập',
+                                            titleInStockQty,
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
@@ -101,13 +107,15 @@ class ProductSearchDialog extends StatelessWidget {
                               Expanded(
                                 child: ListView.separated(
                                     separatorBuilder: (context, index) {
-                                      return Divider();
+                                      return Divider(
+                                        thickness: 0.7,
+                                      );
                                     },
                                     shrinkWrap: true,
-                                    itemCount: controller.result.length,
+                                    itemCount: controller.searchData.length,
                                     itemBuilder: (context, index) {
-                                      var product = controller.result[index];
-
+                                      var product =
+                                          controller.searchData[index];
                                       return Row(
                                         children: [
                                           Container(
@@ -118,7 +126,7 @@ class ProductSearchDialog extends StatelessWidget {
                                                 activeColor: Colors.blue,
                                                 onChanged: (value) {
                                                   controller.setChecked(
-                                                      index, value);
+                                                      product, value);
                                                 },
                                               )),
                                           Image.network(
@@ -136,7 +144,7 @@ class ProductSearchDialog extends StatelessWidget {
                                                   color: Colors.black),
                                             ),
                                           ),
-                                          stockIdOut ==
+                                          outStockId ==
                                                   TextHelper
                                                       .getDefaultGuidString()
                                               ? Container()
@@ -150,7 +158,7 @@ class ProductSearchDialog extends StatelessWidget {
                                                         color: Colors.black),
                                                   ),
                                                 ),
-                                          stockIdIn ==
+                                          inStockId ==
                                                   TextHelper
                                                       .getDefaultGuidString()
                                               ? Container()
@@ -206,6 +214,7 @@ class ProductSearchDialog extends StatelessWidget {
                             )
                           : Container(
                               height: 40,
+                              // ignore: missing_required_param
                               child: RaisedButton(
                                 child: Text(
                                   'Hoàn tất chọn',
