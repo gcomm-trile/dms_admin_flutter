@@ -33,7 +33,7 @@ class InventoryPurchaseOrderImportController extends GetxController {
           .where((element) => element.id == result.value.vendorId)
           .first;
       stock.value = result.value.stocks
-          .where((element) => element.id == result.value.importStockId)
+          .where((element) => element.id == result.value.inStockId)
           .first;
       products(result.value.products);
       isBusy(false);
@@ -49,7 +49,7 @@ class InventoryPurchaseOrderImportController extends GetxController {
   }
 
   void import() {
-    repository.import(result.value).then((data) {
+    repository.nhanHang(result.value).then((data) {
       print(data);
       if (data.toString().isEmpty) {
         UI.showSuccess('Đã cập nhật thành công');
@@ -66,7 +66,7 @@ class InventoryPurchaseOrderImportController extends GetxController {
   void setImportedQty(int index, int newValue) {
     print('imported qty at $index change to $newValue');
     var product = products[index];
-    product.qtyImported = newValue;
+    product.inQty = newValue;
 
     product.qtyImportedTextEditingController.text = newValue.toString();
     products[index] = product;
@@ -74,20 +74,20 @@ class InventoryPurchaseOrderImportController extends GetxController {
 
   void setChecked(int index, bool value) {
     var product = products[index];
-    product.qtyImported = value == true ? product.qtyOrder : 0;
+    product.inQty = value == true ? product.orderQty : 0;
 
-    print(product.qtyImported);
+    print(product.inQty);
     products[index] = product;
   }
 
   getProductImported() {
-    return products.where((e) => e.qtyImported > 0).length;
+    return products.where((e) => e.inQty > 0).length;
   }
 
   getQtyImported() {
     int result = 0;
     for (var product in products) {
-      if (product.qtyImported > 0) result += product.qtyImported;
+      if (product.inQty > 0) result += product.inQty;
     }
     return result;
   }
@@ -101,8 +101,8 @@ class InventoryPurchaseOrderImportController extends GetxController {
   getTotalMoneyImported() {
     int result = 0;
     for (var product in products) {
-      if (product.qtyImported > 0)
-        result += product.qtyImported * product.priceOrder;
+      if (product.inQty > 0)
+        result += product.inQty * product.orderPrice;
     }
     return result;
   }

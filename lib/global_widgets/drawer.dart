@@ -62,6 +62,13 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           _createDrawerItem(
+            icon: Icons.edit,
+            text: 'Điều chỉnh',
+            onTap: () {
+              Get.toNamed(Routes.INVENTORY_ADJUSTMENTS);
+            },
+          ),
+          _createDrawerItem(
             icon: Icons.call_made,
             text: 'Xuất kho',
             onTap: () {

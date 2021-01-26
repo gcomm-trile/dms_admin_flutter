@@ -6,6 +6,7 @@ import 'package:dms_admin/data/model/vendor.dart';
 import 'package:dms_admin/data/repository/inventory_purchase_orders_repository.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -13,9 +14,6 @@ import 'package:meta/meta.dart';
 class InventoryPurchaseOrderNewController extends GetxController {
   final InventoryPurchaseOrdersRepository repository;
 
-  TextEditingController thongTinGhiChuTextEditController =
-      TextEditingController();
-  TextEditingController soThamChieuTextEditController = TextEditingController();
   InventoryPurchaseOrderNewController({@required this.repository})
       : assert(repository != null);
 
@@ -23,7 +21,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
   final isExpandedVendor = false.obs;
   final note = ''.obs;
   Rx<PurchaseOrder> result = Rx<PurchaseOrder>();
-  Rx<DateTime> planImportDate = DateTime.now().obs;
+  Rx<DateTime> planDate = DateTime.now().obs;
   var products = <Product>[].obs;
   final vendor = Rx<Vendor>();
   final stock = Rx<Stock>();
@@ -37,10 +35,6 @@ class InventoryPurchaseOrderNewController extends GetxController {
         result.value = item;
       } else {
         result.value = data;
-        thongTinGhiChuTextEditController =
-            TextEditingController(text: result.value.note);
-        soThamChieuTextEditController =
-            TextEditingController(text: result.value.refDocumentNote);
       }
       result.value.id = id;
       isBusy(false);
@@ -91,8 +85,8 @@ class InventoryPurchaseOrderNewController extends GetxController {
     }
   }
 
-  void setPlanImportDate(value) {
-    planImportDate.value = value;
+  void setPlanDate(value) {
+    planDate.value = value;
   }
 
   addProducts() {
@@ -104,7 +98,10 @@ class InventoryPurchaseOrderNewController extends GetxController {
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
-          stockId: '41B6F379-2254-462A-8472-1C08A4D6D3B2',
+          stockIdOut: TextHelper.getDefaultGuidString(),
+          stockIdIn: stock.value == null
+              ? TextHelper.getDefaultGuidString()
+              : stock.value.id,
           savedData: (selectedProducts) {
             print('return data ' + selectedProducts.length.toString());
 
@@ -113,8 +110,8 @@ class InventoryPurchaseOrderNewController extends GetxController {
                       .where((element) => element.id == selectedProduct.id)
                       .length ==
                   0) {
-                selectedProduct.qtyOrder = 1;
-                selectedProduct.priceOrder = 0;
+                selectedProduct.orderQty = 1;
+                selectedProduct.orderPrice = 0;
                 selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
               }
@@ -151,7 +148,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
       //       int.parse(product.priceTextEditingController.text);
       // }
       for (var product in result.value.products) {
-        print('${product.id} : ${product.qtyOrder} - ${product.priceOrder}');
+        print('${product.id} : ${product.orderQty} - ${product.orderPrice}');
       }
     }
 
@@ -159,7 +156,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
       UI.showError('Chọn kho cần mua hàng');
       return;
     } else {
-      result.value.importStockId = stock.value.id;
+      result.value.inStockId = stock.value.id;
     }
     if (vendor.value == null || vendor.value.id == null) {
       UI.showError('Chọn nhà cung cấp cần mua hàng');
@@ -167,12 +164,11 @@ class InventoryPurchaseOrderNewController extends GetxController {
     } else {
       result.value.vendorId = vendor.value.id;
     }
-    result.value.planImportDate = planImportDate.value;
-    result.value.refDocumentNote = soThamChieuTextEditController.text;
-    result.value.note = thongTinGhiChuTextEditController.text;
-    print('stock ' + result.value.importStockId);
+    result.value.planDate = planDate.value;
+
+    print('stock ' + result.value.inStockId);
     print('vendor ' + result.value.vendorId);
-    print('vendor ' + result.value.planImportDate.toString());
+    print('planDate ' + result.value.planDate.toString());
 
     repository.add(result.value).then((data) {
       print(data);
@@ -195,8 +191,8 @@ class InventoryPurchaseOrderNewController extends GetxController {
     else
       price = int.parse(value.replaceAll(',', ''));
     var item = products[index];
-    item.priceOrder = price;
-    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
+    item.orderPrice = price;
+    item.totalPriceAvg = item.orderQty * item.orderPrice;
     products[index] = item;
   }
 
@@ -204,10 +200,10 @@ class InventoryPurchaseOrderNewController extends GetxController {
     var item = products[index];
 
     print('set QtyOrder at index $index value $value');
-    item.qtyOrder = value;
-    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
+    item.orderQty = value;
+    item.totalPriceAvg = item.orderQty * item.orderPrice;
     products[index] = item;
-    print(item.qtyOrder);
+    print(item.orderQty);
     printAllProduct();
   }
 
@@ -215,7 +211,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
     if (products != null) {
       for (var product in products) {
         print(
-            'id: ${product.id} qtyImported: ${product.qtyImported} priceImported:${product.priceOrder} totalPriceImported:${product.totalPriceAvg}');
+            'id: ${product.id} qtyImported: ${product.inQty} priceImported:${product.orderPrice} totalPriceImported:${product.totalPriceAvg}');
       }
     } else {
       print('product null');
@@ -225,13 +221,13 @@ class InventoryPurchaseOrderNewController extends GetxController {
   getProductOrder() {
     printAllProduct();
     print('call getProductImported');
-    return products.where((e) => e.qtyOrder > 0).length;
+    return products.where((e) => e.orderQty > 0).length;
   }
 
   getQtyOrder() {
     int result = 0;
     for (var product in products) {
-      if (product.qtyOrder > 0) result += product.qtyOrder;
+      if (product.orderQty > 0) result += product.orderQty;
     }
     return result;
   }
@@ -239,7 +235,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
   getTotalMoneyOrder() {
     int result = 0;
     for (var product in products) {
-      if (product.qtyOrder > 0) result += product.qtyOrder * product.priceOrder;
+      if (product.orderQty > 0) result += product.orderQty * product.orderPrice;
     }
     return result;
   }

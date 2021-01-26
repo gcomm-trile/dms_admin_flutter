@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-
+import 'package:dms_admin/data/model/adjustment.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
@@ -9,9 +8,9 @@ import 'package:meta/meta.dart';
 // const baseUrl = 'inventory/transactions';
 const baseUrl = 'inventory/purchaseorders';
 
-class InventoryPurchaseOrdersApiClient {
+class InventoryAdjustmentsApiClient {
   final Dio httpClient;
-  InventoryPurchaseOrdersApiClient({@required this.httpClient});
+  InventoryAdjustmentsApiClient({@required this.httpClient});
 
   getAll() async {
     print('session id ${httpClient.options.headers['Session-ID']}');
@@ -19,9 +18,8 @@ class InventoryPurchaseOrdersApiClient {
       print('call ' + SERVER_URL + baseUrl);
       var response = await httpClient.get(SERVER_URL + baseUrl);
       if (response.statusCode == 200) {
-        var result = (response.data as List)
-            .map((x) => PurchaseOrder.fromJson(x))
-            .toList();
+        var result =
+            (response.data as List).map((x) => Adjustment.fromJson(x)).toList();
         print('result count ' + result.length.toString());
         return result;
       } else
@@ -37,7 +35,7 @@ class InventoryPurchaseOrdersApiClient {
       var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
         //print(response.data);
-        return PurchaseOrder.fromJson(response.data);
+        return Adjustment.fromJson(response.data);
       } else
         print('error -get');
     } catch (_) {
@@ -45,7 +43,7 @@ class InventoryPurchaseOrdersApiClient {
     }
   }
 
-  add(PurchaseOrder value) async {
+  add(Adjustment value) async {
     final jobsListAPIUrl = SERVER_URL +
         baseUrl +
         '/add?id=${value.id}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&vendor_id=${value.vendorId}';
@@ -64,7 +62,7 @@ class InventoryPurchaseOrdersApiClient {
     }
   }
 
-  nhanHang(PurchaseOrder value) async {
+  nhanHang(Adjustment value) async {
     final jobsListAPIUrl = SERVER_URL + baseUrl + '/nhanHang?id=${value.id}';
     print("POST $jobsListAPIUrl");
     print(jsonEncode(value.products));

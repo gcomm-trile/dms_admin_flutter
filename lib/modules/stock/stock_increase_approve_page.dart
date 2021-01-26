@@ -58,7 +58,7 @@ class _StockIncreaseApprovePageState extends State<StockIncreaseApprovePage> {
           width: 80.0,
           child: Container(
               child: Text(
-            product.qtyOrder.toString(),
+            product.orderQty.toString(),
             textAlign: TextAlign.center,
             style: styleItem,
           ))),

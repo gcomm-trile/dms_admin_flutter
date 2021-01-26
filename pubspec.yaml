@@ -59,6 +59,7 @@ dependencies:
   rxdart: ^0.25.0
   scoped_model: ^1.0.1
   tab_indicator_styler: ^1.0.0
+  table_calendar: ^2.3.3
   timeline: ^0.0.1
   timeline_tile: ^1.0.0
 dev_dependencies:

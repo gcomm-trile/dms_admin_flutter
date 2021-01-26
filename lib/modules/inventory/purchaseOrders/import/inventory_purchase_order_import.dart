@@ -40,11 +40,11 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
   _buildRowListViewSection(int index) {
     var product = controller.result.value.products[index];
     print('rebuild data ' +
-        controller.result.value.products[index].qtyImported.toString());
+        controller.result.value.products[index].inQty.toString());
     var textController = TextEditingController();
     return Row(children: <Widget>[
       Checkbox(
-        value: product.qtyImported > 0 ? true : false,
+        value: product.inQty > 0 ? true : false,
         onChanged: (value) {
           print(value);
           controller.setChecked(index, value);
@@ -65,7 +65,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
       Container(
           width: 40,
           child: Text(
-            kNumberFormat.format(product.qtyOrder),
+            kNumberFormat.format(product.orderQty),
           )),
       sizedBox,
       Container(
@@ -75,9 +75,9 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
           controller:
               TextEditingController(), // product.qtyImportedTextEditingController,
           min: 0,
-          max: product.qtyOrder,
+          max: product.orderQty,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: product.qtyImported,
+          initialValue: product.inQty,
           onValueChanged: (value) {
             print(value);
             controller.setImportedQty(index, value);
@@ -93,7 +93,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
             Container(
               width: 25,
               child: Text(
-                '${product.qtyStockIn}',
+                '${product.inStockQty}',
                 textAlign: TextAlign.end,
               ),
             ),
@@ -110,7 +110,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
             Container(
               width: 25,
               child: Text(
-                '${product.qtyStockIn + product.qtyImported}',
+                '${product.inStockQty + product.inQty}',
                 textAlign: TextAlign.start,
               ),
             ),
@@ -121,14 +121,14 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
       Container(
         width: 80,
         child: Text(
-          kNumberFormat.format(product.priceOrder) + ' đ',
+          kNumberFormat.format(product.orderPrice) + ' đ',
         ),
       ),
       sizedBox,
       Container(
         width: 100,
         child: Text(
-          kNumberFormat.format(product.priceOrder * product.qtyImported) + ' đ',
+          kNumberFormat.format(product.orderPrice * product.inQty) + ' đ',
         ),
       )
     ]);
@@ -223,10 +223,6 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         height: 10,
       ),
       _buildStockSection(),
-      SizedBox(
-        height: 10,
-      ),
-      _buildNoteSection(),
       SizedBox(
         height: 10,
       ),
@@ -578,40 +574,6 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
     );
   }
 
-  _buildNoteSection() {
-    return Container(
-      decoration: BoxDecoration(
-        // border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white70,
-      ),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Thông Tin Ghi Chú',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Divider(),
-          Text(
-            controller.result.value.note == null ||
-                    controller.result.value.note.isEmpty == true
-                ? '--'
-                : controller.result.value.note,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   _buildAdditionalSection() {
     return Container(
       decoration: BoxDecoration(
@@ -640,24 +602,8 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
             ),
           ),
           Container(
-            child: Text(DateTimeHelper.day2Text(
-                controller.result.value.planImportDate)),
-          ),
-          Text(
-            'Số tham chiếu',
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
-            ),
-          ),
-          Text(
-            controller.result.value.refDocumentNote.isEmpty
-                ? '--'
-                : controller.result.value.refDocumentNote,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
-            ),
+            child:
+                Text(DateTimeHelper.day2Text(controller.result.value.planDate)),
           ),
         ],
       ),

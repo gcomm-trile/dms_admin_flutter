@@ -46,10 +46,10 @@ class InventoryTransfersApiClient {
     }
   }
 
-  add(Transfer value) async {
+  add(Transfer value, int status) async {
     final apiUrl = SERVER_URL +
         baseUrl +
-        '/add?id=${value.id}&out_stock_id=${value.outStockId}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&ref_document_note=${value.refDocumentNote}&note=${value.note}';
+        '/add?status=$status&id=${value.id}&out_stock_id=${value.outStockId}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&ref_document_note=${value.refDocumentNote}&note=${value.note}';
     print("POST $apiUrl");
 
     final response =
@@ -71,6 +71,51 @@ class InventoryTransfersApiClient {
     print(jsonEncode(value.products));
     final response =
         await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      if (response.data == 'Ok')
+        return '';
+      else
+        return response.data;
+    } else {
+      return response.data;
+    }
+  }
+
+  nhan(String id) async {
+    final url = SERVER_URL + baseUrl + '/nhan?id=$id';
+    print("POST $url");
+    final response = await httpClient.post(url);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      if (response.data == 'Ok')
+        return '';
+      else
+        return response.data;
+    } else {
+      return response.data;
+    }
+  }
+
+  huy(String id) async {
+    final url = SERVER_URL + baseUrl + '/huy?id=$id';
+    print("POST $url");
+    final response = await httpClient.post(url);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      if (response.data == 'Ok')
+        return '';
+      else
+        return response.data;
+    } else {
+      return response.data;
+    }
+  }
+
+  nhanOrHuy(String id, String action) async {
+    final url = SERVER_URL + baseUrl + '/$action?id=$id';
+    print("POST $url");
+    final response = await httpClient.post(url);
     print(response.statusCode);
     if (response.statusCode == 200) {
       if (response.data == 'Ok')

@@ -147,7 +147,7 @@ class VisitOrder extends GetView<VisitController> {
             return buildRowListView(data[index], index);
           } else {
             double sum = 0.0;
-            data.forEach((e) => sum += (e.qtyOrder * e.priceOrder));
+            data.forEach((e) => sum += (e.orderQty * e.orderPrice));
             return Container(
               margin: EdgeInsets.all(10.0),
               child: Text(
@@ -200,7 +200,7 @@ class VisitOrder extends GetView<VisitController> {
               width: 40,
               child: Container(
                   child: Text(
-                kNumberFormat.format(item.qtyOrder),
+                kNumberFormat.format(item.orderQty),
                 style: kStyleListViewItem,
                 textAlign: TextAlign.center,
               ))),
@@ -208,7 +208,7 @@ class VisitOrder extends GetView<VisitController> {
               width: 70,
               child: Container(
                   child: Text(
-                kNumberFormat.format(item.priceOrder),
+                kNumberFormat.format(item.orderPrice),
                 style: kStyleListViewItem,
                 textAlign: TextAlign.right,
               ))),
@@ -216,7 +216,7 @@ class VisitOrder extends GetView<VisitController> {
               width: 100,
               child: Container(
                   child: Text(
-                kNumberFormat.format((item.priceOrder * item.qtyOrder)),
+                kNumberFormat.format((item.orderPrice * item.orderQty)),
                 style: kStyleListViewItem,
                 textAlign: TextAlign.right,
               ))),

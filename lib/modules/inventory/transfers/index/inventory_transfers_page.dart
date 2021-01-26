@@ -1,7 +1,8 @@
-import 'package:dms_admin/data/model/purchase_order.dart';
+
 import 'package:dms_admin/data/model/transfer.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
           sizedBox,
           Container(
-            width: 80,
+            width: 100,
             child: Row(
               children: [
                 Text(
@@ -151,11 +152,15 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
           sizedBox,
           Container(
-            width: 100,
+            width: 60,
             child: Text(
               'Số lượng',
               style: kStyleListViewHeader,
             ),
+          ),
+          sizedBox,
+          Container(
+            width: 30,
           ),
         ],
       ),
@@ -165,18 +170,39 @@ class InventoryTransfersPage extends StatelessWidget {
   Widget _buildRowListViewSection(Transfer data) {
     var color = data.status == 2
         ? Colors.blue
-        : (data.status == 0 ? Colors.red : Colors.green);
+        : (data.status == 1 ? Colors.red : Colors.green);
     return Container(
       child: Row(
         children: [
-          InkWell(
-            onTap: () {
-              controller.goToDetail(data);
-            },
-            child: Row(
-              children: [
-                Container(
-                  width: 60,
+          (data.canReceived == true || data.canCancel == true)
+              ? InkWell(
+                  onTap: () {
+                    print('call import');
+                    controller.gotoImportPage(data);
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        child: Text(
+                          data.no,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 15, 7, 240),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.list,
+                        size: 25,
+                        color: Color.fromARGB(255, 15, 7, 240),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(
+                  width: 85,
                   child: Text(
                     data.no,
                     style: TextStyle(
@@ -186,14 +212,6 @@ class InventoryTransfersPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.list,
-                  size: 25,
-                  color: Color.fromARGB(255, 15, 7, 240),
-                ),
-              ],
-            ),
-          ),
           sizedBox,
           Container(
             width: 90,
@@ -222,7 +240,7 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
           sizedBox,
           Container(
-            width: 80,
+            width: 100,
             child: Text(
               data.statusName,
               style: TextStyle(color: color, fontWeight: FontWeight.bold),
@@ -230,12 +248,31 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
           sizedBox,
           Container(
-            width: 100,
+            width: 60,
             child: Text(
-              data.totalOrderQty.toString(),
+              kNumberFormat.format(data.totalQty),
+              textAlign: TextAlign.center,
               style: TextStyle(color: color, fontWeight: FontWeight.bold),
             ),
           ),
+          sizedBox,
+          data.canEdit == true
+              ? InkWell(
+                  child: Container(
+                    width: 30,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  onTap: () {
+                    print('call detail');
+                    if (data.canEdit) controller.goToDetailPage(data);
+                  },
+                )
+              : Container(
+                  width: 30,
+                ),
         ],
       ),
     );

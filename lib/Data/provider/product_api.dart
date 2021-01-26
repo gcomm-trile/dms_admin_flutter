@@ -12,10 +12,11 @@ class ProductApiClient {
 
   getAll(String stockIdIn, String stockIdOut) async {
     try {
-      print(SERVER_URL + baseUrl);
-      var response = await httpClient.get(SERVER_URL +
+      String url = SERVER_URL +
           baseUrl +
-          '?stock_id_in=$stockIdIn&stock_id_out=$stockIdOut');
+          '?stock_id_in=$stockIdIn&stock_id_out=$stockIdOut';
+      print(url);
+      var response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
         var result =

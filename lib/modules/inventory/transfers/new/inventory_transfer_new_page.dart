@@ -1,11 +1,15 @@
+import 'dart:js';
+
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
+import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'inventory_transfer_new_controller.dart';
 
@@ -50,89 +54,88 @@ class InventoryTransferNewPage extends StatelessWidget {
       SizedBox(
         width: 10,
       ),
-      // Expanded(
-      //   child: Container(child: Text(TextHelper.toSafeString(product.name))),
-      // ),
-      // sizedBox,
-      // Container(
-      //   width: 110,
-      //   padding: EdgeInsets.all(2.0),
-      //   child: NumberInputWithIncrementDecrement(
-      //     controller: TextEditingController(),
-      //     // controller: product.qtyTextEditingController,
-      //     min: 1,
-      //     max: 999999,
-      //     numberFieldDecoration: InputDecoration(border: InputBorder.none),
-      //     initialValue: product.qtyOut,
-      //     onValueChanged: (value) {
-      //       controller.setQtyOut(index, value);
-      //     },
-      //   ),
-      // ),
-      // sizedBox,
-      // Container(
-      //   width: 110,
-      //   padding: EdgeInsets.all(2.0),
-      //   child: Row(
-      //     children: [
-      //       Container(
-      //         width: 40,
-      //         child: Text(
-      //           kNumberFormat.format(product.qtyStockOut),
-      //           textAlign: TextAlign.end,
-      //         ),
-      //       ),
-      //       Container(
-      //         child: Icon(Icons.arrow_right_alt),
-      //       ),
-      //       Container(
-      //         width: 40,
-      //         child: Text(
-      //           kNumberFormat.format(product.qtyStockOut - product.qtyOut),
-      //           textAlign: TextAlign.start,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // sizedBox,
-      // Container(
-      //   width: 110,
-      //   padding: EdgeInsets.all(2.0),
-      //   child: Row(
-      //     children: [
-      //       Container(
-      //         width: 40,
-      //         child: Text(
-      //           kNumberFormat.format(product.qtyStockIn),
-      //           textAlign: TextAlign.end,
-      //         ),
-      //       ),
-      //       Container(
-      //         child: Icon(Icons.arrow_right_alt),
-      //       ),
-      //       Container(
-      //         width: 40,
-      //         child: Text(
-      //           kNumberFormat.format(product.qtyStockIn + product.qtyOut),
-      //           textAlign: TextAlign.start,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // sizedBox,
-      // InkWell(
-      //   child: Container(
-      //     width: 30,
-      //     padding: EdgeInsets.only(left: 2.0),
-      //     child: Icon(
-      //       Icons.close,
-      //       color: Colors.red,
-      //     ),
-      //   ),
-      //   onTap: () => controller.removeProduct(product),
-      // ),
+      Expanded(
+        child: Container(child: Text(TextHelper.toSafeString(product.name))),
+      ),
+      sizedBox,
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: NumberInputWithIncrementDecrement(
+          controller: TextEditingController(),
+          min: 1,
+          max: 999999,
+          numberFieldDecoration: InputDecoration(border: InputBorder.none),
+          initialValue: product.outQty,
+          onValueChanged: (value) {
+            controller.setQtyOut(index, value);
+          },
+        ),
+      ),
+      sizedBox,
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.outStockQty),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.outStockQty - product.outQty),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
+        ),
+      ),
+      sizedBox,
+      Container(
+        width: 110,
+        padding: EdgeInsets.all(2.0),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.inStockQty),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_right_alt),
+            ),
+            Container(
+              width: 40,
+              child: Text(
+                kNumberFormat.format(product.inStockQty + product.outQty),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
+        ),
+      ),
+      sizedBox,
+      InkWell(
+        child: Container(
+          width: 30,
+          padding: EdgeInsets.only(left: 2.0),
+          child: Icon(
+            Icons.close,
+            color: Colors.red,
+          ),
+        ),
+        onTap: () => controller.removeProduct(product),
+      ),
     ]);
   }
 
@@ -196,20 +199,13 @@ class InventoryTransferNewPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildInformationSection(int width) {
+  List<Widget> _buildInformationSection(int width, BuildContext context) {
     return [
       stockSection(),
       SizedBox(
         height: 10,
       ),
-      noteSection(),
-      SizedBox(
-        height: 10,
-      ),
-      additionalSection(),
-      SizedBox(
-        height: 10,
-      )
+      additionalSection(context),
     ];
   }
 
@@ -219,20 +215,75 @@ class InventoryTransferNewPage extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: [
-          Text(
-            'Chi tiết phiếu điều chuyển',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          controller.result.value.products == null
+              ? Text(
+                  'Chi tiết phiếu điều chuyển',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'MÃ PHIẾU',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          child: Text(
+                            '#${TextHelper.toSafeString(controller.result.value.no)}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    sizedBox,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'TRẠNG THÁI',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            color: ColorHelper.fromHex("#e8ae0e"),
+                          ),
+                          padding: EdgeInsets.all(3.0),
+                          child: Text(
+                            TextHelper.toSafeString(
+                                controller.result.value.statusName),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
           Expanded(child: Container()),
           RaisedButton(
             onPressed: () {
-              controller.save();
+              controller.save(1);
             },
-            color: Colors.blue,
+            color: Colors.red,
             child: Container(
               height: 40,
               width: 100,
@@ -243,7 +294,32 @@ class InventoryTransferNewPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   Text(
-                    'Lưu',
+                    'Lưu trữ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          sizedBox,
+          RaisedButton(
+            onPressed: () {
+              controller.save(2);
+            },
+            color: Colors.blue,
+            child: Container(
+              height: 40,
+              width: 140,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.save,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    'Lưu & Xuất hàng',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -258,12 +334,6 @@ class InventoryTransferNewPage extends StatelessWidget {
   }
 
   _buildProductSection() {
-    if (controller.products == null) {
-      print('nukk');
-    } else {
-      print('nukk');
-      print(controller.products.length);
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -303,7 +373,6 @@ class InventoryTransferNewPage extends StatelessWidget {
               : ListView.builder(
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
-                    print('_buildRowListViewSection');
                     return _buildRowListViewSection(index);
                   },
                 ),
@@ -380,15 +449,20 @@ class InventoryTransferNewPage extends StatelessWidget {
                           ),
                           Container(
                             padding: EdgeInsets.all(10),
-                            width: 200,
-                            child: SingleChildScrollView(
-                              child: Column(
+                            width: 160,
+                            child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _buildInformationSection(200),
-                              ),
-                            ),
-                          )
+                                children: [
+                                  stockSection(),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Expanded(child: additionalSection(context)),
+                                ]
+                                // _buildInformationSection(160, context),
+                                ),
+                          ),
                         ],
                       ),
                     ),
@@ -437,7 +511,7 @@ class InventoryTransferNewPage extends StatelessWidget {
                     color: Colors.deepPurpleAccent,
                   ),
                   onChanged: (String newValue) {
-                    controller.setStockExport(newValue);
+                    controller.setOutStock(newValue);
                   },
                   items: controller.outStocks
                       .map<DropdownMenuItem<String>>((String value) {
@@ -507,7 +581,7 @@ class InventoryTransferNewPage extends StatelessWidget {
     );
   }
 
-  additionalSection() {
+  additionalSection(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         // border: Border.all(width: 2),
@@ -519,53 +593,43 @@ class InventoryTransferNewPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Thông Tin Bổ Sung',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Divider(),
-          Text(
             'Ngày dự kiến',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Colors.grey,
+              color: Colors.black,
             ),
           ),
-          Container(
-            height: 150,
-            child: dp.DayPicker.single(
-              selectedDate: controller.planImportDate.value,
-              onChanged: (value) {
-                print(value.toString());
-                controller.setPlanImportDate(value);
-              },
-              firstDate: DateTime.now().add(new Duration(days: -30)),
-              lastDate: DateTime.now().add(new Duration(days: 30)),
-              datePickerStyles: styles,
-              datePickerLayoutSettings: dp.DatePickerLayoutSettings(
-                  maxDayPickerRowCount: 2,
-                  showPrevMonthEnd: true,
-                  showNextMonthStart: true),
-              // selectableDayPredicate: _isSelectableCustom,
-              // eventDecorationBuilder: _eventDecorationBuilder,
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RaisedButton(
+                    child: Text(
+                      DateTimeHelper.day2Text(controller.planDate.value),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    onPressed: () async {
+                      final DateTime pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: controller.planDate.value,
+                          firstDate: DateTime(2015),
+                          lastDate: DateTime(2050));
+                      if (pickedDate != null &&
+                          pickedDate != controller.planDate.value)
+                        controller.planDate(pickedDate);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-          Text(
-            'Số tham chiếu',
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
-            ),
-          ),
-          TextField(
-            controller: controller.soThamChieuTextEditController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-            ),
-          )
         ],
       ),
     );

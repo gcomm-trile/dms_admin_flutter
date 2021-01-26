@@ -2,6 +2,7 @@ import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,7 +65,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
           min: 1,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
-          initialValue: product.qtyOrder,
+          initialValue: product.orderQty,
           onValueChanged: (value) {
             controller.setQtyOrder(index, value);
           },
@@ -172,7 +173,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildInformationSection(int width) {
+  List<Widget> _buildInformationSection(int width, BuildContext context) {
     return [
       vendorSection(),
       SizedBox(
@@ -182,11 +183,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
       SizedBox(
         height: 10,
       ),
-      noteSection(),
-      SizedBox(
-        height: 10,
-      ),
-      additionalSection(),
+      additionalSection(context),
       SizedBox(
         height: 10,
       )
@@ -361,6 +358,8 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
                     child: Container(
                       color: Color.fromRGBO(213, 220, 230, 1),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Container(
@@ -373,10 +372,13 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
                             width: 200,
                             child: SingleChildScrollView(
                               child: Column(
-                                children: _buildInformationSection(200),
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children:
+                                    _buildInformationSection(200, context),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -627,7 +629,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
     );
   }
 
-  noteSection() {
+  additionalSection(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         // border: Border.all(width: 2),
@@ -638,84 +640,42 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Thông Tin Ghi Chú',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Divider(),
-          TextField(
-            controller: controller.thongTinGhiChuTextEditController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  additionalSection() {
-    return Container(
-      decoration: BoxDecoration(
-        // border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white70,
-      ),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Thông Tin Bổ Sung',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Divider(),
           Text(
             'Ngày dự kiến',
             style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           Container(
-            height: 150,
-            child: dp.DayPicker.single(
-              selectedDate: controller.planImportDate.value,
-              onChanged: (value) {
-                print(value.toString());
-                controller.setPlanImportDate(value);
-              },
-              firstDate: DateTime.now().add(new Duration(days: -30)),
-              lastDate: DateTime.now().add(new Duration(days: 30)),
-              datePickerStyles: styles,
-              datePickerLayoutSettings: dp.DatePickerLayoutSettings(
-                  maxDayPickerRowCount: 2,
-                  showPrevMonthEnd: true,
-                  showNextMonthStart: true),
-              // selectableDayPredicate: _isSelectableCustom,
-              // eventDecorationBuilder: _eventDecorationBuilder,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RaisedButton(
+                  child: Text(
+                    DateTimeHelper.day2Text(controller.planDate.value),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () async {
+                    final DateTime pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: controller.planDate.value,
+                        firstDate: DateTime(2015),
+                        lastDate: DateTime(2050));
+                    if (pickedDate != null &&
+                        pickedDate != controller.planDate.value)
+                      controller.planDate(pickedDate);
+                  },
+                ),
+              ],
             ),
           ),
-          Text(
-            'Số tham chiếu',
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
-            ),
-          ),
-          TextField(
-            controller: controller.soThamChieuTextEditController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-            ),
-          )
         ],
       ),
     );

@@ -191,7 +191,7 @@ class _StockDecreaseExportForOrderPageState
             return _buildRowListView(data[index], index);
           } else {
             double sum = 0.0;
-            data.forEach((e) => sum += (e.qtyOrder * e.priceOrder));
+            data.forEach((e) => sum += (e.orderQty * e.orderPrice));
             return Expanded(
                 child: Container(
               margin: EdgeInsets.all(10.0),
@@ -290,7 +290,7 @@ class _StockDecreaseExportForOrderPageState
               width: 40,
               child: Container(
                   child: Text(
-                formatter.format(item.qtyOrder),
+                formatter.format(item.orderQty),
                 style: styleItem,
                 textAlign: TextAlign.center,
               ))),
@@ -298,7 +298,7 @@ class _StockDecreaseExportForOrderPageState
               width: 70,
               child: Container(
                   child: Text(
-                formatter.format(item.priceOrder),
+                formatter.format(item.orderPrice),
                 style: styleItem,
                 textAlign: TextAlign.right,
               ))),
@@ -306,7 +306,7 @@ class _StockDecreaseExportForOrderPageState
               width: 100,
               child: Container(
                   child: Text(
-                formatter.format((item.priceOrder * item.qtyOrder)),
+                formatter.format((item.orderPrice * item.orderQty)),
                 style: styleItem,
                 textAlign: TextAlign.right,
               ))),

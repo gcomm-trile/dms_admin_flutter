@@ -1,18 +1,19 @@
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductSearchDialog extends StatelessWidget {
   final ProductSearchController controller =
       ProductSearchController(repository: Get.find());
-  final String stockId;
+
   final String stockIdIn;
   final String stockIdOut;
   final Function(Set<Product> selectedProducts) savedData;
   ProductSearchDialog(
-      {Key key, this.savedData, this.stockId, this.stockIdIn, this.stockIdOut})
+      {Key key, this.savedData, this.stockIdIn, this.stockIdOut})
       : super(key: key);
 
   @override
@@ -63,28 +64,33 @@ class ProductSearchDialog extends StatelessWidget {
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Kho xuất',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Kho nhập',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                                  stockIdOut ==
+                                          TextHelper.getDefaultGuidString()
+                                      ? Container()
+                                      : SizedBox(
+                                          width: 100,
+                                          child: Text(
+                                            'Kho xuất',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                  stockIdIn == TextHelper.getDefaultGuidString()
+                                      ? Container()
+                                      : SizedBox(
+                                          width: 100,
+                                          child: Text(
+                                            'Kho nhập',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                 ],
                               ),
                               Divider(
@@ -130,26 +136,34 @@ class ProductSearchDialog extends StatelessWidget {
                                                   color: Colors.black),
                                             ),
                                           ),
-                                          Container(
-                                            width: 100.0,
-                                            child: Text(
-                                              kNumberFormat
-                                                  .format(product.qtyStockOut),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 100.0,
-                                            child: Text(
-                                              kNumberFormat
-                                                  .format(product.qtyStockIn),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          )
+                                          stockIdOut ==
+                                                  TextHelper
+                                                      .getDefaultGuidString()
+                                              ? Container()
+                                              : Container(
+                                                  width: 100.0,
+                                                  child: Text(
+                                                    kNumberFormat.format(
+                                                        product.outStockQty),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                          stockIdIn ==
+                                                  TextHelper
+                                                      .getDefaultGuidString()
+                                              ? Container()
+                                              : Container(
+                                                  width: 100.0,
+                                                  child: Text(
+                                                    kNumberFormat.format(
+                                                        product.inStockQty),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                )
                                         ],
                                       );
                                     }),

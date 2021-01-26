@@ -15,7 +15,7 @@ class DateTimeHelper {
         if (date.day == today.add(Duration(days: -1)).day) {
           return 'Hôm qua';
         } else {
-          return DateFormat('yyyy-MM-dd').format(date);
+          return DateFormat('dd-MM-yyyy').format(date);
         }
       }
     }

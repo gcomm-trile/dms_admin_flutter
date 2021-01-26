@@ -22,9 +22,8 @@ class InventoryTransferNewController extends GetxController {
   final isExpandedVendor = false.obs;
   final note = ''.obs;
   var result = Rx<Transfer>();
-  var planImportDate = DateTime.now().obs;
+  var planDate = DateTime.now().obs;
   var products = <Product>[].obs;
-
   final selectedOutStock = ''.obs;
   final selectedInStock = ''.obs;
 
@@ -35,21 +34,22 @@ class InventoryTransferNewController extends GetxController {
     isBusy(true);
     repository.getId(id).then((data) {
       result.value = data;
-      thongTinGhiChuTextEditController =
-          TextEditingController(text: result.value.note);
-      soThamChieuTextEditController =
-          TextEditingController(text: result.value.refDocumentNote);
       result.value.id = id;
       if (result.value.products != null) {
         products(result.value.products);
       }
+      print(result.value.planDate);
+      if (result.value.planDate == null ||
+          result.value.planDate == DateTime(1)) {
+        result.value.planDate = DateTime.now();
+      }
+      planDate(result.value.planDate);
 
       for (var item in result.value.outStocks) {
         outStocks.add(item.name);
       }
 
       if (result.value.outStockName == null) {
-        print('1');
         selectedOutStock(outStocks[0]);
       } else {
         selectedOutStock(result.value.outStockName);
@@ -72,12 +72,8 @@ class InventoryTransferNewController extends GetxController {
     });
   }
 
-  void setExpandedVendor(bool value) {
-    isExpandedVendor(value);
-  }
-
-  void setPlanImportDate(value) {
-    planImportDate.value = value;
+  void setPlanDate(value) {
+    planDate.value = value;
   }
 
   addProducts() {
@@ -90,7 +86,6 @@ class InventoryTransferNewController extends GetxController {
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
-          stockId: '41B6F379-2254-462A-8472-1C08A4D6D3B2',
           stockIdIn: result.value.inStocks
               .where((element) => element.name == selectedInStock.value)
               .first
@@ -107,10 +102,10 @@ class InventoryTransferNewController extends GetxController {
                       .where((element) => element.id == selectedProduct.id)
                       .length ==
                   0) {
-                selectedProduct.qtyOrder = 1;
-                selectedProduct.qtyIn = 0;
-                selectedProduct.qtyOut = 1;
-                selectedProduct.priceOrder = 0;
+                selectedProduct.orderQty = 1;
+                selectedProduct.inQty = 0;
+                selectedProduct.outQty = 1;
+                selectedProduct.orderPrice = 0;
                 selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
               }
@@ -134,7 +129,7 @@ class InventoryTransferNewController extends GetxController {
         .length;
   }
 
-  void save() {
+  void save(int status) {
     if (products == null || products.length == 0) {
       UI.showError('Chọn sản phẩm cần điều chuyển');
       return;
@@ -149,11 +144,11 @@ class InventoryTransferNewController extends GetxController {
         .where((element) => element.name == selectedOutStock.value)
         .first
         .id;
-    result.value.planDate = planImportDate.value;
+    result.value.planDate = planDate.value;
     result.value.refDocumentNote = soThamChieuTextEditController.text;
     result.value.note = thongTinGhiChuTextEditController.text;
 
-    repository.add(result.value).then((data) {
+    repository.add(result.value, status).then((data) {
       print(data);
       if (data.toString().isEmpty) {
         UI.showSuccess('Đã tạo thành công');
@@ -174,8 +169,8 @@ class InventoryTransferNewController extends GetxController {
     else
       price = int.parse(value.replaceAll(',', ''));
     var item = products[index];
-    item.priceOrder = price;
-    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
+    item.orderPrice = price;
+    item.totalPriceAvg = item.orderQty * item.orderPrice;
     products[index] = item;
   }
 
@@ -183,10 +178,10 @@ class InventoryTransferNewController extends GetxController {
     var item = products[index];
 
     print('set QtyOrder at index $index value $value');
-    item.qtyOrder = value;
-    item.totalPriceAvg = item.qtyOrder * item.priceOrder;
+    item.orderQty = value;
+    item.totalPriceAvg = item.orderQty * item.orderPrice;
     products[index] = item;
-    print(item.qtyOrder);
+
     printAllProduct();
   }
 
@@ -194,7 +189,7 @@ class InventoryTransferNewController extends GetxController {
     if (products != null) {
       for (var product in products) {
         print(
-            'id: ${product.id} qtyIn: ${product.qtyIn} qtyOut:${product.qtyOut} totalPriceImported:${product.totalPriceAvg}');
+            'id: ${product.id} qtyIn: ${product.inQty} qtyOut:${product.outQty} totalPriceImported:${product.totalPriceAvg}');
       }
     } else {
       print('product null');
@@ -204,26 +199,25 @@ class InventoryTransferNewController extends GetxController {
   getTotalMoneyOrder() {
     int result = 0;
     for (var product in products) {
-      if (product.qtyOrder > 0) result += product.qtyOrder * product.priceOrder;
+      if (product.orderQty > 0) result += product.orderQty * product.orderPrice;
     }
     return result;
   }
 
-  setStockExport(String value) {
-    print('call setStockExport');
+  setOutStock(String value) {
+    print('call set Out stock');
     var oldValue = selectedInStock.value;
     inStocks.clear();
-
     selectedOutStock(value);
-    for (var item in result.value.outStocks) {
-      if (item.name != selectedOutStock.value) inStocks.add(item.name);
+    for (var item in result.value.inStocks) {
+      if (item.name != selectedOutStock.value) {
+        inStocks.add(item.name);
+      }
     }
+    print(inStocks.length);
     if (!inStocks.contains(oldValue)) {
-      print('!contains');
-      print('set ' + inStocks[0]);
       selectedInStock(inStocks[0]);
     } else {
-      print('contains');
       selectedInStock(oldValue);
     }
   }
@@ -235,7 +229,7 @@ class InventoryTransferNewController extends GetxController {
   void setQtyOut(int index, int value) {
     var item = products[index];
     print('set qty_out at index $index value $value');
-    item.qtyOut = value;
+    item.outQty = value;
     products[index] = item;
   }
 
@@ -244,6 +238,6 @@ class InventoryTransferNewController extends GetxController {
     return (products == null || products.length == 0)
         ? 0
         : products.fold(
-            0, (previousValue, element) => previousValue + element.qtyOut);
+            0, (previousValue, element) => previousValue + element.outQty);
   }
 }

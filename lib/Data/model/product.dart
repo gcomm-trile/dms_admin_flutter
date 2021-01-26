@@ -8,16 +8,17 @@ class Product {
   String name;
   String unit;
   String description;
-  int priceOrder;
-  int priceSell;
+  int orderPrice;
+  int sellPrice;
   bool isActive;
-  int qtyOrder;
-  int qtyImported;
-  int qtyRemaining;
-  int qtyIn;
-  int qtyOut;
-  int qtyStockIn;
-  int qtyStockOut;
+  int orderQty;
+
+  int remainingQty;
+
+  int inQty;
+  int outQty;
+  int inStockQty;
+  int outStockQty;
   String imagePath;
   int totalPriceAvg;
   String stockId;
@@ -55,32 +56,29 @@ class Product {
     name = json['name'];
     unit = json['unit'];
     description = json['description'];
-    priceOrder = json['price_order'];
-    priceSell = json['price_sell'];
+    orderPrice = json['order_price'];
+    sellPrice = json['sell_price'];
     isActive = json['is_active'];
-    qtyOrder = json['qty_order'];
-    qtyImported = json['qty_imported'];
-    qtyRemaining = json['qty_remaining'];
-
+    orderQty = json['order_qty'];
+    remainingQty = json['remaining_qty'];
     totalPriceAvg = json['total_price_avg'];
-
     imagePath = json['image_path'];
     stockId = json['stock_id'];
     stockName = json['stock_name'];
-    qtyStockIn = json['qty_stock_in'];
-    qtyStockOut = json['qty_stock_out'];
-    qtyImportedTextEditingController.text = qtyImported.toString();
+    inQty = json['in_qty'];
+    outQty = json['out_qty'];
+    inStockQty = json['in_stock_qty'];
+    outStockQty = json['out_stock_qty'];
+    qtyImportedTextEditingController.text = inQty.toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['price_order'] = this.priceOrder;
-    data['qty_in'] = this.qtyIn;
-    data['qty_out'] = this.qtyOut;
-    data['qty_order'] = this.qtyOrder;
-    data['qty_imported'] = this.qtyImported;
-    data['qty_remaining'] = this.qtyRemaining;
+    data['order_price'] = this.orderPrice;
+    data['in_qty'] = this.inQty;
+    data['out_qty'] = this.outQty;
+    data['order_qty'] = this.orderQty;
     return data;
   }
 }

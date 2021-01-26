@@ -20,7 +20,7 @@ class InventoryPurchaseOrdersRepository {
     return apiClient.add(value);
   }
 
-  import(PurchaseOrder value) {
-    return apiClient.import(value);
+  nhanHang(PurchaseOrder value) {
+    return apiClient.nhanHang(value);
   }
 }

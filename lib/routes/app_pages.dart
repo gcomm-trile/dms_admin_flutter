@@ -1,9 +1,7 @@
+import 'package:dms_admin/modules/inventory/adjustments/index/inventory_purchase_orders.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
-
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_page.dart';
-import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_page.dart';
-
 import 'package:dms_admin/modules/login/login_binding.dart';
 import 'package:dms_admin/modules/login/login_page.dart';
 import 'package:dms_admin/modules/order/order_binding.dart';
@@ -15,7 +13,7 @@ import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.INVENTORY_TRANSFERS_NEW;
+  static const INITIAL = Routes.INVENTORY_ADJUSTMENTS;
 
   static final routes = [
     GetPage(
@@ -52,10 +50,8 @@ class AppPages {
       page: () => InventoryTransfersPage(),
     ),
     GetPage(
-      name: Routes.INVENTORY_TRANSFERS_NEW,
-      page: () => InventoryTransferNewPage(
-        id: '89F18C5C-2A76-4B24-977B-5AF9D590C1CE',
-      ),
+      name: Routes.INVENTORY_ADJUSTMENTS,
+      page: () => InventoryAdjustmentsPage(),
     ),
   ];
 }

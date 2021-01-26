@@ -54,7 +54,7 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
                           '00000000-0000-0000-0000-000000000000',
                           widget.phieuXuatId,
                           data.products
-                              .where((element) => element.qtyOrder > 0)
+                              .where((element) => element.orderQty > 0)
                               .toList())
                       .then((value) {
                     if (value.isEmpty) {
@@ -184,11 +184,11 @@ class _StockDecreaseExportPageState extends State<StockDecreaseExportPage> {
       Container(
         width: 110,
         child: QtyTextField(
-          value: product.qtyOrder,
+          value: product.orderQty,
           minValue: 0,
           maxValue: 9999,
           onChangedValue: (value) {
-            product.qtyOrder = value;
+            product.orderQty = value;
           },
         ),
       ),

@@ -5,7 +5,7 @@ import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_guid/flutter_guid.dart';
-import '../import/inventory_purchase_order_import.dart';
+import '../import/inventory_transfer_import_page.dart';
 
 class InventoryTransfersController extends GetxController {
   final InventoryTransfersRepository repository;
@@ -31,7 +31,7 @@ class InventoryTransfersController extends GetxController {
     });
   }
 
-  void goToDetail(Transfer data) {
+  void goToDetailPage(Transfer data) {
     Get.to(InventoryTransferNewPage(
       id: data.id,
     ));
@@ -40,6 +40,12 @@ class InventoryTransfersController extends GetxController {
   void createTransfer() {
     Get.to(InventoryTransferNewPage(
       id: Guid.newGuid.toString(),
+    ));
+  }
+
+  void gotoImportPage(Transfer data) {
+    Get.to(InventoryTransferImportPage(
+      id: data.id,
     ));
   }
 }

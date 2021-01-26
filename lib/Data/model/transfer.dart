@@ -16,8 +16,11 @@ class Transfer {
   List<Product> products;
   List<Stock> outStocks;
   List<Stock> inStocks;
-  int totalOrderQty;
-  int totalImportedQty;
+  int totalQty;
+  bool canEdit;
+  bool canView;
+  bool canReceived;
+  bool canCancel;
   Transfer({
     this.id,
     this.inStockId,
@@ -29,8 +32,7 @@ class Transfer {
     this.note,
     this.status,
     this.statusName,
-    this.totalImportedQty,
-    this.totalOrderQty,
+    this.totalQty,
   });
   Transfer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -43,9 +45,12 @@ class Transfer {
     statusName = json['status_name'];
     refDocumentNote = json['ref_document_note'];
     planDate = DateTime.parse(json['plan_date'].toString().substring(0, 10));
-
+    canEdit = json['can_edit'];
+    canView = json['can_view'];
+    canReceived = json['can_received'];
+    canCancel = json['can_cancel'];
     note = json['note'];
-
+    totalQty = json['total_qty'];
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {

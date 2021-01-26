@@ -2,7 +2,7 @@ import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/model/vendor.dart';
 
-class PurchaseOrder {
+class Adjustment {
   String id;
   String inStockId;
   String inStockName;
@@ -18,7 +18,7 @@ class PurchaseOrder {
   int totalOrderQty;
   int totalInQty;
 
-  PurchaseOrder({
+  Adjustment({
     this.id,
     this.inStockId,
     this.inStockName,
@@ -33,7 +33,7 @@ class PurchaseOrder {
     this.totalOrderQty,
   });
 
-  PurchaseOrder.fromJson(Map<String, dynamic> json) {
+  Adjustment.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     inStockId = json['in_stock_id'];
     inStockName = json['in_stock_name'];

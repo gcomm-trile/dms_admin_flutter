@@ -24,7 +24,7 @@ class ProductDetailPage extends StatelessWidget {
     _productNoController.text = data.no;
     _productNameController.text = data.name;
     _productDescriptionController.text = data.description;
-    _productPriceController.text = data.priceOrder.toString();
+    _productPriceController.text = data.orderPrice.toString();
     return Scaffold(
         body: Container(
             padding: EdgeInsets.all(10),
@@ -92,7 +92,7 @@ class ProductDetailPage extends StatelessWidget {
                   product.description = _productDescriptionController.text;
                   product.no = _productNoController.text;
                   product.name = _productNameController.text;
-                  product.priceOrder = int.parse(_productPriceController.text);
+                  product.orderPrice = int.parse(_productPriceController.text);
                   product.isActive = true;
                   product.imagePath = data.imagePath;
                   if (await API_HELPER.updateProduct(product) == true) {

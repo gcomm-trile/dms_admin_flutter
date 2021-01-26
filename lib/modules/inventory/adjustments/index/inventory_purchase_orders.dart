@@ -1,3 +1,4 @@
+import 'package:dms_admin/data/model/adjustment.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
@@ -6,13 +7,12 @@ import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'inventory_adjustments_controller.dart';
 
-import 'inventory_purchase_orders_controller.dart';
-
-class InventoryPurchaseOrdersPage extends StatelessWidget {
-  final InventoryPurchaseOrdersController controller =
-      InventoryPurchaseOrdersController(repository: Get.find());
-  InventoryPurchaseOrdersPage({Key key}) : super(key: key);
+class InventoryAdjustmentsPage extends StatelessWidget {
+  final InventoryAdjustmentsController controller =
+      InventoryAdjustmentsController(repository: Get.find());
+  InventoryAdjustmentsPage({Key key}) : super(key: key);
 
   final sizedBox = SizedBox(
     width: 10,
@@ -25,7 +25,7 @@ class InventoryPurchaseOrdersPage extends StatelessWidget {
       children: [
         AppDrawer(),
         Expanded(
-          child: GetX<InventoryPurchaseOrdersController>(
+          child: GetX<InventoryAdjustmentsController>(
             init: controller,
             initState: (state) => controller.getAll(),
             builder: (_) {
@@ -170,7 +170,7 @@ class InventoryPurchaseOrdersPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRowListViewSection(PurchaseOrder data) {
+  Widget _buildRowListViewSection(Adjustment data) {
     var color = data.status == 2
         ? Colors.blue
         : (data.status == 0 ? Colors.red : Colors.green);

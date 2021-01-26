@@ -17,11 +17,15 @@ class InventoryTransfersRepository {
     return apiClient.getId(id);
   }
 
-  add(Transfer value) {
-    return apiClient.add(value);
+  add(Transfer value, int status) {
+    return apiClient.add(value, status);
   }
 
   import(Transfer value) {
     return apiClient.import(value);
+  }
+
+  nhanOrHuy(String id, String action) {
+    return apiClient.nhanOrHuy(id, action);
   }
 }
