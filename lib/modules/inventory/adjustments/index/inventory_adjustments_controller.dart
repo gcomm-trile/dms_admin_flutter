@@ -1,6 +1,8 @@
 import 'package:dms_admin/data/model/adjustment.dart';
-import 'package:dms_admin/data/model/purchase_order.dart';
+
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
+import 'package:dms_admin/modules/inventory/adjustments/new/inventory_adjustment_order_new.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
@@ -38,5 +40,11 @@ class InventoryAdjustmentsController extends GetxController {
     // Get.to(InventoryPurchaseOrderImportPage(
     //   purchaseOrderId: data.id,
     // ));
+  }
+
+  void create() {
+    Get.to(InventoryAdjustmentNewPage(
+      purchaseOrderId: Guid.newGuid.toString(),
+    ));
   }
 }

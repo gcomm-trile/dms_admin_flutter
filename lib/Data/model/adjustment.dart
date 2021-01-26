@@ -7,30 +7,19 @@ class Adjustment {
   String inStockId;
   String inStockName;
   String no;
-  String vendorId;
-  String vendorName;
-  int status;
-  String statusName;
-  DateTime planDate;
+  DateTime createdOn;
   List<Product> products;
-  List<Vendor> vendors;
   List<Stock> stocks;
-  int totalOrderQty;
-  int totalInQty;
+  int totalQty;
 
   Adjustment({
     this.id,
     this.inStockId,
     this.inStockName,
     this.no,
-    this.vendorId,
-    this.vendorName,
     this.products,
-    this.vendors,
     this.stocks,
-    this.status,
-    this.statusName,
-    this.totalOrderQty,
+    this.totalQty,
   });
 
   Adjustment.fromJson(Map<String, dynamic> json) {
@@ -38,13 +27,10 @@ class Adjustment {
     inStockId = json['in_stock_id'];
     inStockName = json['in_stock_name'];
     no = json['no'];
-    vendorId = json['vendor_id'];
-    vendorName = json['vendor_name'];
-    status = json['status'];
-    statusName = json['status_name'];
-    planDate = DateTime.parse(json['plan_date'].toString().substring(0, 10));
-    totalOrderQty = json['total_order_qty'];
-    totalInQty = json['total_in_qty'];
+
+    createdOn = DateTime.parse(json['created_on'].toString().substring(0, 10));
+
+    totalQty = json['total_qty'];
 
     if (json['products'] != null) {
       products = <Product>[];
@@ -52,12 +38,7 @@ class Adjustment {
         products.add(new Product.fromJson(v));
       });
     }
-    if (json['vendors'] != null) {
-      vendors = new List<Vendor>();
-      json['vendors'].forEach((v) {
-        vendors.add(new Vendor.fromJson(v));
-      });
-    }
+
     if (json['stocks'] != null) {
       stocks = new List<Stock>();
       json['stocks'].forEach((v) {

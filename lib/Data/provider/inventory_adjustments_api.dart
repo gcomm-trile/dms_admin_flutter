@@ -6,14 +6,13 @@ import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
 // const baseUrl = 'inventory/transactions';
-const baseUrl = 'inventory/purchaseorders';
+const baseUrl = 'inventory/adjustments';
 
 class InventoryAdjustmentsApiClient {
   final Dio httpClient;
   InventoryAdjustmentsApiClient({@required this.httpClient});
 
   getAll() async {
-    print('session id ${httpClient.options.headers['Session-ID']}');
     try {
       print('call ' + SERVER_URL + baseUrl);
       var response = await httpClient.get(SERVER_URL + baseUrl);
@@ -44,9 +43,8 @@ class InventoryAdjustmentsApiClient {
   }
 
   add(Adjustment value) async {
-    final jobsListAPIUrl = SERVER_URL +
-        baseUrl +
-        '/add?id=${value.id}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&vendor_id=${value.vendorId}';
+    final jobsListAPIUrl = SERVER_URL + baseUrl + '';
+    // '/add?id=${value.id}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&vendor_id=${value.vendorId}';
     print("POST $jobsListAPIUrl");
 
     final response =

@@ -199,16 +199,6 @@ class InventoryTransferNewPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildInformationSection(int width, BuildContext context) {
-    return [
-      stockSection(),
-      SizedBox(
-        height: 10,
-      ),
-      additionalSection(context),
-    ];
-  }
-
   _buildHeaderBarSection() {
     return Container(
       padding: EdgeInsets.all(10),

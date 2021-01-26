@@ -1,5 +1,5 @@
 import 'package:dms_admin/data/model/adjustment.dart';
-import 'package:dms_admin/data/model/purchase_order.dart';
+
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
@@ -39,7 +39,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Danh sách phiếu mua hàng',
+                            'Danh sách phiếu điều chỉnh',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
@@ -51,7 +51,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                           RaisedButton(
                             color: Colors.blue,
                             onPressed: () {
-                              controller.createPurchaseOrder();
+                              controller.create();
                             },
                             child: Container(
                               height: 37,
@@ -62,7 +62,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                                     color: Colors.white,
                                   ),
                                   Text(
-                                    'Tạo phiếu mua',
+                                    'Tạo phiếu điều chỉnh',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -79,25 +79,34 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                       SizedBox(
                         height: 15,
                       ),
-                      _buildHeaderListViewSection(),
-                      Divider(
-                        thickness: 2.0,
-                      ),
-                      Expanded(
-                        child: controller.result.value.length == 0
-                            ? Center(child: Text('Không có dữ liệu'))
-                            : ListView.separated(
-                                separatorBuilder: (context, index) => Divider(
+                      controller.result.value.length == 0
+                          ? Expanded(
+                              child: Center(
+                                child: Text('Không có dữ liệu'),
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                _buildHeaderListViewSection(),
+                                Divider(
                                   thickness: 2.0,
                                 ),
-                                shrinkWrap: true,
-                                itemCount: controller.result.value.length,
-                                itemBuilder: (context, index) {
-                                  return _buildRowListViewSection(
-                                      controller.result.value[index]);
-                                },
-                              ),
-                      )
+                                Expanded(
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) =>
+                                        Divider(
+                                      thickness: 2.0,
+                                    ),
+                                    shrinkWrap: true,
+                                    itemCount: controller.result.value.length,
+                                    itemBuilder: (context, index) {
+                                      return _buildRowListViewSection(
+                                          controller.result.value[index]);
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
                     ],
                   ),
                 );
@@ -171,9 +180,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
   }
 
   Widget _buildRowListViewSection(Adjustment data) {
-    var color = data.status == 2
-        ? Colors.blue
-        : (data.status == 0 ? Colors.red : Colors.green);
+    var color = Colors.blue;
     return Container(
       child: Row(
         children: [
@@ -206,7 +213,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           Container(
             width: 90,
             child: Text(
-              DateTimeHelper.day2Text(data.planDate),
+              DateTimeHelper.day2Text(data.createdOn),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 15,
@@ -216,7 +223,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           sizedBox,
           Expanded(
             child: Container(
-              child: Text(TextHelper.toSafeString(data.vendorName)),
+              child: Text(''),
             ),
           ),
           sizedBox,
@@ -230,35 +237,6 @@ class InventoryAdjustmentsPage extends StatelessWidget {
             ),
           ),
           sizedBox,
-          Container(
-            width: 80,
-            child: Text(
-              data.statusName,
-              style: TextStyle(color: color, fontWeight: FontWeight.bold),
-            ),
-          ),
-          sizedBox,
-          Container(
-            width: 100,
-            child: Center(
-              child: LinearPercentIndicator(
-                width: 100,
-                animation: true,
-                lineHeight: 16.0,
-                animationDuration: 2000,
-                percent: data.totalInQty * 1.0 / data.totalOrderQty * 1.0,
-                animateFromLastPercent: true,
-                center: Text(
-                  '${data.totalInQty.toString()}/${data.totalOrderQty.toString()}',
-                  style: TextStyle(color: Colors.white, fontSize: 11),
-                ),
-                linearStrokeCap: LinearStrokeCap.roundAll,
-                progressColor: color,
-                // maskFilter: MaskFilter.blur(
-                //     BlurStyle.solid, 3),
-              ),
-            ),
-          ),
         ],
       ),
     );

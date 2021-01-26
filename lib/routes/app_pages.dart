@@ -1,4 +1,4 @@
-import 'package:dms_admin/modules/inventory/adjustments/index/inventory_purchase_orders.dart';
+import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_page.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_page.dart';
