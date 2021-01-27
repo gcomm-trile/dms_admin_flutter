@@ -1,8 +1,6 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/utils/constants.dart';
-import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'inventory_adjustment_new_controller.dart';
@@ -11,12 +9,11 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
   final sizedBox = SizedBox(
     width: 10,
   );
-  final purchaseOrderId;
+  final id;
 
   final InventoryAdjustmentNewController controller =
       InventoryAdjustmentNewController(repository: Get.find());
-  InventoryAdjustmentNewPage({Key key, @required this.purchaseOrderId})
-      : super(key: key);
+  InventoryAdjustmentNewPage({Key key, @required this.id}) : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
@@ -50,15 +47,15 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
+          key: UniqueKey(),
           controller: TextEditingController(),
-          // controller: product.qtyTextEditingController,
           min: -1000,
           max: 1000,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.inQty,
-          onValueChanged: (value) {
-            controller.setInQty(index, value);
-          },
+          onChanged: (newValue) => controller.setInQty(index, newValue),
+          onDecrement: (newValue) => controller.setInQty(index, newValue),
+          onIncrement: (newValue) => controller.setInQty(index, newValue),
         ),
       ),
       sizedBox,
@@ -178,7 +175,7 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   Text(
-                    'Lưu',
+                    'Điều chỉnh',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -268,7 +265,7 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
   _buildBodySection(BuildContext context) {
     return GetX<InventoryAdjustmentNewController>(
       init: controller,
-      initState: (state) => controller.getId(purchaseOrderId),
+      initState: (state) => controller.getId(id),
       builder: (_) {
         print('rebuild');
         return controller.isBusy.value == true
@@ -334,47 +331,6 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Divider(),
-                                Text(
-                                  'Ngày dự kiến',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      RaisedButton(
-                                        child: Text(
-                                          DateTimeHelper.day2Text(
-                                              controller.planDate.value),
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          final DateTime pickedDate =
-                                              await showDatePicker(
-                                                  context: context,
-                                                  initialDate:
-                                                      controller.planDate.value,
-                                                  firstDate: DateTime(2015),
-                                                  lastDate: DateTime(2050));
-                                          if (pickedDate != null &&
-                                              pickedDate !=
-                                                  controller.planDate.value)
-                                            controller.planDate(pickedDate);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -431,224 +387,6 @@ class InventoryAdjustmentNewPage extends StatelessWidget {
                 }).toList(),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  vendorSection() {
-    return Container(
-      decoration: BoxDecoration(
-        // border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white70,
-      ),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'Nhà Phân Phối',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              controller.vendor.value == null
-                  ? Container(
-                      width: 40,
-                      height: 40,
-                    )
-                  : Container(
-                      width: 40,
-                      height: 40,
-                      child: RaisedButton(
-                        child: Icon(
-                          Icons.close,
-                        ),
-                      ),
-                    ),
-            ],
-          ),
-          Divider(),
-          controller.vendor.value == null
-              ? DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  showSelectedItem: true,
-
-                  label: "",
-                  hint: "",
-                  // popupItemDisabled: (String s) => s.startsWith('I'),
-
-                  showClearButton: true,
-                  showSearchBox: true,
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.vendor.value.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    controller.isExpandedVendor.value == false
-                        ? FlatButton(
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: Colors.blue,
-                                  ),
-                                  Text(
-                                    'Xem thêm',
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FlatButton(
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.format_indent_decrease,
-                                        color: Colors.blue,
-                                      ),
-                                      Text(
-                                        'Thu gọn',
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Divider(),
-                              Text(
-                                'Thông tin nhà phân phối',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.phone,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.address,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.ward,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.district,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.province,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                controller.vendor.value.country,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            ],
-                          ),
-                  ],
-                )
-        ],
-      ),
-    );
-  }
-
-  additionalSection(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        // border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.white70,
-      ),
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Ngày dự kiến',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RaisedButton(
-                  child: Text(
-                    DateTimeHelper.day2Text(controller.planDate.value),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  onPressed: () async {
-                    final DateTime pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: controller.planDate.value,
-                        firstDate: DateTime(2015),
-                        lastDate: DateTime(2050));
-                    if (pickedDate != null &&
-                        pickedDate != controller.planDate.value)
-                      controller.planDate(pickedDate);
-                  },
-                ),
-              ],
-            ),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
-import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
+
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
@@ -33,7 +34,6 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
 
   _buildRowListViewSection(int index) {
     var product = controller.products[index];
-
     return Row(children: <Widget>[
       Image.network(
         product.imagePath,
@@ -51,15 +51,16 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
+          key: controller.getKey(index),
           controller: TextEditingController(),
           // controller: product.qtyTextEditingController,
-          min: 1,
+          min: 0,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.orderQty,
-          onValueChanged: (value) {
-            controller.setQtyOrder(index, value);
-          },
+          onChanged: (value) => controller.setQtyOrder(index, value),
+          onDecrement: (value) => controller.setQtyOrder(index, value),
+          onIncrement: (value) => controller.setQtyOrder(index, value),
         ),
       ),
       sizedBox,
@@ -99,7 +100,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
             color: Colors.red,
           ),
         ),
-        onTap: () => controller.removeProduct(product),
+        onTap: () => controller.removeProduct(index),
       ),
     ]);
   }

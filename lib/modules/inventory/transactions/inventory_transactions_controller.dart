@@ -1,5 +1,8 @@
 import 'dart:developer';
+
+import 'package:dms_admin/data/model/filter.dart';
 import 'package:dms_admin/data/model/product.dart';
+import 'package:dms_admin/data/model/transaction.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +10,24 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class InventoryTransactionsController extends GetxController {
+  final selectedFilterIndex = 0.obs;
   final InventoryTransactionsRepository repository;
   InventoryTransactionsController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;
   var result = List<Product>().obs;
-
+  var filters = List<Filter>().obs;
   void getAll() {
     isBusy(true);
     repository.getAll().then((data) {
-      result(data);
+      result(data.products);
+
+      filters.add(Filter(filterName: 'Tất cả', isSelected: true));
+      for (var item in data.filters) {
+        filters.add(item);
+      }
+
       isBusy(false);
 
       log('return data  ');
@@ -79,5 +89,17 @@ class InventoryTransactionsController extends GetxController {
     }
 
     return dataSource;
+  }
+
+  void selectedFilter(Filter filter, int index) {
+    for (int i = 0; i < filters.length; i++) {
+      setFilter(i, index == i ? true : false);
+    }
+  }
+
+  void setFilter(int i, bool value) {
+    var item = filters[i];
+    item.isSelected = value;
+    filters[i] = item;
   }
 }

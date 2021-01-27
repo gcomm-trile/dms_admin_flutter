@@ -2,7 +2,6 @@ import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/data/model/adjustment.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
-import 'package:dms_admin/data/model/vendor.dart';
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
@@ -18,12 +17,8 @@ class InventoryAdjustmentNewController extends GetxController {
       : assert(repository != null);
 
   final isBusy = true.obs;
-  final isExpandedVendor = false.obs;
-  final note = ''.obs;
   var result = Rx<Adjustment>();
-  Rx<DateTime> planDate = DateTime.now().obs;
   var products = <Product>[].obs;
-  final vendor = Rx<Vendor>();
   final stock = Rx<Stock>();
   final stocks = <String>[].obs;
 
@@ -36,6 +31,8 @@ class InventoryAdjustmentNewController extends GetxController {
       } else {
         result.value = data;
       }
+
+      products(result.value.products);
       for (var item in result.value.stocks) {
         stocks.add(item.name);
       }
@@ -69,6 +66,7 @@ class InventoryAdjustmentNewController extends GetxController {
               ? TextHelper.getDefaultGuidString()
               : stock.value.id,
           titleInStockQty: 'Tồn',
+          exceptProducts: products.toList(),
           savedData: (selectedProducts) {
             for (var selectedProduct in selectedProducts) {
               if (products
@@ -86,33 +84,31 @@ class InventoryAdjustmentNewController extends GetxController {
   }
 
   removeProduct(Product product) {
-    products.removeWhere((element) => element.id == product.id);
+    var x = products.where((element) => element.id != product.id).toList();
+    products(x);
+    Product.printAllProduct(products.value);
   }
 
   void save() {
     if (products == null || products.length == 0) {
-      UI.showError('Chọn sản phẩm cần mua hàng');
+      UI.showError('Danh sách sản phẩm trống');
       return;
     } else {
       result.value.products = products;
-
-      for (var product in result.value.products) {
-        print('${product.id} : ${product.orderQty} - ${product.orderPrice}');
-      }
     }
 
     if (stock.value == null || stock.value.id == null) {
-      UI.showError('Chọn kho cần mua hàng');
+      UI.showError('Chọn kho cần điều chỉnh');
       return;
     } else {
       result.value.inStockId = stock.value.id;
     }
-    print('stock ' + result.value.inStockId);
-    repository.add(result.value).then((data) {
+
+    repository.dieuchinh(result.value).then((data) {
       print(data);
       if (data.toString().isEmpty) {
-        UI.showSuccess('Đã tạo thành công');
-        Get.offAndToNamed(Routes.INVENTORY_PURCHASE_ORDERS);
+        UI.showSuccess('Đã cập nhật thành công');
+        Get.offAndToNamed(Routes.INVENTORY_ADJUSTMENTS);
       } else {
         UI.showError(data.toString());
       }
@@ -127,17 +123,5 @@ class InventoryAdjustmentNewController extends GetxController {
     print('set setInQty at index $index value $value');
     item.inQty = value;
     products[index] = item;
-    printAllProduct();
-  }
-
-  printAllProduct() {
-    if (products != null) {
-      for (var product in products) {
-        print(
-            'id: ${product.id} qtyImported: ${product.inQty} priceImported:${product.orderPrice} totalPriceImported:${product.totalPriceAvg}');
-      }
-    } else {
-      print('product null');
-    }
   }
 }

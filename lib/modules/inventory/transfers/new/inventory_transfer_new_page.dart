@@ -1,4 +1,5 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -59,14 +60,15 @@ class InventoryTransferNewPage extends StatelessWidget {
         width: 110,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
+          key: controller.getKey(index),
           controller: TextEditingController(),
           min: 0,
           max: 999999,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.outQty,
-          onValueChanged: (value) {
-            controller.setQtyOut(index, value);
-          },
+          onChanged: (value) => controller.setQtyOrder(index, value),
+          onDecrement: (value) => controller.setQtyOrder(index, value),
+          onIncrement: (value) => controller.setQtyOrder(index, value),
         ),
       ),
       sizedBox,
@@ -131,7 +133,7 @@ class InventoryTransferNewPage extends StatelessWidget {
             color: Colors.red,
           ),
         ),
-        onTap: () => controller.removeProduct(product),
+        onTap: () => controller.removeProduct(index),
       ),
     ]);
   }

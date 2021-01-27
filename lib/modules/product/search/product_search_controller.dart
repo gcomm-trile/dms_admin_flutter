@@ -13,10 +13,19 @@ class ProductSearchController extends GetxController {
   var sourceData = List<Product>();
   var searchData = List<Product>().obs;
 
-  void getAll(String stockIdIn, String stockIdOut) {
+  void getAll(
+      String stockIdIn, String stockIdOut, List<Product> exceptProducts) {
     isBusy(true);
     repository.getAll(stockIdIn, stockIdOut).then((data) {
       sourceData = data;
+      if (exceptProducts != null) {
+        for (var product in exceptProducts) {
+          if (sourceData.where((element) => element.id == product.id).length >
+              0) {
+            sourceData.removeWhere((element) => element.id == product.id);
+          }
+        }
+      }
       searchData(sourceData);
       searchTextEditController.addListener(() {
         print('search text change ' + searchTextEditController.text);

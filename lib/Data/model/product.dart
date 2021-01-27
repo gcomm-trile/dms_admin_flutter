@@ -79,6 +79,18 @@ class Product {
     data['in_qty'] = this.inQty;
     data['out_qty'] = this.outQty;
     data['order_qty'] = this.orderQty;
+
     return data;
+  }
+
+  static void printAllProduct(List<Product> products) {
+    if (products != null) {
+      for (var product in products) {
+        print(
+            'id: ${product.id} inQty: ${product.inQty} outQty: ${product.outQty} orderPrice:${product.orderPrice} ');
+      }
+    } else {
+      print('product null');
+    }
   }
 }

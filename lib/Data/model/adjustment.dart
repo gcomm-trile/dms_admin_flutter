@@ -26,11 +26,8 @@ class Adjustment {
     inStockId = json['in_stock_id'];
     inStockName = json['in_stock_name'];
     no = json['no'];
-
     createdOn = DateTime.parse(json['created_on'].toString().substring(0, 10));
-
     totalQty = json['total_qty'];
-
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {

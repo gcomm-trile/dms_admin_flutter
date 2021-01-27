@@ -13,6 +13,7 @@ class ProductSearchDialog extends StatelessWidget {
   final String outStockId;
   final String titleInStockQty;
   final String titleOutStockQty;
+  final List<Product> exceptProducts;
   final Function(Set<Product> selectedProducts) savedData;
   ProductSearchDialog(
       {Key key,
@@ -20,14 +21,16 @@ class ProductSearchDialog extends StatelessWidget {
       @required this.inStockId,
       this.titleInStockQty = 'Kho nhập',
       @required this.outStockId,
-      this.titleOutStockQty = 'Kho xuất'})
+      this.titleOutStockQty = 'Kho xuất',
+      @required this.exceptProducts})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetX<ProductSearchController>(
         init: controller,
-        initState: (state) => controller.getAll(inStockId, outStockId),
+        initState: (state) =>
+            controller.getAll(inStockId, outStockId, this.exceptProducts),
         builder: (_) {
           return Container(
               width: 500.0,

@@ -1,19 +1,29 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'inventory_purchase_order_import_controller.dart';
 
-class InventoryPurchaseOrderImportPage extends StatelessWidget {
+class InventoryPurchaseOrderImportPage extends StatefulWidget {
   final id;
 
-  final InventoryPurchaseOrderImportController controller =
-      InventoryPurchaseOrderImportController(repository: Get.find());
   InventoryPurchaseOrderImportPage({Key key, @required this.id})
       : super(key: key);
+
+  @override
+  _InventoryPurchaseOrderImportPageState createState() =>
+      _InventoryPurchaseOrderImportPageState();
+}
+
+class _InventoryPurchaseOrderImportPageState
+    extends State<InventoryPurchaseOrderImportPage> {
+  final InventoryPurchaseOrderImportController controller =
+      InventoryPurchaseOrderImportController(repository: Get.find());
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
@@ -33,15 +43,18 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
     var product = controller.result.value.products[index];
     print('rebuild data ' +
         controller.result.value.products[index].inQty.toString());
-    var textController = TextEditingController();
+
     return Row(children: <Widget>[
       Checkbox(
         value: product.inQty > 0 ? true : false,
         onChanged: (value) {
           print(value);
           controller.setChecked(index, value);
-          // textController.text =
-          //     controller.products[index].qtyImported.toString();
+
+          controller
+              .getKey(index)
+              .currentState
+              .setValue(value == true ? product.orderQty : 0);
         },
       ),
       Image.network(
@@ -64,16 +77,22 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
         width: 120,
         padding: EdgeInsets.all(2.0),
         child: NumberInputWithIncrementDecrement(
+          key: controller.getKey(index),
           controller:
               TextEditingController(), // product.qtyImportedTextEditingController,
           min: 0,
           max: product.orderQty,
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.inQty,
-          onValueChanged: (value) {
-            print(value);
-            controller.setImportedQty(index, value);
-            textController.text = value.toString();
+          onChanged: (value) {
+            print('call onvaluechanged ' + value.toString());
+            controller.setInQty(index, value);
+          },
+          onDecrement: (value) {
+            controller.setInQty(index, value);
+          },
+          onIncrement: (value) {
+            controller.setInQty(index, value);
           },
         ),
       ),
@@ -355,7 +374,7 @@ class InventoryPurchaseOrderImportPage extends StatelessWidget {
   _buildBodySection() {
     return GetX<InventoryPurchaseOrderImportController>(
       init: controller,
-      initState: (state) => controller.getId(id),
+      initState: (state) => controller.getId(widget.id),
       builder: (_) {
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())

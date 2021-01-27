@@ -41,10 +41,12 @@ class InventoryAdjustmentsApiClient {
     }
   }
 
-  add(Adjustment value) async {
-    final jobsListAPIUrl = SERVER_URL + baseUrl + '';
-    // '/add?id=${value.id}&in_stock_id=${value.inStockId}&plan_date=${value.planDate}&vendor_id=${value.vendorId}';
+  dieuchinh(Adjustment value) async {
+    final jobsListAPIUrl = SERVER_URL +
+        baseUrl +
+        '/dieuchinh?id=${value.id}&in_stock_id=${value.inStockId}';
     print("POST $jobsListAPIUrl");
+    print('data products :' + jsonEncode(value.products));
 
     final response =
         await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));

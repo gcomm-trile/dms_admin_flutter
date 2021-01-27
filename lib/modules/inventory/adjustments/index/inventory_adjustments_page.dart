@@ -2,7 +2,9 @@ import 'package:dms_admin/data/model/adjustment.dart';
 
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
+import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'inventory_adjustments_controller.dart';
@@ -83,27 +85,29 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                                 child: Text('Không có dữ liệu'),
                               ),
                             )
-                          : Column(
-                              children: [
-                                _buildHeaderListViewSection(),
-                                Divider(
-                                  thickness: 2.0,
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                    separatorBuilder: (context, index) =>
-                                        Divider(
-                                      thickness: 2.0,
-                                    ),
-                                    shrinkWrap: true,
-                                    itemCount: controller.result.value.length,
-                                    itemBuilder: (context, index) {
-                                      return _buildRowListViewSection(
-                                          controller.result.value[index]);
-                                    },
+                          : Expanded(
+                              child: Center(
+                                  child: Column(
+                                children: [
+                                  _buildHeaderListViewSection(),
+                                  Divider(
+                                    thickness: 2.0,
                                   ),
-                                )
-                              ],
+                                  Expanded(
+                                    child: ListView.separated(
+                                      separatorBuilder: (context, index) =>
+                                          Divider(
+                                        thickness: 2.0,
+                                      ),
+                                      itemCount: controller.result.value.length,
+                                      itemBuilder: (context, index) {
+                                        return _buildRowListViewSection(
+                                            controller.result.value[index]);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )),
                             ),
                     ],
                   ),
@@ -131,37 +135,18 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           Container(
             width: 90,
             child: Text(
-              'Ngày dự kiến',
+              'Ngày tạo',
               style: kStyleListViewHeader,
             ),
           ),
           sizedBox,
           Expanded(
             child: Container(
+              width: 60,
               child: Text(
-                'Nhà phân phối',
+                'Kho',
                 style: kStyleListViewHeader,
               ),
-            ),
-          ),
-          sizedBox,
-          Container(
-            width: 60,
-            child: Text(
-              'Kho',
-              style: kStyleListViewHeader,
-            ),
-          ),
-          sizedBox,
-          Container(
-            width: 80,
-            child: Row(
-              children: [
-                Text(
-                  'Tình trạng',
-                  style: kStyleListViewHeader,
-                ),
-              ],
             ),
           ),
           sizedBox,
@@ -190,7 +175,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                 Container(
                   width: 60,
                   child: Text(
-                    data.no,
+                    '#' + TextHelper.toSafeString(data.no),
                     style: TextStyle(
                       color: Color.fromARGB(255, 15, 7, 240),
                       fontWeight: FontWeight.bold,
@@ -220,14 +205,18 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           sizedBox,
           Expanded(
             child: Container(
-              child: Text(''),
+              child: Text(
+                data.inStockName,
+              ),
             ),
           ),
           sizedBox,
           Container(
             width: 60,
             child: Text(
-              data.inStockName,
+              TextHelper.toSafeString(
+                kNumberFormat.format(data.totalQty),
+              ),
               style: TextStyle(
                 color: Colors.black,
               ),

@@ -4,6 +4,7 @@ import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/data/model/vendor.dart';
 import 'package:dms_admin/data/repository/inventory_purchase_orders_repository.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:dms_admin/utils/text_helper.dart';
@@ -12,6 +13,11 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class InventoryPurchaseOrderNewController extends GetxController {
+  List<GlobalKey<NumberInputWithIncrementDecrementState>> _key =
+      List<GlobalKey<NumberInputWithIncrementDecrementState>>();
+  GlobalKey<NumberInputWithIncrementDecrementState> getKey(int index) =>
+      _key[index];
+
   final InventoryPurchaseOrdersRepository repository;
 
   InventoryPurchaseOrderNewController({@required this.repository})
@@ -90,11 +96,6 @@ class InventoryPurchaseOrderNewController extends GetxController {
   }
 
   addProducts() {
-    if (result.value.products != null) {
-      for (var item in result.value.products) {
-        print(item.name + ' ' + item.qtyTextEditingController.text);
-      }
-    }
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
@@ -102,6 +103,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
           inStockId: stock.value == null
               ? TextHelper.getDefaultGuidString()
               : stock.value.id,
+          exceptProducts: products.toList(),
           savedData: (selectedProducts) {
             print('return data ' + selectedProducts.length.toString());
 
@@ -114,6 +116,7 @@ class InventoryPurchaseOrderNewController extends GetxController {
                 selectedProduct.orderPrice = 0;
                 selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
+                _key.add(GlobalKey());
               }
             }
           },
@@ -122,11 +125,9 @@ class InventoryPurchaseOrderNewController extends GetxController {
     );
   }
 
-  removeProduct(Product product) {
-    print('remove ' +
-        product.name.toString() +
-        product.qtyTextEditingController.text);
-    products.removeWhere((element) => element.id == product.id);
+  removeProduct(int index) {
+    products.removeAt(index);
+    _key.removeAt(index);
   }
 
   int getCountSelectedProduct() {
@@ -141,15 +142,6 @@ class InventoryPurchaseOrderNewController extends GetxController {
       return;
     } else {
       result.value.products = products;
-      // for (var product in result.value.products) {
-      //   print('${product.id} : ${product.qtyOrder} - ${product.priceImported}');
-      //   product.qtyOrder = int.parse(product.qtyTextEditingController.text);
-      //   product.priceImported =
-      //       int.parse(product.priceTextEditingController.text);
-      // }
-      for (var product in result.value.products) {
-        print('${product.id} : ${product.orderQty} - ${product.orderPrice}');
-      }
     }
 
     if (stock.value == null || stock.value.id == null) {
@@ -165,10 +157,6 @@ class InventoryPurchaseOrderNewController extends GetxController {
       result.value.vendorId = vendor.value.id;
     }
     result.value.planDate = planDate.value;
-
-    print('stock ' + result.value.inStockId);
-    print('vendor ' + result.value.vendorId);
-    print('planDate ' + result.value.planDate.toString());
 
     repository.add(result.value).then((data) {
       print(data);
@@ -198,29 +186,12 @@ class InventoryPurchaseOrderNewController extends GetxController {
 
   void setQtyOrder(int index, int value) {
     var item = products[index];
-
-    print('set QtyOrder at index $index value $value');
     item.orderQty = value;
     item.totalPriceAvg = item.orderQty * item.orderPrice;
     products[index] = item;
-    print(item.orderQty);
-    printAllProduct();
-  }
-
-  printAllProduct() {
-    if (products != null) {
-      for (var product in products) {
-        print(
-            'id: ${product.id} qtyImported: ${product.inQty} priceImported:${product.orderPrice} totalPriceImported:${product.totalPriceAvg}');
-      }
-    } else {
-      print('product null');
-    }
   }
 
   getProductOrder() {
-    printAllProduct();
-    print('call getProductImported');
     return products.where((e) => e.orderQty > 0).length;
   }
 

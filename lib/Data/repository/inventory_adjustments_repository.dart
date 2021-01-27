@@ -16,11 +16,9 @@ class InventoryAdjustmentsRepository {
     return apiClient.getId(purchaseOrderId);
   }
 
-  add(Adjustment value) {
-    return apiClient.add(value);
-  }
 
-  nhanHang(Adjustment value) {
-    return apiClient.nhanHang(value);
+
+  dieuchinh(Adjustment value) {
+    return apiClient.dieuchinh(value);
   }
 }

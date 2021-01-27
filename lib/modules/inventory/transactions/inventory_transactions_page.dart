@@ -65,117 +65,149 @@ class InventoryTransactionsPage extends StatelessWidget {
             init: controller,
             initState: (state) => controller.getAll(),
             builder: (_) {
+              print('rebukid');
               if (controller.isBusy.value == true)
                 return Center(child: CircularProgressIndicator());
               else
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Chi tiết tồn kho',
-                              textAlign: TextAlign.start,
-                            ),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            RaisedButton(
-                              color: Colors.blue,
-                              child: Text(
-                                'Xuất file',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () {
-                                print(Get.width);
-                              },
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: Get.width > 750
-                              ? 65.0
-                              : Get.width > 520
-                                  ? 140
-                                  : (65.0 * 4 + 30),
-                          child: Get.width > 750
-                              ? cardRow(4)
-                              : Get.width > 520
-                                  ? cardRow(2)
-                                  : cardRow(1),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        DataTable(columns: <DataColumn>[
-                          DataColumn(
-                            tooltip: 'Kho chứa sản phẩm',
-                            label: Container(
-                              width: 70,
-                              child: Text(
-                                'Kho',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
+                return Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Chi tiết tồn kho',
+                            textAlign: TextAlign.start,
                           ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
+                          Expanded(
+                            child: Container(),
+                          ),
+                          RaisedButton(
+                            color: Colors.blue,
+                            child: Text(
+                              'Xuất file',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              print(Get.width);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: Get.width > 750
+                            ? 65.0
+                            : Get.width > 520
+                                ? 140
+                                : (65.0 * 4 + 30),
+                        child: Get.width > 750
+                            ? cardRow(4)
+                            : Get.width > 520
+                                ? cardRow(2)
+                                : cardRow(1),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 30,
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => Divider(
+                            thickness: 0.5,
+                          ),
+                          //shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.filters.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: RaisedButton(
                                 child: Text(
-                                  'Sản phẩm ',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                  controller.filters[index].filterName,
+                                  style: TextStyle(
+                                      color: controller
+                                                  .filters[index].isSelected ==
+                                              true
+                                          ? Colors.red
+                                          : Colors.black),
                                 ),
+                                onPressed: () {
+                                  controller.selectedFilter(
+                                      controller.filters[index], index);
+                                },
                               ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              width: 25,
-                              child: Text(
-                                'Tồn',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              width: 65,
-                              child: Text(
-                                'Khả dụng',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              width: 25,
-                              child: Text(
-                                'Đặt',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              // width: 40,
-                              child: Text(
-                                'Giá(vnđ)',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        ], rows: controller.createDataSource()),
-                      ],
-                    ),
+                            );
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      // DataTable(columns: <DataColumn>[
+                      //   DataColumn(
+                      //     tooltip: 'Kho chứa sản phẩm',
+                      //     label: Container(
+                      //       width: 70,
+                      //       child: Text(
+                      //         'Kho',
+                      //         style: TextStyle(fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   DataColumn(
+                      //     label: Expanded(
+                      //       child: Container(
+                      //         child: Text(
+                      //           'Sản phẩm ',
+                      //           style: TextStyle(fontWeight: FontWeight.w600),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   DataColumn(
+                      //     label: Container(
+                      //       width: 25,
+                      //       child: Text(
+                      //         'Tồn',
+                      //         style: TextStyle(fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   DataColumn(
+                      //     label: Container(
+                      //       width: 65,
+                      //       child: Text(
+                      //         'Khả dụng',
+                      //         style: TextStyle(fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   DataColumn(
+                      //     label: Container(
+                      //       width: 25,
+                      //       child: Text(
+                      //         'Đặt',
+                      //         style: TextStyle(fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   DataColumn(
+                      //     label: Container(
+                      //       // width: 40,
+                      //       child: Text(
+                      //         'Giá(vnđ)',
+                      //         style: TextStyle(fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ], rows: controller.createDataSource()),
+                    ],
                   ),
                 );
             },
@@ -183,5 +215,77 @@ class InventoryTransactionsPage extends StatelessWidget {
         ),
       ],
     ));
+  }
+
+  _buildFilterSection() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            ListView.builder(
+              // shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: 1 + controller.filters.length,
+              itemBuilder: (context, index) {
+                return RaisedButton(
+                  child: Text('Tất cả'),
+                  onPressed: () {},
+                );
+              },
+            ),
+          ],
+        ),
+        // Row(
+        //   children: [
+        //     RaisedButton(
+        //       child: Row(
+        //         children: [
+        //           Icon(Icons.filter_alt),
+        //           Text('Thêm điều kiện lọc'),
+        //         ],
+        //       ),
+        //       onPressed: () {},
+        //     ),
+        //     SizedBox(
+        //       width: 10,
+        //     ),
+        //     RaisedButton(
+        //       child: Row(
+        //         children: [
+        //           Icon(Icons.save_rounded),
+        //           Text('Lưu bộ lọc'),
+        //         ],
+        //       ),
+        //       onPressed: () {},
+        //     ),
+        //   ],
+        // ),
+      ],
+    );
+  }
+
+  _buildFilterExpress(String express) {
+    // return Container(
+    //   child: ListTile(
+    //     title: Text(express),
+    //     trailing: Icon(Icons.close),
+    //   ),
+    // );
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+      ),
+      child: Row(children: [
+        Text(express),
+        InkWell(
+          onTap: () {},
+          child: Icon(
+            Icons.close,
+            size: 25,
+          ),
+        ),
+      ]),
+    );
   }
 }

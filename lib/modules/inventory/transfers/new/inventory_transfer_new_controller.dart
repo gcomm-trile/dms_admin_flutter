@@ -3,6 +3,7 @@ import 'package:dms_admin/data/model/product.dart';
 
 import 'package:dms_admin/data/model/transfer.dart';
 import 'package:dms_admin/data/repository/inventory_transfers_repository.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,10 @@ import 'package:meta/meta.dart';
 
 class InventoryTransferNewController extends GetxController {
   final InventoryTransfersRepository repository;
+  List<GlobalKey<NumberInputWithIncrementDecrementState>> _key =
+      List<GlobalKey<NumberInputWithIncrementDecrementState>>();
+  GlobalKey<NumberInputWithIncrementDecrementState> getKey(int index) =>
+      _key[index];
 
   TextEditingController thongTinGhiChuTextEditController =
       TextEditingController();
@@ -37,6 +42,9 @@ class InventoryTransferNewController extends GetxController {
       result.value.id = id;
       if (result.value.products != null) {
         products(result.value.products);
+        for (var item in products) {
+          _key.add(GlobalKey());
+        }
       }
       print(result.value.planDate);
       if (result.value.planDate == null ||
@@ -77,12 +85,6 @@ class InventoryTransferNewController extends GetxController {
   }
 
   addProducts() {
-    if (result.value.products != null) {
-      for (var item in result.value.products) {
-        print(item.name + ' ' + item.qtyTextEditingController.text);
-      }
-    }
-
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
@@ -94,9 +96,8 @@ class InventoryTransferNewController extends GetxController {
               .where((element) => element.name == selectedOutStock.value)
               .first
               .id,
+          exceptProducts: products.toList(),
           savedData: (selectedProducts) {
-            print('return data ' + selectedProducts.length.toString());
-
             for (var selectedProduct in selectedProducts) {
               if (products
                       .where((element) => element.id == selectedProduct.id)
@@ -108,6 +109,7 @@ class InventoryTransferNewController extends GetxController {
                 selectedProduct.orderPrice = 0;
                 selectedProduct.totalPriceAvg = 0;
                 products.add(selectedProduct);
+                _key.add(GlobalKey());
               }
             }
           },
@@ -116,11 +118,9 @@ class InventoryTransferNewController extends GetxController {
     );
   }
 
-  removeProduct(Product product) {
-    print('remove ' +
-        product.name.toString() +
-        product.qtyTextEditingController.text);
-    products.removeWhere((element) => element.id == product.id);
+  removeProduct(int index) {
+    products.removeAt(index);
+    _key.removeAt(index);
   }
 
   int getCountSelectedProduct() {
