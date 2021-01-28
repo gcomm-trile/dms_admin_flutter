@@ -1,18 +1,22 @@
 import 'filter_expression.dart';
 
 class Filter {
-  String filterName;
+  String id;
+  String name;
   String expressions;
   List<FilterExpression> filterExpressions;
   bool isSelected;
+
   Filter(
-      {this.filterName,
+      {this.id,
+      this.name,
       this.expressions,
       this.filterExpressions,
       this.isSelected});
 
   Filter.fromJson(Map<String, dynamic> json) {
-    filterName = json['filter_name'];
+    id = json['id'];
+    name = json['name'];
     expressions = json['expressions'];
     if (json['filter_expressions'] != null) {
       filterExpressions = new List<FilterExpression>();
@@ -24,7 +28,7 @@ class Filter {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['filter_name'] = this.filterName;
+    data['name'] = this.name;
     data['expressions'] = this.expressions;
     if (this.filterExpressions != null) {
       data['filter_expressions'] =

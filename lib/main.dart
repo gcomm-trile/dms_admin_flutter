@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:dms_admin/data/provider/filter_api.dart';
 
 import 'package:dms_admin/data/provider/inventory_transactions_api.dart';
 import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
 import 'package:dms_admin/data/provider/product_api.dart';
+import 'package:dms_admin/data/repository/filters_repository.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
+import 'package:dms_admin/global_widgets/filter_dialog/fliter_controller.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_controller.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
@@ -51,9 +54,13 @@ void main() {
   Get.lazyPut(
       () => InventoryPurchaseOrderNewController(repository: Get.find()));
 
+  Get.lazyPut(() => FilterApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => FiltersRepository(apiClient: Get.find()));
+
   Get.lazyPut(() => ProductApiClient(httpClient: Get.find()));
   Get.lazyPut(() => ProductRepository(apiClient: Get.find()));
   Get.lazyPut(() => ProductSearchController(repository: Get.find()));
+  Get.lazyPut(() => FilterController(repository: Get.find()));
 
   Dio dio = Get.find();
   dio.options.headers["Session-ID"] = '2EF87A1E-5C47-4784-B9E7-5A2438DE308F';
