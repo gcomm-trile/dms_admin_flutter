@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-const SERVER_URL = "http://localhost:58985/";
+// const SERVER_URL = "http://localhost:58985/";
+const SERVER_URL = "http://f90e98e918a6.ngrok.io/api/";
 const kIconSize = 32.0;
 var kNumberFormat = new NumberFormat("#,###");
-// const SERVER_URL = "http://gcomm.online:9812/";
+
 const kPrimaryColor = Color.fromRGBO(109, 192, 45, 1); //Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kWidthProductNo = 80.0;

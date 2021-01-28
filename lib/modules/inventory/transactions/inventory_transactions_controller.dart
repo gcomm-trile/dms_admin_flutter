@@ -54,13 +54,13 @@ class InventoryTransactionsController extends GetxController {
 
   int getTongTon() {
     return result
-        .map((expense) => expense.inStockQty)
+        .map((expense) => expense.inQty)
         .fold(0, (prev, amount) => prev + amount);
   }
 
   getTongGiaBan() {
     return result
-        .map((expense) => expense.inStockQty * expense.sellPrice)
+        .map((expense) => expense.inQty * expense.sellPrice)
         .fold(0, (prev, amount) => prev + amount);
   }
 
@@ -73,7 +73,7 @@ class InventoryTransactionsController extends GetxController {
   getTongLoiNhuan() {
     return result
         .map((expense) =>
-            expense.inStockQty * expense.sellPrice - expense.totalPriceAvg)
+            expense.inQty * expense.sellPrice - expense.totalPriceAvg)
         .fold(0, (prev, amount) => prev + amount);
   }
 
