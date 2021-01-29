@@ -43,7 +43,7 @@ class _DashboardPageState extends State<DashboardPage>
       appBar: AppBar(
         title: Text('Report'),
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawer(selectedModule: 'Dashboard'),
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: Column(

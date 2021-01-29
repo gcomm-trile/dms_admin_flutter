@@ -1,6 +1,7 @@
-import 'package:dms_admin/data/model/adjustment.dart';
+import 'package:dms_admin/data/model/adjustment_model.dart';
 
 import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
@@ -23,7 +24,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
     return Scaffold(
         body: Row(
       children: [
-        AppDrawer(),
+        AppDrawer(selectedModule: 'Điều chỉnh'),
         Expanded(
           child: GetX<InventoryAdjustmentsController>(
             init: controller,
@@ -76,10 +77,17 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                       SizedBox(
                         height: 15,
                       ),
+                      FilterWidget(
+                        // filterExpressions: controller.filterExpressions,
+                        module: 'inventory_adjustments',
+                       
+                        products: [],
+                        stocks: [],
+                      ),
                       SizedBox(
                         height: 15,
                       ),
-                      controller.result.value.length == 0
+                      controller.adjustments.value.length == 0
                           ? Expanded(
                               child: Center(
                                 child: Text('Không có dữ liệu'),
@@ -99,10 +107,12 @@ class InventoryAdjustmentsPage extends StatelessWidget {
                                           Divider(
                                         thickness: 2.0,
                                       ),
-                                      itemCount: controller.result.value.length,
+                                      itemCount:
+                                          controller.adjustments.value.length,
                                       itemBuilder: (context, index) {
                                         return _buildRowListViewSection(
-                                            controller.result.value[index]);
+                                            controller
+                                                .adjustments.value[index]);
                                       },
                                     ),
                                   ),
@@ -135,7 +145,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           Container(
             width: 90,
             child: Text(
-              'Ngày tạo',
+              'Ngày dự kiến',
               style: kStyleListViewHeader,
             ),
           ),
@@ -153,6 +163,14 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           Container(
             width: 100,
             child: Text(
+              'Lí do',
+              style: kStyleListViewHeader,
+            ),
+          ),
+          sizedBox,
+          Container(
+            width: 60,
+            child: Text(
               'Số lượng',
               style: kStyleListViewHeader,
             ),
@@ -162,7 +180,7 @@ class InventoryAdjustmentsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRowListViewSection(Adjustment data) {
+  Widget _buildRowListViewSection(AdjustmentModel data) {
     return Container(
       child: Row(
         children: [
@@ -212,6 +230,18 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           ),
           sizedBox,
           Container(
+            width: 100,
+            child: Text(
+              TextHelper.toSafeString(
+                data.reasonName,
+              ),
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ),
+          sizedBox,
+          Container(
             width: 60,
             child: Text(
               TextHelper.toSafeString(
@@ -222,7 +252,6 @@ class InventoryAdjustmentsPage extends StatelessWidget {
               ),
             ),
           ),
-          sizedBox,
         ],
       ),
     );

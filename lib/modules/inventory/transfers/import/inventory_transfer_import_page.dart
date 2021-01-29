@@ -21,7 +21,7 @@ class InventoryTransferImportPage extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          AppDrawer(),
+          AppDrawer(selectedModule: 'Điều chuyển'),
           Expanded(child: _buildBodySection(context)),
         ],
       ),

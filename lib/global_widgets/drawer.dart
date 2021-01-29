@@ -1,16 +1,26 @@
 import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
 import 'package:dms_admin/modules/stock/stock_decrease_page.dart';
 import 'package:dms_admin/routes/app_pages.dart';
+import 'package:dms_admin/utils/color_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppDrawer extends StatelessWidget {
+  final String selectedModule;
+
+  const AppDrawer({Key key, @required this.selectedModule}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: ColorHelper.fromHex('#033382'),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.blue[400], ColorHelper.fromHex('#042863')],
           //border: Border.all(),
-          ),
+        ),
+      ),
       width: 150,
       child: ListView(
         padding: EdgeInsets.zero,
@@ -111,14 +121,23 @@ class AppDrawer extends StatelessWidget {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Icon(icon),
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: 11,
-              ),
+              style: selectedModule == text
+                  ? TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)
+                  : TextStyle(
+                      fontSize: 11,
+                      color: Colors.white60,
+                    ),
             ),
           )
         ],

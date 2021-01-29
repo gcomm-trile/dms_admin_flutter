@@ -1,8 +1,10 @@
 import 'package:dms_admin/Helper/UI.dart';
-import 'package:dms_admin/data/model/adjustment.dart';
+import 'package:dms_admin/data/model/adjustment_model.dart';
+import 'package:dms_admin/data/model/category_model.dart';
 import 'package:dms_admin/data/model/product.dart';
 import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
+import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:dms_admin/utils/text_helper.dart';
@@ -11,34 +13,60 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class InventoryAdjustmentNewController extends GetxController {
+  List<GlobalKey<NumberInputWithIncrementDecrementState>> _key =
+      List<GlobalKey<NumberInputWithIncrementDecrementState>>();
+  GlobalKey<NumberInputWithIncrementDecrementState> getKey(int index) =>
+      _key[index];
+
   final InventoryAdjustmentsRepository repository;
 
   InventoryAdjustmentNewController({@required this.repository})
       : assert(repository != null);
 
   final isBusy = true.obs;
-  var result = Rx<Adjustment>();
+  var isNew = true;
+  var result = AdjustmentItemModel();
   var products = <Product>[].obs;
   final stock = Rx<Stock>();
   final stocks = <String>[].obs;
+  final adjustmentReason = Rx<CategoryModel>();
 
   void getId(String id) {
     isBusy(true);
     repository.getId(id).then((data) {
-      if (data == null) {
-        var item = new Adjustment(id: id, products: List<Product>());
-        result.value = item;
+      result = data;
+      if (result.adjustment == null ||
+          result.adjustment.id == null ||
+          result.adjustment.id == TextHelper.getDefaultGuidString()) {
+        result.adjustment = new AdjustmentModel();
+        result.adjustment.id = id;
+        result.adjustment.products = <Product>[];
+        isNew = true;
       } else {
-        result.value = data;
+        isNew = false;
+        products(result.adjustment.products);
       }
 
-      products(result.value.products);
-      for (var item in result.value.stocks) {
+      for (var product in products) {
+        _key.add(GlobalKey());
+      }
+      for (var item in result.stocks) {
         stocks.add(item.name);
       }
 
-      stock(result.value.stocks[0]);
-      result.value.id = id;
+      if (isNew == true) {
+        stock(result.stocks[0]);
+        adjustmentReason(result.adjustmentReasons[0]);
+      } else {
+        stock(result.stocks
+            .where((element) => element.id == result.adjustment.inStockId)
+            .first);
+        adjustmentReason(result.adjustmentReasons
+            .where((element) => element.id == result.adjustment.reasonId)
+            .first);
+      }
+
+      result.adjustment.id = id;
       isBusy(false);
     }).catchError((e) {
       Get.snackbar('Error', e.toString());
@@ -46,18 +74,7 @@ class InventoryAdjustmentNewController extends GetxController {
     });
   }
 
-  setStock(String value) {
-    print('setStock =' + value);
-    stock.value =
-        result.value.stocks.where((element) => element.id == value).first;
-  }
-
   addProducts() {
-    if (result.value.products != null) {
-      for (var item in result.value.products) {
-        print(item.name + ' ' + item.qtyTextEditingController.text);
-      }
-    }
     Get.dialog(
       AlertDialog(
         content: ProductSearchDialog(
@@ -75,6 +92,8 @@ class InventoryAdjustmentNewController extends GetxController {
                   0) {
                 selectedProduct.inQty = 1;
                 products.add(selectedProduct);
+                _key.add(GlobalKey());
+                print('--------' + products.length.toString());
               }
             }
           },
@@ -83,10 +102,10 @@ class InventoryAdjustmentNewController extends GetxController {
     );
   }
 
-  removeProduct(Product product) {
+  removeProduct(Product product, int index) {
     var x = products.where((element) => element.id != product.id).toList();
     products(x);
-    Product.printAllProduct(products.value);
+    _key.removeAt(index);
   }
 
   void save() {
@@ -94,21 +113,24 @@ class InventoryAdjustmentNewController extends GetxController {
       UI.showError('Danh sách sản phẩm trống');
       return;
     } else {
-      result.value.products = products;
+      result.adjustment.products = products;
     }
 
     if (stock.value == null || stock.value.id == null) {
       UI.showError('Chọn kho cần điều chỉnh');
       return;
     } else {
-      result.value.inStockId = stock.value.id;
+      result.adjustment.inStockId = stock.value.id;
+      print('stock id ' + result.adjustment.inStockId);
     }
+    print('reason ' + adjustmentReason.value.id.toString());
+    result.adjustment.reasonId = adjustmentReason.value.id;
 
-    repository.dieuchinh(result.value).then((data) {
+    repository.dieuchinh(result.adjustment).then((data) {
       print(data);
       if (data.toString().isEmpty) {
-        UI.showSuccess('Đã cập nhật thành công');
         Get.offAndToNamed(Routes.INVENTORY_ADJUSTMENTS);
+        UI.showSuccess('Đã cập nhật thành công');
       } else {
         UI.showError(data.toString());
       }

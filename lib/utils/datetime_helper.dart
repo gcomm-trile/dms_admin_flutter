@@ -20,4 +20,12 @@ class DateTimeHelper {
       }
     }
   }
+
+  static DateTime text2Date(value) {
+    try {
+      return DateTime.parse(value.toString().substring(0, 10));
+    } catch (_) {
+      return DateTime(1, 1, 1);
+    }
+  }
 }

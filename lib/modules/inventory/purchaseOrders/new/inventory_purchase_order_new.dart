@@ -23,7 +23,7 @@ class InventoryPurchaseOrderNewPage extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          AppDrawer(),
+          AppDrawer(selectedModule: 'Mua hàng'),
           Expanded(child: _buildBodySection(context)),
         ],
       ),

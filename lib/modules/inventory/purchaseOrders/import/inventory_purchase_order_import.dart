@@ -1,6 +1,6 @@
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
-import 'package:dms_admin/global_widgets/number_input_with_increment_decrement.dart';
+
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _InventoryPurchaseOrderImportPageState
     return Scaffold(
       body: Row(
         children: [
-          AppDrawer(),
+          AppDrawer(selectedModule: 'Mua hàng'),
           Expanded(child: _buildBodySection()),
         ],
       ),
@@ -41,8 +41,6 @@ class _InventoryPurchaseOrderImportPageState
   );
   _buildRowListViewSection(int index) {
     var product = controller.result.value.products[index];
-    print('rebuild data ' +
-        controller.result.value.products[index].inQty.toString());
 
     return Row(children: <Widget>[
       Checkbox(
@@ -85,7 +83,6 @@ class _InventoryPurchaseOrderImportPageState
           numberFieldDecoration: InputDecoration(border: InputBorder.none),
           initialValue: product.inQty,
           onChanged: (value) {
-            print('call onvaluechanged ' + value.toString());
             controller.setInQty(index, value);
           },
           onDecrement: (value) {

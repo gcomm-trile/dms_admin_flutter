@@ -1,4 +1,3 @@
-
 import 'package:dms_admin/data/model/transfer.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
@@ -23,7 +22,7 @@ class InventoryTransfersPage extends StatelessWidget {
     return Scaffold(
         body: Row(
       children: [
-        AppDrawer(),
+        AppDrawer(selectedModule: 'Điều chuyển'),
         Expanded(
           child: GetX<InventoryTransfersController>(
             init: controller,

@@ -1,4 +1,4 @@
-import 'package:dms_admin/data/model/adjustment.dart';
+import 'package:dms_admin/data/model/adjustment_model.dart';
 import 'package:dms_admin/data/provider/inventory_adjustments_api.dart';
 import 'package:meta/meta.dart';
 
@@ -16,9 +16,7 @@ class InventoryAdjustmentsRepository {
     return apiClient.getId(purchaseOrderId);
   }
 
-
-
-  dieuchinh(Adjustment value) {
+  dieuchinh(AdjustmentModel value) {
     return apiClient.dieuchinh(value);
   }
 }

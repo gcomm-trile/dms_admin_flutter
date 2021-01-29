@@ -1,7 +1,10 @@
-import 'package:dms_admin/data/model/adjustment.dart';
+import 'package:dms_admin/data/model/adjustment_model.dart';
+import 'package:dms_admin/data/model/filter.dart';
+import 'package:dms_admin/data/model/filter_expression.dart';
 
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
 import 'package:dms_admin/modules/inventory/adjustments/new/inventory_adjustment_new.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -12,17 +15,23 @@ class InventoryAdjustmentsController extends GetxController {
       : assert(repository != null);
 
   final isBusy = true.obs;
-  var result = Rx<List<Adjustment>>();
-
+  var adjustments = Rx<List<AdjustmentModel>>();
+  var filters = List<Filter>();
+  var filterExpressions = List<FilterExpression>();
   void getAll() {
-    print('run');
-    // log('busy' + isBusy.value.toString());
     isBusy(true);
-    // log('busy' + isBusy.value.toString());
+
     repository.getAll().then((data) {
-      result.value = data;
+      adjustments.value = data.adjustments;
+      filters.add(Filter(
+          id: TextHelper.getDefaultGuidString(),
+          name: 'Tất cả',
+          isSelected: true,
+          filterExpressions: List<FilterExpression>()));
+      for (var item in data.filters) {
+        filters.add(item);
+      }
       isBusy(false);
-      // log('busy' + irsBusy.value.toString());
       print('return data  ');
     }).catchError((e) {
       Get.snackbar('Error', e.toString());
@@ -30,13 +39,7 @@ class InventoryAdjustmentsController extends GetxController {
     });
   }
 
-  void createPurchaseOrder() {
-    // Get.to(InventoryPurchaseOrderNewPage(
-    //   purchaseOrderId: Guid.newGuid.toString(),
-    // ));
-  }
-
-  void goToDetail(Adjustment data) {
+  void goToDetail(AdjustmentModel data) {
     Get.to(InventoryAdjustmentNewPage(
       id: data.id,
     ));

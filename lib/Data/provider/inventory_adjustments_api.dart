@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:dms_admin/data/model/adjustment.dart';
+import 'package:dms_admin/data/model/adjustment_model.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
@@ -16,10 +16,7 @@ class InventoryAdjustmentsApiClient {
       print('call ' + SERVER_URL + baseUrl);
       var response = await httpClient.get(SERVER_URL + baseUrl);
       if (response.statusCode == 200) {
-        var result =
-            (response.data as List).map((x) => Adjustment.fromJson(x)).toList();
-        print('result count ' + result.length.toString());
-        return result;
+        return AdjustmentListModel.fromJson(response.data);
       } else
         print('error -get');
     } catch (_) {
@@ -33,7 +30,7 @@ class InventoryAdjustmentsApiClient {
       var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
         //print(response.data);
-        return Adjustment.fromJson(response.data);
+        return AdjustmentItemModel.fromJson(response.data);
       } else
         print('error -get');
     } catch (_) {
@@ -41,12 +38,11 @@ class InventoryAdjustmentsApiClient {
     }
   }
 
-  dieuchinh(Adjustment value) async {
+  dieuchinh(AdjustmentModel value) async {
     final jobsListAPIUrl = SERVER_URL +
         baseUrl +
-        '/dieuchinh?id=${value.id}&in_stock_id=${value.inStockId}';
+        '/dieuchinh?id=${value.id}&in_stock_id=${value.inStockId}&reason_id=${value.reasonId}';
     print("POST $jobsListAPIUrl");
-    print('data products :' + jsonEncode(value.products));
 
     final response =
         await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
@@ -61,7 +57,7 @@ class InventoryAdjustmentsApiClient {
     }
   }
 
-  nhanHang(Adjustment value) async {
+  nhanHang(AdjustmentModel value) async {
     final jobsListAPIUrl = SERVER_URL + baseUrl + '/nhanHang?id=${value.id}';
     print("POST $jobsListAPIUrl");
     print(jsonEncode(value.products));

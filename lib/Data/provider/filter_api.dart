@@ -31,4 +31,22 @@ class FilterApiClient {
       return _.toString();
     }
   }
+
+  Future<List<Filter>> getId(String module) async {
+    try {
+      print(SERVER_URL + baseUrl);
+      final url = SERVER_URL + baseUrl + '?module=$module';
+      print("POST $url");
+      var response = await httpClient.get(
+        url,
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        return (response.data as List).map((x) => Filter.fromJson(x)).toList();
+      } else
+        throw Exception('Failed to load jobs from API');
+    } catch (_) {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
 }
