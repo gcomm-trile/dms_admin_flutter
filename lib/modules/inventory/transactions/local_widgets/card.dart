@@ -5,12 +5,13 @@ class CardInventoryTransaction extends StatelessWidget {
   final String title;
   final int value;
   final Color textColor;
-  const CardInventoryTransaction(
-      {Key key,
-      @required this.title,
-      @required this.value,
-      this.textColor = Colors.black})
-      : super(key: key);
+
+  const CardInventoryTransaction({
+    Key key,
+    @required this.title,
+    @required this.value,
+    this.textColor = Colors.black,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

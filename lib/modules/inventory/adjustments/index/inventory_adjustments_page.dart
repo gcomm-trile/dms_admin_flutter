@@ -1,133 +1,237 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/adjustment_model.dart';
 
-import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
+import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
+import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'inventory_adjustments_controller.dart';
 
 class InventoryAdjustmentsPage extends StatelessWidget {
-  final InventoryAdjustmentsController controller =
-      InventoryAdjustmentsController(repository: Get.find());
-  InventoryAdjustmentsPage({Key key}) : super(key: key);
+  final InventoryAdjustmentsController controller = Get.find();
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  final DeviceScreenType deviceScreenType;
+  InventoryAdjustmentsPage(
+      {Key key,
+      @required this.deviceScreenType,
+      @required this.onNavigationChanged})
+      : super(key: key);
 
   final sizedBox = SizedBox(
     width: 10,
   );
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Row(
-      children: [
-        AppDrawer(selectedModule: 'Điều chỉnh'),
-        Expanded(
-          child: GetX<InventoryAdjustmentsController>(
-            init: controller,
-            initState: (state) => controller.getAll(),
-            builder: (_) {
-              if (controller.isBusy.value == true)
-                return Center(child: CircularProgressIndicator());
-              else {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
+  desktopWidget(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                'Danh sách phiếu điều chỉnh',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              RaisedButton(
+                color: Colors.blue,
+                onPressed: () {
+                  onNavigationChanged(NavigationCallBackModel(
+                      module: DrawModule.INVENTORY_ADJUSTMENTS,
+                      function: DrawFunction.NEW,
+                      id: Guid.newGuid.toString()));
+                  // controller.create();
+                },
+                child: Container(
+                  height: 37,
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Danh sách phiếu điều chỉnh',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                          RaisedButton(
-                            color: Colors.blue,
-                            onPressed: () {
-                              controller.create();
-                            },
-                            child: Container(
-                              height: 37,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add_circle_outline,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    'Tạo phiếu điều chỉnh',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.white,
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      FilterWidget(
-                        // filterExpressions: controller.filterExpressions,
-                        module: 'inventory_adjustments',
-                       
-                        products: [],
-                        stocks: [],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      controller.adjustments.value.length == 0
-                          ? Expanded(
-                              child: Center(
-                                child: Text('Không có dữ liệu'),
-                              ),
-                            )
-                          : Expanded(
-                              child: Center(
-                                  child: Column(
-                                children: [
-                                  _buildHeaderListViewSection(),
-                                  Divider(
-                                    thickness: 2.0,
-                                  ),
-                                  Expanded(
-                                    child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          Divider(
-                                        thickness: 2.0,
-                                      ),
-                                      itemCount:
-                                          controller.adjustments.value.length,
-                                      itemBuilder: (context, index) {
-                                        return _buildRowListViewSection(
-                                            controller
-                                                .adjustments.value[index]);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )),
-                            ),
+                      Text(
+                        'Tạo phiếu điều chỉnh',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      )
                     ],
                   ),
-                );
-              }
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          FilterWidget(
+            // filterExpressions: controller.filterExpressions,
+            module: 'inventory_adjustments',
+
+            products: [],
+            stocks: [],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          controller.adjustments.value.length == 0
+              ? Expanded(
+                  child: Center(
+                    child: Text('Không có dữ liệu'),
+                  ),
+                )
+              : Expanded(
+                  child: Center(
+                      child: Column(
+                    children: [
+                      _buildHeaderListViewSection(),
+                      Divider(
+                        thickness: 2.0,
+                      ),
+                      Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => Divider(
+                            thickness: 2.0,
+                          ),
+                          itemCount: controller.adjustments.value.length,
+                          itemBuilder: (context, index) {
+                            return _buildRowListViewSection(
+                                controller.adjustments.value[index]);
+                          },
+                        ),
+                      ),
+                    ],
+                  )),
+                ),
+        ],
+      ),
+    );
+  }
+
+  mobileWidget(BuildContext context) {
+    return Stack(children: [
+      Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.blue[400], ColorHelper.fromHex('#042863')],
+            )),
+            child: SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Text(
+                    'Điều chỉnh',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FilterWidget(
+            // filterExpressions: controller.filterExpressions,
+            module: 'inventory_adjustments',
+
+            products: [],
+            stocks: [],
+            onValueChanged: (filterExpressions) {
+              controller.filterExpressions = filterExpressions;
+              controller.refresh();
             },
           ),
+          SizedBox(
+            height: 5,
+          ),
+          GetX<InventoryAdjustmentsController>(
+              init: controller,
+              initState: (state) => controller.refresh(),
+              builder: (_) {
+                return controller.isBusy.value == true
+                    ? Expanded(
+                        child: Center(child: CircularProgressIndicator()))
+                    : (controller.adjustments.value.length == 0
+                        ? Expanded(
+                            child: Center(
+                              child: Text('Không có dữ liệu'),
+                            ),
+                          )
+                        : Expanded(
+                            child: Center(
+                                child: Column(
+                              children: [
+                                _buildHeaderListViewSection(),
+                                Divider(
+                                  thickness: 2.0,
+                                ),
+                                Expanded(
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) =>
+                                        Divider(
+                                      thickness: 2.0,
+                                    ),
+                                    itemCount:
+                                        controller.adjustments.value.length,
+                                    itemBuilder: (context, index) {
+                                      return _buildRowListViewSection(
+                                          controller.adjustments.value[index]);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )),
+                          ));
+              }),
+        ],
+      ),
+      Positioned(
+        right: 10,
+        bottom: 10,
+        child: FloatingActionButton(
+          tooltip: 'Tạo mới phiếu điều chỉnh',
+          onPressed: () => onNavigationChanged(onNavigationChanged(
+              NavigationCallBackModel(
+                  module: DrawModule.INVENTORY_ADJUSTMENTS,
+                  function: DrawFunction.NEW,
+                  id: Guid.newGuid.toString()))),
+          child: Icon(Icons.add),
         ),
-      ],
-    ));
+      )
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return deviceScreenType == DeviceScreenType.mobile
+        ? mobileWidget(context)
+        : desktopWidget(context);
   }
 
   _buildHeaderListViewSection() {
@@ -186,7 +290,11 @@ class InventoryAdjustmentsPage extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              controller.goToDetail(data);
+              onNavigationChanged(NavigationCallBackModel(
+                  module: DrawModule.INVENTORY_ADJUSTMENTS,
+                  function: DrawFunction.NEW,
+                  id: data.id));
+              // controller.goToDetail(data);
             },
             child: Row(
               children: [

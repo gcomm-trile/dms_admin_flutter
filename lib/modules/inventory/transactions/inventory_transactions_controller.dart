@@ -30,6 +30,13 @@ class InventoryTransactionsController extends GetxController {
   var filters = List<Filter>().obs;
   var filterExpressions = List<FilterExpression>().obs;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getAll();
+  }
+
   void getAll() {
     isBusy(true);
     repository.getAll(filterExpressions).then((data) {

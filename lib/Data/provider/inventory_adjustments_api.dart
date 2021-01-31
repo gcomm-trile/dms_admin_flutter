@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:dms_admin/data/model/adjustment_model.dart';
+import 'package:dms_admin/data/model/filter_expression.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
@@ -11,16 +12,18 @@ class InventoryAdjustmentsApiClient {
   final Dio httpClient;
   InventoryAdjustmentsApiClient({@required this.httpClient});
 
-  getAll() async {
+  getAll(List<FilterExpression> filterExpressions) async {
     try {
-      print('call ' + SERVER_URL + baseUrl);
-      var response = await httpClient.get(SERVER_URL + baseUrl);
+      String url =
+          SERVER_URL + baseUrl + '?filter=' + jsonEncode(filterExpressions);
+      print(url);
+      var response = await httpClient.get(url);
       if (response.statusCode == 200) {
         return AdjustmentListModel.fromJson(response.data);
       } else
-        print('error -get');
+        throw Exception('Failed to load jobs from API');
     } catch (_) {
-      print(_.toString());
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 
@@ -32,45 +35,53 @@ class InventoryAdjustmentsApiClient {
         //print(response.data);
         return AdjustmentItemModel.fromJson(response.data);
       } else
-        print('error -get');
+        throw Exception('Failed to load jobs from API');
     } catch (_) {
-      print(_.toString());
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 
   dieuchinh(AdjustmentModel value) async {
-    final jobsListAPIUrl = SERVER_URL +
-        baseUrl +
-        '/dieuchinh?id=${value.id}&in_stock_id=${value.inStockId}&reason_id=${value.reasonId}';
-    print("POST $jobsListAPIUrl");
+    try {
+      final jobsListAPIUrl = SERVER_URL +
+          baseUrl +
+          '/dieuchinh?id=${value.id}&in_stock_id=${value.inStockId}&reason_id=${value.reasonId}';
+      print("POST $jobsListAPIUrl");
 
-    final response =
-        await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      if (response.data == 'Ok')
-        return '';
-      else
-        return response.data;
-    } else {
-      return response.data;
+      final response = await httpClient.post(jobsListAPIUrl,
+          data: jsonEncode(value.products));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        if (response.data == 'Ok')
+          return '';
+        else
+          throw Exception(response.data);
+      } else {
+        throw Exception('Failed to load jobs from API');
+      }
+    } catch (_) {
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 
   nhanHang(AdjustmentModel value) async {
-    final jobsListAPIUrl = SERVER_URL + baseUrl + '/nhanHang?id=${value.id}';
-    print("POST $jobsListAPIUrl");
-    print(jsonEncode(value.products));
-    final response =
-        await httpClient.post(jobsListAPIUrl, data: jsonEncode(value.products));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      if (response.data == 'Ok')
-        return '';
-      else
+    try {
+      final jobsListAPIUrl = SERVER_URL + baseUrl + '/nhanHang?id=${value.id}';
+      print("POST $jobsListAPIUrl");
+      print(jsonEncode(value.products));
+      final response = await httpClient.post(jobsListAPIUrl,
+          data: jsonEncode(value.products));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        if (response.data == 'Ok')
+          return '';
+        else
+          throw Exception('Failed to load jobs from API');
+      } else {
         return response.data;
-    } else {
-      return response.data;
+      }
+    } catch (_) {
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 }

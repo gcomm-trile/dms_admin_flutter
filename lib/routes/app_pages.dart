@@ -1,3 +1,4 @@
+import 'package:dms_admin/modules/home_page.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_page.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/import/inventory_purchase_order_import.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
@@ -15,13 +16,17 @@ import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.INVENTORY_TRANSACTIONS;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
       name: Routes.LOGIN,
       page: () => LoginPage(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: Routes.HOME,
+      page: () => HomePage(),
     ),
     GetPage(
       name: Routes.VISIT,

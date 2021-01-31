@@ -36,11 +36,7 @@ class _FilterWidgetState extends State<FilterWidget> {
   @override
   void initState() {
     super.initState();
-    filters.add(Filter(
-        id: TextHelper.getDefaultGuidString(),
-        name: 'Tất cả',
-        isSelected: true,
-        filterExpressions: List<FilterExpression>()));
+
     inventory = filtersRepository.getId(widget.module);
   }
 
@@ -50,6 +46,12 @@ class _FilterWidgetState extends State<FilterWidget> {
       future: inventory,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          filters.clear();
+          filters.add(Filter(
+              id: TextHelper.getDefaultGuidString(),
+              name: 'Tất cả',
+              isSelected: true,
+              filterExpressions: List<FilterExpression>()));
           for (var item in snapshot.data) {
             filters.add(item);
           }

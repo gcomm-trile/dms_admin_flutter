@@ -32,6 +32,7 @@ class InventoryAdjustmentNewController extends GetxController {
   final adjustmentReason = Rx<CategoryModel>();
 
   void getId(String id) {
+    print('call InventoryAdjustmentNewController');
     isBusy(true);
     repository.getId(id).then((data) {
       result = data;
@@ -44,16 +45,15 @@ class InventoryAdjustmentNewController extends GetxController {
         isNew = true;
       } else {
         isNew = false;
-        products(result.adjustment.products);
       }
-
+      products(result.adjustment.products);
       for (var product in products) {
         _key.add(GlobalKey());
       }
       for (var item in result.stocks) {
         stocks.add(item.name);
       }
-
+      print('sl sp ${products.length}');
       if (isNew == true) {
         stock(result.stocks[0]);
         adjustmentReason(result.adjustmentReasons[0]);
@@ -108,17 +108,17 @@ class InventoryAdjustmentNewController extends GetxController {
     _key.removeAt(index);
   }
 
-  void save() {
+  save() async {
     if (products == null || products.length == 0) {
       UI.showError('Danh sách sản phẩm trống');
-      return;
+      return false;
     } else {
       result.adjustment.products = products;
     }
 
     if (stock.value == null || stock.value.id == null) {
       UI.showError('Chọn kho cần điều chỉnh');
-      return;
+      return false;
     } else {
       result.adjustment.inStockId = stock.value.id;
       print('stock id ' + result.adjustment.inStockId);
@@ -126,18 +126,30 @@ class InventoryAdjustmentNewController extends GetxController {
     print('reason ' + adjustmentReason.value.id.toString());
     result.adjustment.reasonId = adjustmentReason.value.id;
 
-    repository.dieuchinh(result.adjustment).then((data) {
-      print(data);
+    try {
+      var data = await repository.dieuchinh(result.adjustment);
+
       if (data.toString().isEmpty) {
-        Get.offAndToNamed(Routes.INVENTORY_ADJUSTMENTS);
         UI.showSuccess('Đã cập nhật thành công');
+
+        return true;
       } else {
         UI.showError(data.toString());
+        return false;
       }
-    }).catchError((e) {
+    } catch (e) {
       print(e.toString());
       Get.snackbar('Error', e.toString());
-    });
+      return false;
+    }
+
+    // repository.dieuchinh(result.adjustment).then((data) {
+    //   print(data);
+    // }).catchError((e) {
+    //   print(e.toString());
+    //   Get.snackbar('Error', e.toString());
+    //   return false;
+    // });
   }
 
   void setInQty(int index, int value) {

@@ -21,6 +21,7 @@ import 'data/repository/inventory_adjustments_repository.dart';
 import 'data/repository/inventory_purchase_orders_repository.dart';
 import 'data/repository/inventory_transfers_repository.dart';
 import 'modules/inventory/adjustments/index/inventory_adjustments_controller.dart';
+import 'modules/inventory/adjustments/new/inventory_adjustment_new_controller.dart';
 import 'modules/inventory/purchaseOrders/import/inventory_purchase_order_import_controller.dart';
 import 'modules/inventory/purchaseOrders/index/inventory_purchase_orders_controller.dart';
 import 'modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
@@ -35,7 +36,7 @@ void main() {
   Get.lazyPut(() => InventoryAdjustmentsApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentsRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentsController(repository: Get.find()));
-
+  Get.lazyPut(() => InventoryAdjustmentNewController(repository: Get.find()));
   Get.lazyPut(() => InventoryTransfersApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryTransfersRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryTransfersController(repository: Get.find()));
