@@ -108,10 +108,8 @@ class InventoryTransactionsPage extends StatelessWidget {
                       FilterWidget(
                         module: 'inventory_transactions',
                         // filterExpressions: controller.filterExpressions,
-                        products: [],
-                        stocks: [],
-                        onValueChanged: (filterExpressions) => controller
-                            .updateDataByFilterChange(filterExpressions),
+                        filterDataChange: (data) =>
+                            controller.updateDataByFilterChange(data),
                       ),
                       SizedBox(
                         height: 7,
@@ -284,10 +282,8 @@ class InventoryTransactionsPage extends StatelessWidget {
                   FilterWidget(
                     module: 'inventory_transactions',
                     // filterExpressions: controller.filterExpressions,
-                    products: [],
-                    stocks: [],
-                    onValueChanged: (filterExpressions) =>
-                        controller.updateDataByFilterChange(filterExpressions),
+                    filterDataChange: (data) =>
+                        controller.updateDataByFilterChange(data),
                   ),
                   SizedBox(
                     height: 7,

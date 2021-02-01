@@ -4,6 +4,7 @@ import 'package:dms_admin/data/model/filter.dart';
 import 'package:dms_admin/data/model/filter_expression.dart';
 
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/modules/inventory/adjustments/new/inventory_adjustment_new_page.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter_guid/flutter_guid.dart';
@@ -18,16 +19,19 @@ class InventoryAdjustmentsController extends GetxController {
   final isBusy = true.obs;
   var adjustments = Rx<List<AdjustmentModel>>();
   // var filters = List<Filter>();
-  var filterExpressions = List<FilterExpression>();
+  // var filterExpressions = List<FilterExpression>().obs;
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  refresh() {
+  refreshData(filterDataChange) {
     isBusy(true);
-    repository.getAll(filterExpressions).then((data) {
+    if (filterDataChange == null)
+      filterDataChange = FilterDataChange(
+          searchText: '', filterExpressions: <FilterExpression>[]);
+    repository.getAll(filterDataChange).then((data) {
       adjustments.value = data.adjustments;
       isBusy(false);
       print('return data  123');
@@ -35,6 +39,10 @@ class InventoryAdjustmentsController extends GetxController {
       Get.snackbar('Error', e.toString());
       isBusy(false);
     }).catchError((error) => UI.showError(error));
+  }
+
+  updateDataByFilterChange(FilterDataChange filterDataChange) {
+    refreshData(filterDataChange);
   }
   // void goToDetail(AdjustmentModel data) {
   //   Get.to(InventoryAdjustmentNewPage(

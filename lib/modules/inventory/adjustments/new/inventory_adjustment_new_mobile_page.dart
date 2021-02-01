@@ -2,7 +2,6 @@ import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/category_model.dart';
 import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
-import 'package:dms_admin/modules/home_page.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
@@ -107,6 +106,9 @@ class InventoryAdjustmentNewMobilePage extends StatelessWidget {
                           )
                         : Row(
                             children: [
+                              SizedBox(
+                                width: 40,
+                              ),
                               Column(
                                 children: [
                                   Text(

@@ -1,8 +1,5 @@
-import 'package:dms_admin/data/model/filter.dart';
 import 'package:dms_admin/data/model/filter_expression.dart';
-import 'package:dms_admin/data/model/product.dart';
-import 'package:dms_admin/data/model/stock.dart';
-import 'package:dms_admin/global_widgets/filter_dialog/fliter_controller.dart';
+import 'package:dms_admin/global_widgets/filter_dialog/filter_controller.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,26 +7,27 @@ import 'package:get/get.dart';
 
 class FilterDialog extends StatelessWidget {
   final FilterController controller = FilterController(repository: Get.find());
-  final List<Stock> stocks;
-  final List<Product> products;
+
   final Function(FilterExpression filterExpression) savedData;
+  final String module;
+
   FilterDialog({
     Key key,
     this.savedData,
-    this.stocks,
-    this.products,
+    @required this.module,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetX<FilterController>(
       init: controller,
-      initState: (state) => controller.onInitData(stocks, products),
+      initState: (state) => controller.onInitData(module),
       builder: (_) {
         print('rebuild');
 
         return controller.isBusy.value == true
-            ? CircularProgressIndicator()
+            ? Container(
+                height: 250, child: Center(child: CircularProgressIndicator()))
             : Container(
                 height: 250,
                 child: Column(
@@ -66,7 +64,6 @@ class FilterDialog extends StatelessWidget {
                           )
                         : DropdownSearch<String>(
                             mode: Mode.MENU,
-                            
                             selectedItem: controller.selectedLogicDisplay.value,
                             showSelectedItem: true,
                             items: controller.filterLogics,

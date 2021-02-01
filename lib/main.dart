@@ -7,7 +7,7 @@ import 'package:dms_admin/data/provider/product_api.dart';
 import 'package:dms_admin/data/repository/filters_repository.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
-import 'package:dms_admin/global_widgets/filter_dialog/fliter_controller.dart';
+import 'package:dms_admin/global_widgets/filter_dialog/filter_controller.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_controller.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';

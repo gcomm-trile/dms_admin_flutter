@@ -16,4 +16,8 @@ class FiltersRepository {
   Future<List<Filter>> getId(String module) {
     return apiClient.getId(module);
   }
+
+  getDataValues(String module) {
+    return apiClient.getDataValues(module);
+  }
 }

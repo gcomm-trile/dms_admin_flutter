@@ -80,42 +80,51 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           FilterWidget(
             // filterExpressions: controller.filterExpressions,
             module: 'inventory_adjustments',
-
-            products: [],
-            stocks: [],
+            filterDataChange: (data) =>
+                controller.updateDataByFilterChange(data),
           ),
           SizedBox(
             height: 15,
           ),
-          controller.adjustments.value.length == 0
-              ? Expanded(
-                  child: Center(
-                    child: Text('Không có dữ liệu'),
-                  ),
-                )
-              : Expanded(
-                  child: Center(
-                      child: Column(
-                    children: [
-                      _buildHeaderListViewSection(),
-                      Divider(
-                        thickness: 2.0,
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => Divider(
-                            thickness: 2.0,
-                          ),
-                          itemCount: controller.adjustments.value.length,
-                          itemBuilder: (context, index) {
-                            return _buildRowListViewSection(
-                                controller.adjustments.value[index]);
-                          },
-                        ),
-                      ),
-                    ],
-                  )),
-                ),
+          GetX<InventoryAdjustmentsController>(
+              init: controller,
+              initState: (state) => controller.refreshData(null),
+              builder: (_) {
+                return controller.isBusy.value == true
+                    ? Expanded(
+                        child: Center(child: CircularProgressIndicator()))
+                    : (controller.adjustments.value.length == 0
+                        ? Expanded(
+                            child: Center(
+                              child: Text('Không có dữ liệu'),
+                            ),
+                          )
+                        : Expanded(
+                            child: Center(
+                                child: Column(
+                              children: [
+                                _buildHeaderListViewSection(),
+                                Divider(
+                                  thickness: 2.0,
+                                ),
+                                Expanded(
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) =>
+                                        Divider(
+                                      thickness: 2.0,
+                                    ),
+                                    itemCount:
+                                        controller.adjustments.value.length,
+                                    itemBuilder: (context, index) {
+                                      return _buildRowListViewSection(
+                                          controller.adjustments.value[index]);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )),
+                          ));
+              }),
         ],
       ),
     );
@@ -159,20 +168,15 @@ class InventoryAdjustmentsPage extends StatelessWidget {
           FilterWidget(
             // filterExpressions: controller.filterExpressions,
             module: 'inventory_adjustments',
-
-            products: [],
-            stocks: [],
-            onValueChanged: (filterExpressions) {
-              controller.filterExpressions = filterExpressions;
-              controller.refresh();
-            },
+            filterDataChange: (data) =>
+                controller.updateDataByFilterChange(data),
           ),
           SizedBox(
             height: 5,
           ),
           GetX<InventoryAdjustmentsController>(
               init: controller,
-              initState: (state) => controller.refresh(),
+              initState: (state) => controller.refreshData(null),
               builder: (_) {
                 return controller.isBusy.value == true
                     ? Expanded(

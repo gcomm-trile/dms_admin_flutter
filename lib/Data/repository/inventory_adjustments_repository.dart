@@ -1,6 +1,7 @@
 import 'package:dms_admin/data/model/adjustment_model.dart';
 import 'package:dms_admin/data/model/filter_expression.dart';
 import 'package:dms_admin/data/provider/inventory_adjustments_api.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:meta/meta.dart';
 
 class InventoryAdjustmentsRepository {
@@ -9,8 +10,8 @@ class InventoryAdjustmentsRepository {
   InventoryAdjustmentsRepository({@required this.apiClient})
       : assert(apiClient != null);
 
-  getAll(List<FilterExpression> filterExpressions) {
-    return apiClient.getAll(filterExpressions);
+  getAll(FilterDataChange filterDataChange) {
+    return apiClient.getAll(filterDataChange);
   }
 
   getId(String purchaseOrderId) {

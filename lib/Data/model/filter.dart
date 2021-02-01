@@ -5,14 +5,13 @@ class Filter {
   String name;
   String expressions;
   List<FilterExpression> filterExpressions;
-  bool isSelected;
 
-  Filter(
-      {this.id,
-      this.name,
-      this.expressions,
-      this.filterExpressions,
-      this.isSelected});
+  Filter({
+    this.id,
+    this.name,
+    this.expressions,
+    this.filterExpressions,
+  });
 
   Filter.fromJson(Map<String, dynamic> json) {
     id = json['id'];

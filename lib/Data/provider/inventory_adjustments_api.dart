@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:dms_admin/data/model/adjustment_model.dart';
-import 'package:dms_admin/data/model/filter_expression.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
@@ -12,10 +12,12 @@ class InventoryAdjustmentsApiClient {
   final Dio httpClient;
   InventoryAdjustmentsApiClient({@required this.httpClient});
 
-  getAll(List<FilterExpression> filterExpressions) async {
+  getAll(FilterDataChange filterDataChange) async {
     try {
-      String url =
-          SERVER_URL + baseUrl + '?filter=' + jsonEncode(filterExpressions);
+      String url = SERVER_URL +
+          baseUrl +
+          '?searchText=${filterDataChange.searchText}&filter=' +
+          jsonEncode(filterDataChange.filterExpressions);
       print(url);
       var response = await httpClient.get(url);
       if (response.statusCode == 200) {

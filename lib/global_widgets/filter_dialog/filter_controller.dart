@@ -1,22 +1,18 @@
-import 'package:dms_admin/data/model/filter.dart';
 import 'package:dms_admin/data/model/filter_expression.dart';
+import 'package:dms_admin/data/model/filter_field_name_values.dart';
 import 'package:dms_admin/data/model/filter_template.dart';
-import 'package:dms_admin/data/model/stock.dart';
-import 'package:dms_admin/data/model/product.dart';
-import 'package:dms_admin/data/repository/product_repository.dart';
+import 'package:dms_admin/data/repository/filters_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 class FilterController extends GetxController {
-  final ProductRepository repository;
+  final FiltersRepository repository;
 
   FilterController({@required this.repository}) : assert(repository != null);
   final isBusy = true.obs;
-  List<Stock> stocks;
-  List<Product> products;
   var textBoxEditController = TextEditingController();
-  var filters = FilterTemplate.generateInventoryTransactionModule();
+  var filters = <FilterTemplate>[];
   var selectedFieldNameDisplay = ''.obs;
   var selectedLogicDisplay = ''.obs;
   var selectedValueDisplay = ''.obs;
@@ -26,6 +22,7 @@ class FilterController extends GetxController {
   var filterValues = <String>[].obs;
 
   var isTextBoxNumber = false.obs;
+  var filterFieldNameValues = <FilterFieldNameValues>[];
 
   void setFilterLogics(String value) {
     var items = filters
@@ -55,28 +52,33 @@ class FilterController extends GetxController {
   setFilterValues(String value) {
     var item =
         filters.where((element) => element.fieldNameDisplay == value).first;
-    if (item.isStock == true) {
-      filterValues(
-        stocks.map((e) => e.name).toList(),
-      );
-    }
-    if (item.isProduct == true) {
-      filterValues(
-        products.map((e) => e.name).toList(),
-      );
+    if (item.isList == true) {
+      filterValues(filterFieldNameValues
+          .where((element) => element.fieldName == item.fieldName)
+          .first
+          .filterValues
+          .map((e) => e.value)
+          .toList());
     }
   }
 
-  onInitData(List<Stock> _stocks, List<Product> _products) {
+  onInitData(String module) {
     isBusy(true);
-    stocks = _stocks;
-    products = _products;
-    filterFieldNames(filters.map((e) => e.fieldNameDisplay).toList());
-    selectedFieldNameDisplay(filters[0].fieldNameDisplay);
-    isTextBoxNumber(filters[0].isTextBoxNumber);
-    setFilterLogics(filters[0].fieldNameDisplay);
-    setFilterValues(filters[0].fieldNameDisplay);
-    isBusy(false);
+
+    repository.getDataValues(module).then((data) {
+      filterFieldNameValues = data;
+      filters = FilterTemplate.generateFilterTemplate(module);
+      filterFieldNames(filters.map((e) => e.fieldNameDisplay).toList());
+      selectedFieldNameDisplay(filters[0].fieldNameDisplay);
+      isTextBoxNumber(filters[0].isTextBoxNumber);
+      setFilterLogics(filters[0].fieldNameDisplay);
+      setFilterValues(filters[0].fieldNameDisplay);
+      isBusy(false);
+    }).catchError((e) {
+      Get.snackbar('Error', e.toString());
+      isBusy(false);
+    });
+
     super.onInit();
   }
 
@@ -104,33 +106,20 @@ class FilterController extends GetxController {
       filterExpression.value = textBoxEditController.text;
       filterExpression.expression += filterExpression.value;
     } else {
-      if (fieldNameItem.isStock) {
-        print('is stock');
-        filterExpression.value = stocks
-            .where((element) => element.name == selectedValueDisplay.value)
+      if (fieldNameItem.isList) {
+        filterExpression.value = filterFieldNameValues
+            .where((element) => element.fieldName == filterExpression.fieldName)
+            .first
+            .filterValues
+            .where((element) => element.value == selectedValueDisplay.value)
             .first
             .id;
         filterExpression.expression += '\'${filterExpression.value}\'';
-      }
-      if (fieldNameItem.isProduct) {
-        filterExpression.value = products
-            .where((element) => element.name == selectedValueDisplay.value)
-            .first
-            .id
-            .toString();
-        filterExpression.expression += '${filterExpression.value}';
       }
     }
 
     filterExpression.valueDisplay = selectedValueDisplay.value;
 
-    print('fieldName ' + filterExpression.fieldName);
-    print('fieldNameDisplay ' + filterExpression.fieldNameDisplay);
-    print('logic ' + filterExpression.logic);
-    print('logicDisplay ' + filterExpression.logicDisplay);
-    print('value ' + filterExpression.value);
-    print('valueDisplay ' + filterExpression.valueDisplay);
-    print('expression ' + filterExpression.expression);
     return filterExpression;
   }
 }
