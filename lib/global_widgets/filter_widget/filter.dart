@@ -137,9 +137,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                             prefixIcon: Icon(Icons.search),
                             suffixIcon: null,
                           ),
-                          onChanged: (value) {
-                            updateDataByFilterChange();
-                          },
+                          onSubmitted: (value) => updateDataByFilterChange(),
                         ),
                       ),
                       SizedBox(

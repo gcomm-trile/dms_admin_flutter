@@ -1,4 +1,5 @@
 import 'package:dms_admin/modules/home_page.dart';
+import 'package:dms_admin/modules/home_view/home_view.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_page.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/import/inventory_purchase_order_import.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
@@ -26,17 +27,12 @@ class AppPages {
     ),
     GetPage(
       name: Routes.HOME,
-      page: () => HomePage(),
+      page: () => HomeView(),
     ),
     GetPage(
       name: Routes.VISIT,
       page: () => VisitPage(),
       binding: VisitBinding(),
-    ),
-    GetPage(
-      name: Routes.ORDER,
-      page: () => OrderPage(),
-      binding: OrderBinding(),
     ),
     GetPage(
       name: Routes.ORDER,
