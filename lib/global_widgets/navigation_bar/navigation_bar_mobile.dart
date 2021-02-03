@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'navbar_logo.dart';
 
 class NavigationBarMobile extends StatelessWidget {
-  const NavigationBarMobile({Key key}) : super(key: key);
+  final Function menuOnPressed;
+  const NavigationBarMobile({Key key, this.menuOnPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +15,12 @@ class NavigationBarMobile extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.menu),
-            onPressed: () {},
+            onPressed: () {
+              if (menuOnPressed != null) {
+                print('menu click');
+                menuOnPressed();
+              }
+            },
           ),
           NavBarLogo()
         ],

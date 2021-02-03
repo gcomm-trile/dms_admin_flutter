@@ -1,5 +1,5 @@
 import 'package:dms_admin/global_widgets/my_drawer.dart';
-import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_page.dart';
+import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_view.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/device_screene_type.dart';
@@ -95,8 +95,7 @@ class _HomePageState extends State<HomePage> {
               );
       case DrawModule.INVENTORY_ADJUSTMENTS:
         return selectedFunction == DrawFunction.INDEX
-            ? InventoryAdjustmentsPage(
-                deviceScreenType: _deviceScreenType,
+            ? InventoryAdjustmentsView(
                 onNavigationChanged: (data) {
                   setState(() {
                     id = data.id;

@@ -5,11 +5,14 @@ import 'navigation_bar_mobile.dart';
 import 'navigation_bar_tablet_desktop.dart';
 
 class NavigationBar extends StatelessWidget {
-  const NavigationBar({Key key}) : super(key: key);
+  final Function menuOnPressed;
+  const NavigationBar({Key key, this.menuOnPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: NavigationBarMobile(),
+      mobile: NavigationBarMobile(
+        menuOnPressed: menuOnPressed(),
+      ),
       tablet: NavigationBarTabletDesktop(),
     );
   }

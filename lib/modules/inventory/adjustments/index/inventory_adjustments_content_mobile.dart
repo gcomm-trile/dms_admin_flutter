@@ -7,130 +7,26 @@ import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'inventory_adjustments_controller.dart';
 
-class InventoryAdjustmentsPage extends StatelessWidget {
+class InventoryAdjustmentsContentMobile extends StatelessWidget {
   final InventoryAdjustmentsController controller = Get.find();
   final Function(NavigationCallBackModel data) onNavigationChanged;
-  final DeviceScreenType deviceScreenType;
-  InventoryAdjustmentsPage(
-      {Key key,
-      @required this.deviceScreenType,
-      @required this.onNavigationChanged})
+
+  InventoryAdjustmentsContentMobile(
+      {Key key, @required this.onNavigationChanged})
       : super(key: key);
 
   final sizedBox = SizedBox(
     width: 10,
   );
 
-  desktopWidget(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Danh sách phiếu điều chỉnh',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              RaisedButton(
-                color: Colors.blue,
-                onPressed: () {
-                  onNavigationChanged(NavigationCallBackModel(
-                      module: DrawModule.INVENTORY_ADJUSTMENTS,
-                      function: DrawFunction.NEW,
-                      id: Guid.newGuid.toString()));
-                  // controller.create();
-                },
-                child: Container(
-                  height: 37,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.add_circle_outline,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        'Tạo phiếu điều chỉnh',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          FilterWidget(
-            // filterExpressions: controller.filterExpressions,
-            module: 'inventory_adjustments',
-            filterDataChange: (data) =>
-                controller.updateDataByFilterChange(data),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          GetX<InventoryAdjustmentsController>(
-              init: controller,
-              initState: (state) => controller.refreshData(null),
-              builder: (_) {
-                return controller.isBusy.value == true
-                    ? Expanded(
-                        child: Center(child: CircularProgressIndicator()))
-                    : (controller.adjustments.value.length == 0
-                        ? Expanded(
-                            child: Center(
-                              child: Text('Không có dữ liệu'),
-                            ),
-                          )
-                        : Expanded(
-                            child: Center(
-                                child: Column(
-                              children: [
-                                _buildHeaderListViewSection(),
-                                Divider(
-                                  thickness: 2.0,
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                    separatorBuilder: (context, index) =>
-                                        Divider(
-                                      thickness: 2.0,
-                                    ),
-                                    itemCount:
-                                        controller.adjustments.value.length,
-                                    itemBuilder: (context, index) {
-                                      return _buildRowListViewSection(
-                                          controller.adjustments.value[index]);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )),
-                          ));
-              }),
-        ],
-      ),
-    );
-  }
-
-  mobileWidget(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Stack(children: [
       Column(
         children: [
@@ -229,13 +125,6 @@ class InventoryAdjustmentsPage extends StatelessWidget {
         ),
       )
     ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return deviceScreenType == DeviceScreenType.mobile
-        ? mobileWidget(context)
-        : desktopWidget(context);
   }
 
   _buildHeaderListViewSection() {
