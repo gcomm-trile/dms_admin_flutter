@@ -1,18 +1,22 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
-import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'inventory_purchase_orders_controller.dart';
 
-class InventoryPurchaseOrdersPage extends StatelessWidget {
-  final InventoryPurchaseOrdersController controller =
-      InventoryPurchaseOrdersController(repository: Get.find());
-  InventoryPurchaseOrdersPage({Key key}) : super(key: key);
+class InventoryPurchaseOrdersContentDesktop extends StatelessWidget {
+  final InventoryPurchaseOrdersController controller = Get.find();
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  InventoryPurchaseOrdersContentDesktop({Key key, this.onNavigationChanged})
+      : super(key: key);
 
   final sizedBox = SizedBox(
     width: 10,
@@ -20,93 +24,104 @@ class InventoryPurchaseOrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Row(
-      children: [
-        AppDrawer(selectedModule: 'Mua hàng'),
-        Expanded(
-          child: GetX<InventoryPurchaseOrdersController>(
-            init: controller,
-            initState: (state) => controller.getAll(),
-            builder: (_) {
-              if (controller.isBusy.value == true)
-                return Center(child: CircularProgressIndicator());
-              else {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                'Mua hàng',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              RaisedButton(
+                color: Colors.blue,
+                onPressed: () {
+                  onNavigationChanged(NavigationCallBackModel(
+                      module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                      function: DrawFunction.NEW,
+                      id: Guid.newGuid.toString()));
+                  // controller.create();
+                },
+                child: Container(
+                  height: 37,
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Danh sách phiếu mua hàng',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                          RaisedButton(
-                            color: Colors.blue,
-                            onPressed: () {
-                              controller.createPurchaseOrder();
-                            },
-                            child: Container(
-                              height: 37,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add_circle_outline,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    'Tạo phiếu mua',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.white,
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      _buildHeaderListViewSection(),
-                      Divider(
-                        thickness: 2.0,
-                      ),
-                      Expanded(
-                        child: controller.result.value.length == 0
-                            ? Center(child: Text('Không có dữ liệu'))
-                            : ListView.separated(
-                                separatorBuilder: (context, index) => Divider(
-                                  thickness: 2.0,
-                                ),
-                                shrinkWrap: true,
-                                itemCount: controller.result.value.length,
-                                itemBuilder: (context, index) {
-                                  return _buildRowListViewSection(
-                                      controller.result.value[index]);
-                                },
-                              ),
+                      Text(
+                        'Tạo phiếu mua hàng',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       )
                     ],
                   ),
-                );
-              }
-            },
+                ),
+              )
+            ],
           ),
-        ),
-      ],
-    ));
+          SizedBox(
+            height: 15,
+          ),
+          FilterWidget(
+            // filterExpressions: controller.filterExpressions,
+            module: 'inventory_purchase_orders',
+            filterDataChange: (data) =>
+                controller.updateDataByFilterChange(data),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          GetX<InventoryPurchaseOrdersController>(
+              init: controller,
+              initState: (state) => controller.refreshData(null),
+              builder: (_) {
+                return controller.isBusy.value == true
+                    ? Expanded(
+                        child: Center(child: CircularProgressIndicator()))
+                    : (controller.result.value.length == 0
+                        ? Expanded(
+                            child: Center(
+                              child: Text('Không có dữ liệu'),
+                            ),
+                          )
+                        : Expanded(
+                            child: Center(
+                                child: Column(
+                              children: [
+                                _buildHeaderListViewSection(),
+                                Divider(
+                                  thickness: 2.0,
+                                ),
+                                Expanded(
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) =>
+                                        Divider(
+                                      thickness: 2.0,
+                                    ),
+                                    itemCount: controller.result.value.length,
+                                    itemBuilder: (context, index) {
+                                      return _buildRowListViewSection(
+                                          controller.result.value[index]);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )),
+                          ));
+              }),
+        ],
+      ),
+    );
   }
 
   _buildHeaderListViewSection() {

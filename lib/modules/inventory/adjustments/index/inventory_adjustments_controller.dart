@@ -12,14 +12,7 @@ class InventoryAdjustmentsController extends GetxController {
       : assert(repository != null);
 
   final isBusy = true.obs;
-  var adjustments = Rx<List<AdjustmentModel>>();
-  // var filters = List<Filter>();
-  // var filterExpressions = List<FilterExpression>().obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  var result = Rx<List<AdjustmentModel>>();
 
   refreshData(filterDataChange) {
     isBusy(true);
@@ -27,7 +20,7 @@ class InventoryAdjustmentsController extends GetxController {
       filterDataChange = FilterDataChange(
           searchText: '', filterExpressions: <FilterExpression>[]);
     repository.getAll(filterDataChange).then((data) {
-      adjustments.value = data.adjustments;
+      result.value = data.adjustments;
       isBusy(false);
     }).catchError((e) {
       Get.snackbar('Error', e.toString());

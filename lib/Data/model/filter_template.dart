@@ -106,6 +106,38 @@ class FilterTemplate {
         ),
       );
     }
+    if (module == 'inventory_purchase_orders') {
+      result.add(
+        FilterTemplate(
+          module: module,
+          fieldName: 'stock_id',
+          fieldNameDisplay: 'Kho',
+          isList: true,
+          isTextBoxNumber: false,
+          logics: [
+            LogicTemplate(
+              logic: '=',
+              logicDisplay: 'là',
+            )
+          ],
+        ),
+      );
+      result.add(
+        FilterTemplate(
+          module: module,
+          fieldName: 'purchase_order_status_id',
+          fieldNameDisplay: 'Tình trạng',
+          isList: true,
+          isTextBoxNumber: false,
+          logics: [
+            LogicTemplate(
+              logic: '=',
+              logicDisplay: 'là',
+            )
+          ],
+        ),
+      );
+    }
     return result;
   }
 }

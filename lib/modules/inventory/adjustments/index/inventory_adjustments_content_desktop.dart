@@ -1,17 +1,14 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/adjustment_model.dart';
-
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
-import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'inventory_adjustments_controller.dart';
 
 class InventoryAdjustmentsContentDesktop extends StatelessWidget {
@@ -92,7 +89,7 @@ class InventoryAdjustmentsContentDesktop extends StatelessWidget {
                 return controller.isBusy.value == true
                     ? Expanded(
                         child: Center(child: CircularProgressIndicator()))
-                    : (controller.adjustments.value.length == 0
+                    : (controller.result.value.length == 0
                         ? Expanded(
                             child: Center(
                               child: Text('Không có dữ liệu'),
@@ -113,10 +110,10 @@ class InventoryAdjustmentsContentDesktop extends StatelessWidget {
                                       thickness: 2.0,
                                     ),
                                     itemCount:
-                                        controller.adjustments.value.length,
+                                        controller.result.value.length,
                                     itemBuilder: (context, index) {
                                       return _buildRowListViewSection(
-                                          controller.adjustments.value[index]);
+                                          controller.result.value[index]);
                                     },
                                   ),
                                 ),

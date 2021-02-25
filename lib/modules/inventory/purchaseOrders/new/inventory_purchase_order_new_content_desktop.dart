@@ -1,23 +1,24 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
-
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:get/get.dart';
 
-class InventoryPurchaseOrderNewPage extends StatelessWidget {
+class InventoryPurchaseOrderNewContentDesktop extends StatelessWidget {
   final sizedBox = SizedBox(
     width: 10,
   );
+  final Function(NavigationCallBackModel data) onNavigationChanged;
   final purchaseOrderId;
   final InventoryPurchaseOrderNewController controller =
       InventoryPurchaseOrderNewController(repository: Get.find());
-  InventoryPurchaseOrderNewPage({Key key, @required this.purchaseOrderId})
+  InventoryPurchaseOrderNewContentDesktop(
+      {Key key, @required this.purchaseOrderId, this.onNavigationChanged})
       : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(

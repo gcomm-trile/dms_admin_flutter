@@ -81,7 +81,6 @@ class _FilterWidgetState extends State<FilterWidget> {
                         child: InkWell(
                           onTap: () => selectedFilter(filters[index], index),
                           child: selectedIndex == index
-                              // filters[index].isSelected == true
                               ? Column(
                                   children: [
                                     Text(

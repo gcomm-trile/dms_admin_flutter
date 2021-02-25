@@ -1,11 +1,11 @@
+import 'package:dms_admin/Helper/UI.dart';
+import 'package:dms_admin/data/model/filter_expression.dart';
 import 'package:dms_admin/data/model/purchase_order.dart';
 import 'package:dms_admin/data/repository/inventory_purchase_orders_repository.dart';
-
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_guid/flutter_guid.dart';
 import '../import/inventory_purchase_order_import.dart';
-import '../new/inventory_purchase_order_new.dart';
 
 class InventoryPurchaseOrdersController extends GetxController {
   final InventoryPurchaseOrdersRepository repository;
@@ -15,31 +15,33 @@ class InventoryPurchaseOrdersController extends GetxController {
   final isBusy = true.obs;
   Rx<List<PurchaseOrder>> result = Rx<List<PurchaseOrder>>();
 
-  void getAll() {
-    print('run');
-    // log('busy' + isBusy.value.toString());
-    isBusy(true);
-    // log('busy' + isBusy.value.toString());
-    repository.getAll().then((data) {
-      result.value = data;
-      isBusy(false);
-      // log('busy' + irsBusy.value.toString());
-      print('return data  ');
-    }).catchError((e) {
-      Get.snackbar('Error', e.toString());
-      isBusy(false);
-    });
-  }
-
-  void createPurchaseOrder() {
-    Get.to(InventoryPurchaseOrderNewPage(
-      purchaseOrderId: Guid.newGuid.toString(),
-    ));
-  }
+  // void createPurchaseOrder() {
+  //   Get.to(InventoryPurchaseOrderNewView(
+  //     purchaseOrderId: Guid.newGuid.toString(),
+  //   ));
+  // }
 
   void goToDetail(PurchaseOrder data) {
     Get.to(InventoryPurchaseOrderImportPage(
       id: data.id,
     ));
+  }
+
+  updateDataByFilterChange(FilterDataChange filterDataChange) {
+    refreshData(filterDataChange);
+  }
+
+  refreshData(filterDataChange) {
+    isBusy(true);
+    if (filterDataChange == null)
+      filterDataChange = FilterDataChange(
+          searchText: '', filterExpressions: <FilterExpression>[]);
+    repository.getAll(filterDataChange).then((data) {
+      result.value = data;
+      isBusy(false);
+    }).catchError((e) {
+      Get.snackbar('Error', e.toString());
+      isBusy(false);
+    }).catchError((error) => UI.showError(error));
   }
 }

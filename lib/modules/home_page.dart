@@ -1,10 +1,14 @@
+import 'package:dms_admin/data/model/inventory_purchase_order.dart';
 import 'package:dms_admin/global_widgets/my_drawer.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_view.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/import/inventory_purchase_order_import.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders_view.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:flutter/material.dart';
 import 'inventory/adjustments/new/inventory_adjustment_new_page.dart';
+import 'inventory/purchaseOrders/new/inventory_purchase_order_new_view.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -16,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  String selectedModule = DrawModule.INVENTORY_ADJUSTMENTS;
+  String selectedModule = DrawModule.INVENTORY_PURCHASE_ORDERS;
   String selectedFunction = DrawFunction.INDEX;
   String id = '';
   homePageMobile(BuildContext context) {
@@ -108,6 +112,31 @@ class _HomePageState extends State<HomePage> {
                 ? InventoryAdjustmentNewPage(
                     id: id,
                     deviceScreenType: _deviceScreenType,
+                    onNavigationChanged: (data) {
+                      setState(() {
+                        id = data.id;
+                        selectedModule = data.module;
+                        selectedFunction = data.function;
+                      });
+                    },
+                  )
+                : Container();
+
+        break;
+      case DrawModule.INVENTORY_PURCHASE_ORDERS:
+        return selectedFunction == DrawFunction.INDEX
+            ? InventoryPurchaseOrdersView(
+                onNavigationChanged: (data) {
+                  setState(() {
+                    id = data.id;
+                    selectedModule = data.module;
+                    selectedFunction = data.function;
+                  });
+                },
+              )
+            : selectedFunction == DrawFunction.NEW
+                ? InventoryPurchaseOrderNewView(
+                    purchaseOrderId: id,
                     onNavigationChanged: (data) {
                       setState(() {
                         id = data.id;

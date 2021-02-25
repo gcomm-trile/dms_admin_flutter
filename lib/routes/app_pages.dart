@@ -1,8 +1,7 @@
 import 'package:dms_admin/modules/home_page.dart';
-import 'package:dms_admin/modules/home_view/home_view.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_view.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/import/inventory_purchase_order_import.dart';
-import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders.dart';
+import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders_view.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_page.dart';
@@ -46,7 +45,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.INVENTORY_PURCHASE_ORDERS,
-      page: () => InventoryPurchaseOrdersPage(),
+      page: () => InventoryPurchaseOrdersView(),
     ),
     GetPage(
       name: Routes.INVENTORY_TRANSFERS,

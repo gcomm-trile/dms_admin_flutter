@@ -1,16 +1,23 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
+import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'inventory_purchase_order_import_controller.dart';
 
 class InventoryPurchaseOrderImportPage extends StatefulWidget {
   final id;
-
-  InventoryPurchaseOrderImportPage({Key key, @required this.id})
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  final DeviceScreenType deviceScreenType;
+  InventoryPurchaseOrderImportPage(
+      {Key key,
+      @required this.id,
+      this.deviceScreenType,
+      this.onNavigationChanged})
       : super(key: key);
 
   @override

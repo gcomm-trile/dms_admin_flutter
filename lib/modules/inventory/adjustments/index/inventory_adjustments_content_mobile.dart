@@ -2,6 +2,7 @@ import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/adjustment_model.dart';
 
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
+import 'package:dms_admin/global_widgets/header_appbar/header_appbar_mobile.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/color_helper.dart';
@@ -30,34 +31,7 @@ class InventoryAdjustmentsContentMobile extends StatelessWidget {
     return Stack(children: [
       Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blue[400], ColorHelper.fromHex('#042863')],
-            )),
-            child: SizedBox(
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 50,
-                  ),
-                  Text(
-                    'Điều chỉnh',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
-            ),
-          ),
+          HeaderAppBarMobile(title: 'Điều chỉnh'),
           SizedBox(
             height: 10,
           ),
@@ -77,7 +51,7 @@ class InventoryAdjustmentsContentMobile extends StatelessWidget {
                 return controller.isBusy.value == true
                     ? Expanded(
                         child: Center(child: CircularProgressIndicator()))
-                    : (controller.adjustments.value.length == 0
+                    : (controller.result.value.length == 0
                         ? Expanded(
                             child: Center(
                               child: Text('Không có dữ liệu'),
@@ -97,11 +71,10 @@ class InventoryAdjustmentsContentMobile extends StatelessWidget {
                                         Divider(
                                       thickness: 2.0,
                                     ),
-                                    itemCount:
-                                        controller.adjustments.value.length,
+                                    itemCount: controller.result.value.length,
                                     itemBuilder: (context, index) {
                                       return _buildRowListViewSection(
-                                          controller.adjustments.value[index]);
+                                          controller.result.value[index]);
                                     },
                                   ),
                                 ),

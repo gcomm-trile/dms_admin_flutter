@@ -23,8 +23,6 @@ class FilterDialog extends StatelessWidget {
       init: controller,
       initState: (state) => controller.onInitData(module),
       builder: (_) {
-        print('rebuild');
-
         return controller.isBusy.value == true
             ? Container(
                 height: 250, child: Center(child: CircularProgressIndicator()))

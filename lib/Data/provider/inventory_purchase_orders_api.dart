@@ -3,31 +3,33 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import 'package:dms_admin/data/model/purchase_order.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
 // const baseUrl = 'inventory/transactions';
-const baseUrl = 'inventory/purchaseorders';
+const baseUrl = 'inventory/purchaseorder';
 
 class InventoryPurchaseOrdersApiClient {
   final Dio httpClient;
   InventoryPurchaseOrdersApiClient({@required this.httpClient});
 
-  getAll() async {
-    print('session id ${httpClient.options.headers['Session-ID']}');
+  getAll(FilterDataChange filterDataChange) async {
     try {
-      print('call ' + SERVER_URL + baseUrl);
-      var response = await httpClient.get(SERVER_URL + baseUrl);
+      String url = SERVER_URL +
+          baseUrl +
+          '?searchText=${filterDataChange.searchText}&filter=' +
+          jsonEncode(filterDataChange.filterExpressions);
+      print(url);
+      var response = await httpClient.get(url);
       if (response.statusCode == 200) {
-        var result = (response.data as List)
+        return (response.data as List)
             .map((x) => PurchaseOrder.fromJson(x))
             .toList();
-        print('result count ' + result.length.toString());
-        return result;
       } else
-        print('error -get');
+        throw Exception('Failed to load jobs from API');
     } catch (_) {
-      print(_.toString());
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 
