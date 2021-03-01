@@ -29,12 +29,10 @@ class InventoryTransfersApiClient {
 
   getId(String id) async {
     try {
-      print('call 1 ' + SERVER_URL + baseUrl + '/' + id);
+      print('call ' + SERVER_URL + baseUrl + '/' + id);
       var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
-        print(response.data);
         var models = Transfer.fromJson(response.data);
-        print('return model');
         return models; //Transfer.fromJson(response.data);
       } else
         print('error -get');

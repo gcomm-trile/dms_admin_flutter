@@ -21,7 +21,9 @@ class InventoryAdjustmentsApiClient {
       print(url);
       var response = await httpClient.get(url);
       if (response.statusCode == 200) {
-        return AdjustmentListModel.fromJson(response.data);
+        return (response.data as List)
+            .map((x) => AdjustmentModel.fromJson(x))
+            .toList();
       } else
         throw Exception('Failed to load jobs from API');
     } catch (_) {

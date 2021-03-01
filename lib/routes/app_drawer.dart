@@ -8,4 +8,5 @@ abstract class DrawModule {
 abstract class DrawFunction {
   static const INDEX = 'index';
   static const NEW = 'new';
+  static const IMPORT = 'import';
 }

@@ -4,7 +4,7 @@ import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_guid/flutter_guid.dart';
-import '../import/inventory_transfer_import_page.dart';
+import '../import/inventory_transfer_import_view.dart';
 
 class InventoryTransfersController extends GetxController {
   final InventoryTransfersRepository repository;
@@ -28,23 +28,5 @@ class InventoryTransfersController extends GetxController {
       Get.snackbar('Error', e.toString());
       isBusy(false);
     });
-  }
-
-  void goToDetailPage(Transfer data) {
-    Get.to(InventoryTransferNewPage(
-      id: data.id,
-    ));
-  }
-
-  void createTransfer() {
-    Get.to(InventoryTransferNewPage(
-      id: Guid.newGuid.toString(),
-    ));
-  }
-
-  void gotoImportPage(Transfer data) {
-    Get.to(InventoryTransferImportPage(
-      id: data.id,
-    ));
   }
 }

@@ -36,20 +36,16 @@ class InventoryTransferImportController extends GetxController {
     });
   }
 
-  void save() {
-    repository
-        .nhanOrHuy(result.value.id, result.value.status == 2 ? 'nhan' : 'huy')
-        .then((data) {
-      if (data.toString().isEmpty) {
-        UI.showSuccess('Đã cập nhật thành công');
-        Get.offAndToNamed(Routes.INVENTORY_TRANSFERS);
-      } else {
-        UI.showError(data.toString());
-      }
-    }).catchError((e) {
-      print(e.toString());
-      Get.snackbar('Error', e.toString());
-    });
+  save() async {
+    var data = await repository.nhanOrHuy(
+        result.value.id, result.value.status == 2 ? 'nhan' : 'huy');
+    if (data.toString().isEmpty) {
+      UI.showSuccess('Đã tạo thành công');
+      return true;
+    } else {
+      UI.showError(data.toString());
+      return false;
+    }
   }
 
   sumQtyOut() {

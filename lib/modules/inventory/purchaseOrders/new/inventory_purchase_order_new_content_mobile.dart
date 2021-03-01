@@ -1,6 +1,7 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -12,16 +13,16 @@ class InventoryPurchaseOrderNewContentMobile extends StatelessWidget {
   final Function(NavigationCallBackModel data) onNavigationChanged;
   final sizedBox = SizedBox(width: 10);
   final double widthQuantibox = 80.0;
-  final purchaseOrderId;
+  final id;
   final InventoryPurchaseOrderNewController controller = Get.find();
   InventoryPurchaseOrderNewContentMobile(
-      {Key key, @required this.purchaseOrderId, this.onNavigationChanged})
+      {Key key, @required this.id, this.onNavigationChanged})
       : super(key: key);
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
       child: GetX<InventoryPurchaseOrderNewController>(
         init: controller,
-        initState: (state) => controller.getId(purchaseOrderId),
+        initState: (state) => controller.getId(id),
         builder: (_) {
           return controller.isBusy.value == true
               ? Center(child: CircularProgressIndicator())
@@ -279,8 +280,14 @@ class InventoryPurchaseOrderNewContentMobile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 7),
             child: RaisedButton(
-              onPressed: () {
-                controller.save();
+              onPressed: () async {
+                var data = await controller.save();
+                if (data == true) {
+                  onNavigationChanged(NavigationCallBackModel(
+                      module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                      function: DrawFunction.INDEX,
+                      id: ''));
+                }
               },
               color: Colors.blue,
               child: Container(

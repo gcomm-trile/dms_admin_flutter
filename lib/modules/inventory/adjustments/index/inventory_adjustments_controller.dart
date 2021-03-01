@@ -20,7 +20,7 @@ class InventoryAdjustmentsController extends GetxController {
       filterDataChange = FilterDataChange(
           searchText: '', filterExpressions: <FilterExpression>[]);
     repository.getAll(filterDataChange).then((data) {
-      result.value = data.adjustments;
+      result.value = data;
       isBusy(false);
     }).catchError((e) {
       Get.snackbar('Error', e.toString());

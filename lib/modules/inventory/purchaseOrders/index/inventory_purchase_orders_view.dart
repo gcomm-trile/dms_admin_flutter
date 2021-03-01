@@ -15,6 +15,7 @@ class InventoryPurchaseOrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) { 
+   
     return ScreenTypeLayout(
       mobile: InventoryPurchaseOrdersContentMobile(
         onNavigationChanged: (data) => onNavigationChanged(data),

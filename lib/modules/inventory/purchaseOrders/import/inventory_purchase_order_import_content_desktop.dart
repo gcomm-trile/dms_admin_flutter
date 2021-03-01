@@ -1,44 +1,27 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
-import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
-
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'inventory_purchase_order_import_controller.dart';
 
-class InventoryPurchaseOrderImportPage extends StatefulWidget {
+class InventoryPurchaseOrderImportContentDesktop extends StatelessWidget {
   final id;
   final Function(NavigationCallBackModel data) onNavigationChanged;
-  final DeviceScreenType deviceScreenType;
-  InventoryPurchaseOrderImportPage(
-      {Key key,
-      @required this.id,
-      this.deviceScreenType,
-      this.onNavigationChanged})
+  InventoryPurchaseOrderImportContentDesktop(
+      {Key key, @required this.id, this.onNavigationChanged})
       : super(key: key);
 
-  @override
-  _InventoryPurchaseOrderImportPageState createState() =>
-      _InventoryPurchaseOrderImportPageState();
-}
-
-class _InventoryPurchaseOrderImportPageState
-    extends State<InventoryPurchaseOrderImportPage> {
-  final InventoryPurchaseOrderImportController controller =
-      InventoryPurchaseOrderImportController(repository: Get.find());
+  final InventoryPurchaseOrderImportController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          AppDrawer(selectedModule: 'Mua hàng'),
-          Expanded(child: _buildBodySection()),
-        ],
-      ),
+    return Row(
+      children: [
+        Expanded(child: _buildBodySection()),
+      ],
     );
   }
 
@@ -48,7 +31,6 @@ class _InventoryPurchaseOrderImportPageState
   );
   _buildRowListViewSection(int index) {
     var product = controller.result.value.products[index];
-
     return Row(children: <Widget>[
       Checkbox(
         value: product.inQty > 0 ? true : false,
@@ -62,12 +44,6 @@ class _InventoryPurchaseOrderImportPageState
               .setValue(value == true ? product.orderQty : 0);
         },
       ),
-      Image.network(
-        product.imagePath,
-        width: kSizeProductImageWidth,
-        height: kSizeProductImageHeight,
-      ),
-      sizedBox,
       Expanded(
         child: Container(child: Text(product.name)),
       ),
@@ -102,7 +78,7 @@ class _InventoryPurchaseOrderImportPageState
       ),
       sizedBox,
       Container(
-        width: 80,
+        width: 100,
         child: Row(
           children: [
             Container(
@@ -139,13 +115,6 @@ class _InventoryPurchaseOrderImportPageState
           kNumberFormat.format(product.orderPrice) + ' đ',
         ),
       ),
-      sizedBox,
-      Container(
-        width: 100,
-        child: Text(
-          kNumberFormat.format(product.orderPrice * product.inQty) + ' đ',
-        ),
-      )
     ]);
   }
 
@@ -190,7 +159,7 @@ class _InventoryPurchaseOrderImportPageState
         ),
         sizedBox,
         Container(
-          width: 80,
+          width: 100,
           child: Text(
             'Trong kho',
             textAlign: TextAlign.start,
@@ -206,19 +175,6 @@ class _InventoryPurchaseOrderImportPageState
           width: 80,
           child: Text(
             'Giá',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-          ),
-        ),
-        sizedBox,
-        Container(
-          width: 100,
-          child: Text(
-            'Thành tiền',
             textAlign: TextAlign.start,
             style: TextStyle(
               color: Colors.black,
@@ -255,7 +211,7 @@ class _InventoryPurchaseOrderImportPageState
       child: Row(
         children: [
           Text(
-            'Chi tiết phiếu mua hàng',
+            'Nhận hàng',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 20,
@@ -264,8 +220,15 @@ class _InventoryPurchaseOrderImportPageState
           ),
           Expanded(child: Container()),
           RaisedButton(
-            onPressed: () {
-              controller.import();
+            onPressed: () async {
+              var data = await controller.save();
+            
+              if (data == true) {
+                onNavigationChanged(NavigationCallBackModel(
+                    module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                    function: DrawFunction.INDEX,
+                    id: ''));
+              }
             },
             color: Colors.blue,
             child: Container(
@@ -378,7 +341,7 @@ class _InventoryPurchaseOrderImportPageState
   _buildBodySection() {
     return GetX<InventoryPurchaseOrderImportController>(
       init: controller,
-      initState: (state) => controller.getId(widget.id),
+      initState: (state) => controller.getId(id),
       builder: (_) {
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())

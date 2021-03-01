@@ -1,7 +1,7 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
-import 'package:dms_admin/global_widgets/drawer.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -14,20 +14,16 @@ class InventoryPurchaseOrderNewContentDesktop extends StatelessWidget {
     width: 10,
   );
   final Function(NavigationCallBackModel data) onNavigationChanged;
-  final purchaseOrderId;
-  final InventoryPurchaseOrderNewController controller =
-      InventoryPurchaseOrderNewController(repository: Get.find());
+  final id;
+  final InventoryPurchaseOrderNewController controller = Get.find();
   InventoryPurchaseOrderNewContentDesktop(
-      {Key key, @required this.purchaseOrderId, this.onNavigationChanged})
+      {Key key, @required this.id, this.onNavigationChanged})
       : super(key: key);
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          AppDrawer(selectedModule: 'Mua hàng'),
-          Expanded(child: _buildBodySection(context)),
-        ],
-      ),
+    return Row(
+      children: [
+        Expanded(child: _buildBodySection(context)),
+      ],
     );
   }
 
@@ -36,14 +32,6 @@ class InventoryPurchaseOrderNewContentDesktop extends StatelessWidget {
   _buildRowListViewSection(int index) {
     var product = controller.products[index];
     return Row(children: <Widget>[
-      Image.network(
-        product.imagePath,
-        width: kSizeProductImageWidth,
-        height: kSizeProductImageHeight,
-      ),
-      SizedBox(
-        width: 10,
-      ),
       Expanded(
         child: Container(child: Text(product.name)),
       ),
@@ -199,8 +187,14 @@ class InventoryPurchaseOrderNewContentDesktop extends StatelessWidget {
           ),
           Expanded(child: Container()),
           RaisedButton(
-            onPressed: () {
-              controller.save();
+            onPressed: () async {
+              var data = await controller.save();
+              if (data == true) {
+                onNavigationChanged(NavigationCallBackModel(
+                    module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                    function: DrawFunction.INDEX,
+                    id: ''));
+              }
             },
             color: Colors.blue,
             child: Container(
@@ -338,10 +332,8 @@ class InventoryPurchaseOrderNewContentDesktop extends StatelessWidget {
   _buildBodySection(BuildContext context) {
     return GetX<InventoryPurchaseOrderNewController>(
       init: controller,
-      initState: (state) => controller.getId(purchaseOrderId),
+      initState: (state) => controller.getId(id),
       builder: (_) {
-        print('rebuild');
-
         return controller.isBusy.value == true
             ? Center(child: CircularProgressIndicator())
             : Column(

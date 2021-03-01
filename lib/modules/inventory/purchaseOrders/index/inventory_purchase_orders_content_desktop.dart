@@ -194,7 +194,10 @@ class InventoryPurchaseOrdersContentDesktop extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              controller.goToDetail(data);
+              onNavigationChanged(NavigationCallBackModel(
+                  module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                  function: DrawFunction.IMPORT,
+                  id: data.id));
             },
             child: Row(
               children: [

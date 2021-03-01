@@ -1,17 +1,20 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/transfer.dart';
-import 'package:dms_admin/global_widgets/drawer.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
 import 'inventory_transfers_controller.dart';
 
-class InventoryTransfersPage extends StatelessWidget {
-  final InventoryTransfersController controller =
-      InventoryTransfersController(repository: Get.find());
-  InventoryTransfersPage({Key key}) : super(key: key);
+class InventoryTransfersContentDesktop extends StatelessWidget {
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  final InventoryTransfersController controller = Get.find();
+  InventoryTransfersContentDesktop({Key key, this.onNavigationChanged})
+      : super(key: key);
 
   final sizedBox = SizedBox(
     width: 10,
@@ -19,10 +22,8 @@ class InventoryTransfersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Row(
+    return Row(
       children: [
-        AppDrawer(selectedModule: 'Điều chuyển'),
         Expanded(
           child: GetX<InventoryTransfersController>(
             init: controller,
@@ -38,7 +39,7 @@ class InventoryTransfersPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Danh sách phiếu điều chuyển',
+                            'Điều chuyển',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
@@ -50,7 +51,10 @@ class InventoryTransfersPage extends StatelessWidget {
                           RaisedButton(
                             color: Colors.blue,
                             onPressed: () {
-                              controller.createTransfer();
+                              onNavigationChanged(NavigationCallBackModel(
+                                  module: DrawModule.INVENTORY_TRANSFERS,
+                                  function: DrawFunction.NEW,
+                                  id: Guid.newGuid.toString()));
                             },
                             child: Container(
                               height: 37,
@@ -105,7 +109,7 @@ class InventoryTransfersPage extends StatelessWidget {
           ),
         ),
       ],
-    ));
+    );
   }
 
   _buildHeaderListViewSection() {
@@ -176,8 +180,10 @@ class InventoryTransfersPage extends StatelessWidget {
           (data.canReceived == true || data.canCancel == true)
               ? InkWell(
                   onTap: () {
-                    print('call import');
-                    controller.gotoImportPage(data);
+                    onNavigationChanged(NavigationCallBackModel(
+                        module: DrawModule.INVENTORY_TRANSFERS,
+                        function: DrawFunction.IMPORT,
+                        id: data.id));
                   },
                   child: Row(
                     children: [
@@ -266,7 +272,12 @@ class InventoryTransfersPage extends StatelessWidget {
                   ),
                   onTap: () {
                     print('call detail');
-                    if (data.canEdit) controller.goToDetailPage(data);
+                    if (data.canEdit) {
+                      onNavigationChanged(NavigationCallBackModel(
+                          module: DrawModule.INVENTORY_TRANSFERS,
+                          function: DrawFunction.NEW,
+                          id: data.id));
+                    }
                   },
                 )
               : Container(

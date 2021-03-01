@@ -5,7 +5,7 @@ import 'package:dms_admin/data/repository/inventory_purchase_orders_repository.d
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import '../import/inventory_purchase_order_import.dart';
+import '../import/inventory_purchase_order_import_view.dart';
 
 class InventoryPurchaseOrdersController extends GetxController {
   final InventoryPurchaseOrdersRepository repository;
@@ -22,9 +22,9 @@ class InventoryPurchaseOrdersController extends GetxController {
   // }
 
   void goToDetail(PurchaseOrder data) {
-    Get.to(InventoryPurchaseOrderImportPage(
-      id: data.id,
-    ));
+    // Get.to(InventoryPurchaseOrderImportPage(
+    //   id: data.id,
+    // ));
   }
 
   updateDataByFilterChange(FilterDataChange filterDataChange) {

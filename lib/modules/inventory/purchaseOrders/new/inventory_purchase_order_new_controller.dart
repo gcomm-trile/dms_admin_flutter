@@ -29,11 +29,11 @@ class InventoryPurchaseOrderNewController extends GetxController {
   Rx<PurchaseOrder> result = Rx<PurchaseOrder>();
   Rx<DateTime> planDate = DateTime.now().obs;
   var products = <Product>[].obs;
-  final vendor = Rx<Vendor>();
-  final stock = Rx<Stock>();
+  var vendor = Rx<Vendor>();
+  var stock = Rx<Stock>();
 
   void getId(String id) {
-    print('run');
+    print('run ' + id);
     isBusy(true);
     repository.getId(id).then((data) {
       if (data == null) {
@@ -42,6 +42,9 @@ class InventoryPurchaseOrderNewController extends GetxController {
       } else {
         result.value = data;
       }
+      products.clear();
+      vendor = Rx<Vendor>();
+      stock = Rx<Stock>();
       result.value.id = id;
       isBusy(false);
     }).catchError((e) {
@@ -136,40 +139,36 @@ class InventoryPurchaseOrderNewController extends GetxController {
         .length;
   }
 
-  void save() {
+  save() async {
     if (products == null || products.length == 0) {
       UI.showError('Chọn sản phẩm cần mua hàng');
-      return;
+      return false;
     } else {
       result.value.products = products;
     }
 
     if (stock.value == null || stock.value.id == null) {
       UI.showError('Chọn kho cần mua hàng');
-      return;
+      return false;
     } else {
       result.value.inStockId = stock.value.id;
     }
     if (vendor.value == null || vendor.value.id == null) {
       UI.showError('Chọn nhà cung cấp cần mua hàng');
-      return;
+      return false;
     } else {
       result.value.vendorId = vendor.value.id;
     }
     result.value.planDate = planDate.value;
 
-    repository.add(result.value).then((data) {
-      print(data);
-      if (data.toString().isEmpty) {
-        UI.showSuccess('Đã tạo thành công');
-        Get.offAndToNamed(Routes.INVENTORY_PURCHASE_ORDERS);
-      } else {
-        UI.showError(data.toString());
-      }
-    }).catchError((e) {
-      print(e.toString());
-      Get.snackbar('Error', e.toString());
-    });
+    var data = await repository.add(result.value);
+    if (data.toString().isEmpty) {
+      UI.showSuccess('Đã tạo thành công');
+      return true;
+    } else {
+      UI.showError(data.toString());
+      return false;
+    }
   }
 
   void setPriceImported(int index, String value) {

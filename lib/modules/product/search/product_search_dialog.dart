@@ -132,14 +132,6 @@ class ProductSearchDialog extends StatelessWidget {
                                                       product, value);
                                                 },
                                               )),
-                                          Image.network(
-                                            product.imagePath,
-                                            width: kSizeProductImageWidth,
-                                            height: kSizeProductImageHeight,
-                                          ),
-                                          SizedBox(
-                                            width: 30,
-                                          ),
                                           Expanded(
                                             child: Text(
                                               product.name,

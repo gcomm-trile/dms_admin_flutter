@@ -1,27 +1,24 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
-import 'package:dms_admin/modules/inventory/purchaseOrders/new/inventory_purchase_order_new_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'inventory_purchase_order_new_content_desktop.dart';
-import 'inventory_purchase_order_new_content_mobile.dart';
+import 'inventory_purchase_order_import_content_desktop.dart';
+import 'inventory_purchase_order_import_content_mobile.dart';
 
-class InventoryPurchaseOrderNewView extends StatelessWidget {
+class InventoryPurchaseOrderImportView extends StatelessWidget {
   final id;
   final Function(NavigationCallBackModel data) onNavigationChanged;
-
-  InventoryPurchaseOrderNewView(
-      {Key key, @required this.id, @required this.onNavigationChanged})
+  const InventoryPurchaseOrderImportView(
+      {Key key, this.onNavigationChanged, this.id})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: InventoryPurchaseOrderNewContentMobile(
+      mobile: InventoryPurchaseOrderImportContentMobile(
         id: id,
         onNavigationChanged: (data) => onNavigationChanged(data),
       ),
-      tablet: InventoryPurchaseOrderNewContentDesktop(
+      tablet: InventoryPurchaseOrderImportContentDesktop(
         id: id,
         onNavigationChanged: (data) => onNavigationChanged(data),
       ),

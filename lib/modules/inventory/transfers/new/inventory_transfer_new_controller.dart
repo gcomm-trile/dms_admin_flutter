@@ -37,9 +37,11 @@ class InventoryTransferNewController extends GetxController {
 
   void getId(String id) {
     isBusy(true);
+    print('call getId' + id);
     repository.getId(id).then((data) {
       result.value = data;
       result.value.id = id;
+      products.clear();
       if (result.value.products != null) {
         products(result.value.products);
         for (var item in products) {
@@ -52,7 +54,7 @@ class InventoryTransferNewController extends GetxController {
         result.value.planDate = DateTime.now();
       }
       planDate(result.value.planDate);
-
+      outStocks.clear();
       for (var item in result.value.outStocks) {
         outStocks.add(item.name);
       }
@@ -62,7 +64,7 @@ class InventoryTransferNewController extends GetxController {
       } else {
         selectedOutStock(result.value.outStockName);
       }
-
+      inStocks.clear();
       for (var item in result.value.inStocks) {
         if (item.name != selectedOutStock.value) inStocks.add(item.name);
       }
@@ -129,7 +131,7 @@ class InventoryTransferNewController extends GetxController {
         .length;
   }
 
-  void save(int status) {
+  save(int status) async {
     if (products == null || products.length == 0) {
       UI.showError('Chọn sản phẩm cần điều chuyển');
       return;
@@ -148,18 +150,14 @@ class InventoryTransferNewController extends GetxController {
     result.value.refDocumentNote = soThamChieuTextEditController.text;
     result.value.note = thongTinGhiChuTextEditController.text;
 
-    repository.add(result.value, status).then((data) {
-      print(data);
-      if (data.toString().isEmpty) {
-        UI.showSuccess('Đã tạo thành công');
-        Get.offAndToNamed(Routes.INVENTORY_TRANSFERS);
-      } else {
-        UI.showError(data.toString());
-      }
-    }).catchError((e) {
-      print(e.toString());
-      Get.snackbar('Error', e.toString());
-    });
+    var data = await repository.add(result.value, status);
+    if (data.toString().isEmpty) {
+      UI.showSuccess('Đã tạo thành công');
+      return true;
+    } else {
+      UI.showError(data.toString());
+      return false;
+    }
   }
 
   void setPriceImported(int index, String value) {

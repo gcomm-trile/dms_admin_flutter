@@ -6,7 +6,6 @@ import 'package:dms_admin/data/model/stock.dart';
 import 'package:dms_admin/data/repository/inventory_adjustments_repository.dart';
 import 'package:dms_admin/global_widgets/number_in_dec/number_increment_decrement.dart';
 import 'package:dms_admin/modules/product/search/product_search_dialog.dart';
-import 'package:dms_admin/routes/app_pages.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

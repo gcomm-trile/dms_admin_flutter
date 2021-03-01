@@ -5,7 +5,6 @@ import 'package:dms_admin/global_widgets/header_appbar/header_appbar_mobile.dart
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/datetime_helper.dart';
-import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:get/get.dart';
@@ -86,11 +85,12 @@ class InventoryPurchaseOrdersContentMobile extends StatelessWidget {
           bottom: 10,
           child: FloatingActionButton(
             tooltip: 'Tạo mới phiếu mua hàng',
-            onPressed: () => onNavigationChanged(onNavigationChanged(
-                NavigationCallBackModel(
-                    module: DrawModule.INVENTORY_PURCHASE_ORDERS,
-                    function: DrawFunction.NEW,
-                    id: Guid.newGuid.toString()))),
+            onPressed: () {
+              onNavigationChanged(NavigationCallBackModel(
+                  module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                  function: DrawFunction.NEW,
+                  id: Guid.newGuid.toString()));
+            },
             child: Icon(Icons.add),
           ),
         )
@@ -152,7 +152,10 @@ class InventoryPurchaseOrdersContentMobile extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              controller.goToDetail(data);
+              onNavigationChanged(NavigationCallBackModel(
+                  module: DrawModule.INVENTORY_PURCHASE_ORDERS,
+                  function: DrawFunction.IMPORT,
+                  id: data.id));
             },
             child: Row(
               children: [
