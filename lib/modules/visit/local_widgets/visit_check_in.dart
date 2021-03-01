@@ -1,8 +1,8 @@
+import 'package:dms_admin/modules/visit/new/visit_detail_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:get/get.dart';
 
-class VisitCheckIn extends GetView<VisitController> {
+class VisitCheckIn extends GetView<VisitDetailController> {
   const VisitCheckIn({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class VisitCheckIn extends GetView<VisitController> {
           children: [
             Text('Tình trạng: '),
             Text(
-              controller.visit.isOpened ? 'Mở cửa' : 'Đóng cửa',
+              controller.result.value.isOpened ? 'Mở cửa' : 'Đóng cửa',
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             )
@@ -27,13 +27,13 @@ class VisitCheckIn extends GetView<VisitController> {
         Expanded(
             child: ListView.builder(
           shrinkWrap: true,
-          itemCount: controller.visit.checkinImages != null
-              ? controller.visit.checkinImages.length
+          itemCount: controller.result.value.checkinImages != null
+              ? controller.result.value.checkinImages.length
               : 0,
           itemBuilder: (context, index) {
             return Row(children: [
               Image.network(
-                controller.visit.checkinImages[index].path,
+                controller.result.value.checkinImages[index].path,
                 height: 200,
                 width: 200,
               )

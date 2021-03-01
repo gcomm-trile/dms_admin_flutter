@@ -1,12 +1,8 @@
-// import 'package:dms_admin/modules/visit/visit_detail_controller.dart';
-// import 'package:dms_admin/share/widgets/divider_header.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/state_manager.dart';
-import 'package:dms_admin/modules/visit/visit_controller.dart';
+import 'package:dms_admin/modules/visit/new/visit_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VisitCheckOut extends GetView<VisitController> {
+class VisitCheckOut extends GetView<VisitDetailController> {
   const VisitCheckOut({Key key}) : super(key: key);
   // final VisitDetailController controller = Get.find();
   @override
@@ -21,7 +17,7 @@ class VisitCheckOut extends GetView<VisitController> {
             border: Border.all(),
           ),
           child: Text(
-            controller.visit.feedBack,
+            controller.result.value.feedBack,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
@@ -29,11 +25,11 @@ class VisitCheckOut extends GetView<VisitController> {
         Expanded(
             child: ListView.builder(
           shrinkWrap: true,
-          itemCount: controller.visit.checkoutImages.length,
+          itemCount: controller.result.value.checkoutImages.length,
           itemBuilder: (context, index) {
             return Row(children: [
               Image.network(
-                controller.visit.checkoutImages[index].path,
+                controller.result.value.checkoutImages[index].path,
                 height: 200,
                 width: 200,
               )

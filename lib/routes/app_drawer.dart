@@ -3,6 +3,8 @@ abstract class DrawModule {
   static const INVENTORY_PURCHASE_ORDERS = 'Mua hàng';
   static const INVENTORY_TRANSFERS = 'Điều chuyển';
   static const INVENTORY_ADJUSTMENTS = 'Điều chỉnh';
+  static const ORDERS = 'Đơn hàng';
+  static const VISITS = 'Viếng thăm';
 }
 
 abstract class DrawFunction {

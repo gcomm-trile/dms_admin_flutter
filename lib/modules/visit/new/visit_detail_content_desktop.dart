@@ -1,25 +1,30 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/visit.dart';
 import 'package:dms_admin/modules/store/store_detail.dart';
 import 'package:dms_admin/modules/visit/local_widgets/tab_header.dart';
 import 'package:dms_admin/modules/visit/local_widgets/visit_order.dart';
-import 'package:dms_admin/modules/visit/visit_controller.dart';
+import 'package:dms_admin/modules/visit/new/visit_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import 'local_widgets/visit_check_in.dart';
-import 'local_widgets/visit_check_out.dart';
-import 'local_widgets/visit_map.dart';
+import '../local_widgets/visit_check_in.dart';
+import '../local_widgets/visit_check_out.dart';
+import '../local_widgets/visit_map.dart';
 
-class VisitDetailPage extends StatefulWidget {
-  final String visitId;
+class VisitDetailContentDesktop extends StatefulWidget {
+  final String id;
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  final VisitDetailController controller = Get.find();
 
-  VisitDetailPage({Key key, this.visitId}) : super(key: key);
+  VisitDetailContentDesktop({Key key, this.id, this.onNavigationChanged})
+      : super(key: key);
 
   @override
-  _VisitDetailPageState createState() => _VisitDetailPageState();
+  _VisitDetailContentDesktopState createState() =>
+      _VisitDetailContentDesktopState();
 }
 
-class _VisitDetailPageState extends State<VisitDetailPage>
+class _VisitDetailContentDesktopState extends State<VisitDetailContentDesktop>
     with TickerProviderStateMixin {
   TabController _nestedTabController;
 
@@ -37,19 +42,15 @@ class _VisitDetailPageState extends State<VisitDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Chi tiết viếng thăm'),
-        ),
-        body: GetX<VisitController>(
-            init: Get.find<VisitController>().getId(widget.visitId),
-            // initState: (state) =>
-            //     Get.find<VisitController>().getId(widget.visitId),
-            builder: (controller) {
-              return controller.visit.id == null
-                  ? Center(child: CircularProgressIndicator())
-                  : mainBodySection(controller.visit);
-            }));
+    return GetX<VisitDetailController>(
+        init: widget.controller.getId(widget.id),
+        // initState: (state) =>
+        //     Get.find<VisitController>().getId(widget.visitId),
+        builder: (_) {
+          return widget.controller.isBusy.value == true
+              ? Center(child: CircularProgressIndicator())
+              : mainBodySection(widget.controller.result.value);
+        });
   }
 
   tabbarSection(Visit visit) {
@@ -72,10 +73,6 @@ class _VisitDetailPageState extends State<VisitDetailPage>
             // paintingStyle: PaintingStyle.stroke,
           ),
           tabs: <Widget>[
-            // Tab(icon: Icon(Icons.directions_car)),
-            // Tab(icon: Icon(Icons.directions_transit)),
-            // Tab(icon: Icon(Icons.directions_bike)),
-            // Tab(icon: Icon(Icons.directions_bike)),
             TabHeader(title: 'Check in'),
             TabHeader(title: 'Đơn hàng'),
             TabHeader(title: 'Check out'),
@@ -104,7 +101,9 @@ class _VisitDetailPageState extends State<VisitDetailPage>
                 Container(
                     margin: EdgeInsets.all(5), child: const VisitCheckIn()),
                 Container(
-                    padding: EdgeInsets.all(5), child: const VisitOrder()),
+                  padding: EdgeInsets.all(5),
+                  child: const VisitOrder(),
+                ),
                 Container(
                     padding: EdgeInsets.all(5), child: const VisitCheckOut()),
                 Container(padding: EdgeInsets.all(5), child: const VisitMap()),

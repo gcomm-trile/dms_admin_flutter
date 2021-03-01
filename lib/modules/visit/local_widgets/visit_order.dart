@@ -1,26 +1,26 @@
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/model/product.dart';
-import 'package:dms_admin/modules/visit/visit_controller.dart';
+import 'package:dms_admin/modules/visit/new/visit_detail_controller.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class VisitOrder extends GetView<VisitController> {
+class VisitOrder extends GetView<VisitDetailController> {
   const VisitOrder({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(controller.visit.order.products.length);
-    return controller.visit.order == null
+    print(controller.result.value.order.products.length);
+    return controller.result.value.order == null
         ? Center(
             child: Text('Không có đơn hàng'),
           )
         : Stack(children: [
             Column(
               children: [
-                buildInfoSection(controller.visit.order),
+                buildInfoSection(controller.result.value.order),
                 Divider(
                   thickness: 1.5,
                   color: Colors.black,
@@ -31,7 +31,7 @@ class VisitOrder extends GetView<VisitController> {
                   color: Colors.black,
                 ),
                 Expanded(
-                  child: buildListView(controller.visit.order.products),
+                  child: buildListView(controller.result.value.order.products),
                 )
               ],
             ),
@@ -41,7 +41,7 @@ class VisitOrder extends GetView<VisitController> {
               child: Opacity(
                   opacity: 0.2,
                   child: Image.asset(
-                    controller.visit.order.isExportStock == true
+                    controller.result.value.order.isExportStock == true
                         ? ('assets/images/approved.jpg')
                         : ('assets/images/pending.jpg'),
                     height: 150,

@@ -1,7 +1,5 @@
 import 'package:dms_admin/Helper/UI.dart';
 import 'package:dms_admin/data/repository/login_repository.dart';
-import 'package:dms_admin/modules/order/order_binding.dart';
-import 'package:dms_admin/modules/order/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +21,8 @@ class LoginController extends GetxController {
       if (result.isEmpty) {
         UI.showError("Xảy ra lỗi trong quá trình đăng nhập");
       } else {
-        Get.to(OrderPage(),
-            binding: OrderBinding(), transition: Transition.zoom);
+        // Get.to(OrderPage(),
+        //     binding: OrderBinding(), transition: Transition.zoom);
       }
     } else {
       // UI.showError("Xảy ra lỗi trong quá trình đăng nhập");

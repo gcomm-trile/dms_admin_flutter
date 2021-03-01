@@ -1,4 +1,3 @@
-
 import 'package:dms_admin/data/provider/visit_api.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
@@ -9,8 +8,8 @@ class VisitRepository {
   final VisitApiClient visitApiClient;
   VisitRepository({@required this.visitApiClient});
 
-  getAll() async {
-    return visitApiClient.getAll();
+  getAll(filterDataChange) async {
+    return visitApiClient.getAll(filterDataChange);
   }
 
   getId(id) async {

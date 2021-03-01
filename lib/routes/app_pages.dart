@@ -7,10 +7,8 @@ import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_page.dart';
 import 'package:dms_admin/modules/login/login_binding.dart';
 import 'package:dms_admin/modules/login/login_page.dart';
-import 'package:dms_admin/modules/order/order_binding.dart';
-import 'package:dms_admin/modules/order/order_page.dart';
-import 'package:dms_admin/modules/visit/visit_binding.dart';
-import 'package:dms_admin/modules/visit/visit_page.dart';
+import 'package:dms_admin/modules/order/index/order_view.dart';
+import 'package:dms_admin/modules/visit/index/visit_view.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -30,13 +28,11 @@ class AppPages {
     ),
     GetPage(
       name: Routes.VISIT,
-      page: () => VisitPage(),
-      binding: VisitBinding(),
+      page: () => VisitsView(),
     ),
     GetPage(
       name: Routes.ORDER,
-      page: () => OrderPage(),
-      binding: OrderBinding(),
+      page: () => OrdersView(),
     ),
     GetPage(
       name: Routes.INVENTORY_TRANSACTIONS,

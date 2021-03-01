@@ -4,6 +4,8 @@ import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purch
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
 import 'package:dms_admin/modules/inventory/transfers/index/inventory_transfers_view.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_page.dart';
+import 'package:dms_admin/modules/order/new/order_detail_view.dart';
+import 'package:dms_admin/modules/visit/new/visit_detail_view.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/utils/device_screene_type.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'inventory/adjustments/new/inventory_adjustment_new_page.dart';
 import 'inventory/purchaseOrders/import/inventory_purchase_order_import_view.dart';
 import 'inventory/purchaseOrders/new/inventory_purchase_order_new_view.dart';
 import 'inventory/transfers/import/inventory_transfer_import_view.dart';
+import 'order/index/order_view.dart';
+import 'visit/index/visit_view.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -22,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  String selectedModule = DrawModule.INVENTORY_TRANSFERS;
+  String selectedModule = DrawModule.VISITS;
   String selectedFunction = DrawFunction.INDEX;
   String id = '';
   homePageMobile(BuildContext context) {
@@ -91,6 +95,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   mainSection(DeviceScreenType _deviceScreenType) {
+    print(selectedModule + ' - ' + selectedFunction);
     switch (selectedModule) {
       case DrawModule.INVENTORY_TRANSACTIONS:
         return selectedFunction == DrawFunction.INDEX
@@ -99,6 +104,48 @@ class _HomePageState extends State<HomePage> {
               )
             : InventoryTransactionsPage(
                 deviceScreenType: _deviceScreenType,
+              );
+      case DrawModule.ORDERS:
+        return selectedFunction == DrawFunction.INDEX
+            ? OrdersView(
+                onNavigationChanged: (data) {
+                  setState(() {
+                    id = data.id;
+                    selectedModule = data.module;
+                    selectedFunction = data.function;
+                  });
+                },
+              )
+            : OrderDetailView(
+                id: id,
+                onNavigationChanged: (data) {
+                  setState(() {
+                    id = data.id;
+                    selectedModule = data.module;
+                    selectedFunction = data.function;
+                  });
+                },
+              );
+      case DrawModule.VISITS:
+        return selectedFunction == DrawFunction.INDEX
+            ? VisitsView(
+                onNavigationChanged: (data) {
+                  setState(() {
+                    id = data.id;
+                    selectedModule = data.module;
+                    selectedFunction = data.function;
+                  });
+                },
+              )
+            : VisitDetailView(
+                id: id,
+                onNavigationChanged: (data) {
+                  setState(() {
+                    id = data.id;
+                    selectedModule = data.module;
+                    selectedFunction = data.function;
+                  });
+                },
               );
       case DrawModule.INVENTORY_ADJUSTMENTS:
         return selectedFunction == DrawFunction.INDEX

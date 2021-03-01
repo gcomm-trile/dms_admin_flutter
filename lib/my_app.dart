@@ -1,12 +1,9 @@
-import 'package:dms_admin/modules/order/order_binding.dart';
-import 'package:dms_admin/modules/visit/visit_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'modules/login/login_binding.dart';
 import 'modules/login/login_page.dart';
-import 'modules/order/order_page.dart';
-import 'modules/visit/visit_page.dart';
+import 'modules/order/index/order_view.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -33,10 +30,8 @@ class MainApp extends StatelessWidget {
       initialRoute: '/orders',
       getPages: [
         GetPage(name: '/', page: () => LoginPage(), binding: LoginBinding()),
-        GetPage(
-            name: '/visits', page: () => VisitPage(), binding: VisitBinding()),
-        GetPage(
-            name: '/orders', page: () => OrderPage(), binding: OrderBinding()),
+
+        GetPage(name: '/orders', page: () => OrdersView()),
         // GetPage(
         //   name: '/visitdetail',
         //   page: () =>

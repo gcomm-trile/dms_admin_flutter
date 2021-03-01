@@ -6,8 +6,8 @@ import 'order_controller.dart';
 class OrderBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => Dio());
-    Get.lazyPut(() => OrderRepository(dio: Get.find()));
-    Get.lazyPut<OrderController>(() => OrderController(repository: Get.find()));
+    // Get.lazyPut(() => Dio());
+    // Get.lazyPut(() => OrderRepository(dio: Get.find()));
+    // Get.lazyPut<OrderController>(() => OrderController(repository: Get.find()));
   }
 }

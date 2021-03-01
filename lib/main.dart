@@ -3,13 +3,17 @@ import 'package:dms_admin/data/provider/filter_api.dart';
 
 import 'package:dms_admin/data/provider/inventory_transactions_api.dart';
 import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
+import 'package:dms_admin/data/provider/order_api.dart';
 import 'package:dms_admin/data/provider/product_api.dart';
 import 'package:dms_admin/data/repository/filters_repository.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
+import 'package:dms_admin/data/repository/order_repository.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
 import 'package:dms_admin/global_widgets/filter_dialog/filter_controller.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_controller.dart';
+import 'package:dms_admin/modules/order/index/order_controller.dart';
+import 'package:dms_admin/modules/order/new/order_detail_controller.dart';
 import 'package:dms_admin/modules/product/search/product_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
@@ -17,9 +21,11 @@ import 'package:get/get.dart';
 
 import 'data/provider/inventory_adjustments_api.dart';
 import 'data/provider/inventory_purchase_orders_api.dart';
+import 'data/provider/visit_api.dart';
 import 'data/repository/inventory_adjustments_repository.dart';
 import 'data/repository/inventory_purchase_orders_repository.dart';
 import 'data/repository/inventory_transfers_repository.dart';
+import 'data/repository/visit_repository.dart';
 import 'modules/inventory/adjustments/index/inventory_adjustments_controller.dart';
 import 'modules/inventory/adjustments/new/inventory_adjustment_new_controller.dart';
 import 'modules/inventory/purchaseOrders/import/inventory_purchase_order_import_controller.dart';
@@ -28,6 +34,8 @@ import 'modules/inventory/purchaseOrders/new/inventory_purchase_order_new_contro
 
 import 'modules/inventory/transfers/import/inventory_transfer_import_controller.dart';
 import 'modules/inventory/transfers/index/inventory_transfers_controller.dart';
+import 'modules/visit/index/visit_controller.dart';
+import 'modules/visit/new/visit_detail_controller.dart';
 import 'routes/app_pages.dart';
 
 void main() {
@@ -39,6 +47,10 @@ void main() {
   Get.lazyPut(() => InventoryAdjustmentsController(repository: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentNewController(repository: Get.find()));
 
+  Get.lazyPut(() => VisitApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => VisitRepository(visitApiClient: Get.find()));
+  Get.lazyPut(() => VisitController(repository: Get.find()));
+  Get.lazyPut(() => VisitDetailController(repository: Get.find()));
   Get.lazyPut(() => InventoryTransfersApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryTransfersRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryTransfersController(repository: Get.find()));
@@ -49,7 +61,10 @@ void main() {
   Get.lazyPut(() => InventoryTransactionsApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryTransactionsRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryTransactionsController(repository: Get.find()));
-
+  Get.lazyPut(() => OrderApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => OrderRepository(apiClient: Get.find()));
+  Get.lazyPut(() => OrderController(repository: Get.find()));
+  Get.lazyPut(() => OrderDetailController(repository: Get.find()));
   Get.lazyPut(() => InventoryPurchaseOrdersApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryPurchaseOrdersRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryPurchaseOrdersController(repository: Get.find()));

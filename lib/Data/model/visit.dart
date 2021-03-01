@@ -5,7 +5,7 @@ import 'package:dms_admin/data/model/order.dart';
 class Visit {
   Store store;
   String id;
-  String seq;
+  String no;
   String storeId;
   String storeName;
   String storeOwner;
@@ -34,7 +34,7 @@ class Visit {
   Visit(
       {this.store,
       this.id,
-      this.seq,
+      this.no,
       this.storeId,
       this.storeName,
       this.storeOwner,
@@ -63,7 +63,7 @@ class Visit {
   Visit.fromJson(Map<String, dynamic> json) {
     store = json['store'] != null ? new Store.fromJson(json['store']) : null;
     id = json['id'];
-    seq = json['seq'];
+    no = json['no'];
     storeId = json['store_id'];
     storeName = json['store_name'];
     storeOwner = json['store_owner'];
@@ -104,7 +104,7 @@ class Visit {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['store'] = this.store;
     data['id'] = this.id;
-    data['seq'] = this.seq;
+    data['no'] = this.no;
     data['store_id'] = this.storeId;
     data['store_name'] = this.storeName;
     data['store_owner'] = this.storeOwner;

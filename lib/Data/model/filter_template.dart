@@ -73,7 +73,40 @@ class FilterTemplate {
         ),
       );
     }
-
+    if (module == 'orders') {
+      result.add(
+        FilterTemplate(
+          module: module,
+          fieldName: 'stock_id',
+          fieldNameDisplay: 'Kho',
+          isList: true,
+          isTextBoxNumber: false,
+          logics: [
+            LogicTemplate(
+              logic: '=',
+              logicDisplay: 'là',
+            )
+          ],
+        ),
+      );
+    }
+    if (module == 'visits') {
+      result.add(
+        FilterTemplate(
+          module: module,
+          fieldName: 'store_id',
+          fieldNameDisplay: 'Cửa hàng',
+          isList: true,
+          isTextBoxNumber: false,
+          logics: [
+            LogicTemplate(
+              logic: '=',
+              logicDisplay: 'là',
+            )
+          ],
+        ),
+      );
+    }
     if (module == 'inventory_adjustments') {
       result.add(
         FilterTemplate(

@@ -1,13 +1,9 @@
-// // Copyright 2019 The Chromium Authors. All rights reserved.
-// // Use of this source code is governed by a BSD-style license that can be
-// // found in the LICENSE file.
-
+import 'package:dms_admin/modules/visit/new/visit_detail_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:dms_admin/modules/visit/visit_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_google_maps/flutter_google_maps.dart';
 
-class VisitMap extends GetView<VisitController> {
+class VisitMap extends GetView<VisitDetailController> {
   const VisitMap({Key key}) : super(key: key);
   final assetCheckin = 'assets/images/marker_tim.png';
   final assetCheckOut = 'assets/images/marker_do.png';
@@ -37,40 +33,36 @@ class VisitMap extends GetView<VisitController> {
 
   googleMapSection() {
     var _key = GlobalKey<GoogleMapStateBase>();
-    print(controller.visit.storeGpsLatitude);
-    print(controller.visit.storeGpsLongitude);
+    print(controller.result.value.storeGpsLatitude);
+    print(controller.result.value.storeGpsLongitude);
     return GoogleMap(
       key: _key,
       initialZoom: 18,
-      initialPosition: GeoCoord(controller.visit.locationCheckinLat,
-          controller.visit.locationCheckinLong), // Los Angeles, CA
+      initialPosition: GeoCoord(controller.result.value.locationCheckinLat,
+          controller.result.value.locationCheckinLong), // Los Angeles, CA
       mapType: MapType.roadmap,
       markers: [
         Marker(
-          GeoCoord(controller.visit.locationCheckinLat,
-              controller.visit.locationCheckinLong),
+          GeoCoord(controller.result.value.locationCheckinLat,
+              controller.result.value.locationCheckinLong),
           icon: assetCheckin,
           label: 'Check in',
         ),
         Marker(
-          GeoCoord(controller.visit.locationCheckoutLat,
-              controller.visit.locationCheckoutLong),
+          GeoCoord(controller.result.value.locationCheckoutLat,
+              controller.result.value.locationCheckoutLong),
           icon: assetCheckOut,
           label: 'Check out',
         ),
         Marker(
-          GeoCoord(controller.visit.storeGpsLatitude,
-              controller.visit.storeGpsLongitude),
+          GeoCoord(controller.result.value.storeGpsLatitude,
+              controller.result.value.storeGpsLongitude),
           icon: assetStore,
           label: 'Cửa hàng',
         )
       ].toSet(),
       interactive: true,
 
-      // onTap: (coord) => _scaffoldKey.currentState.showSnackBar(SnackBar(
-      //   content: Text(coord?.toString()),
-      //   duration: const Duration(seconds: 2),
-      // )),
       mobilePreferences: const MobileMapPreferences(
         trafficEnabled: true,
         zoomControlsEnabled: false,

@@ -195,14 +195,6 @@ class InventoryTransferImportContentMobile extends StatelessWidget {
         },
       ),
     );
-    return Scaffold(
-      body: Row(
-        children: [
-          AppDrawer(selectedModule: 'Điều chuyển'),
-          Expanded(child: _buildBodySection(context)),
-        ],
-      ),
-    );
   }
 
   _buildRowListViewSection(int index) {

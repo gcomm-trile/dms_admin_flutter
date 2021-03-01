@@ -1,77 +1,199 @@
+import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/components/loading.dart';
 import 'package:dms_admin/data/model/order.dart';
 import 'package:dms_admin/data/model/product.dart';
-import 'package:dms_admin/modules/order/order_controller.dart';
+import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
+import 'package:dms_admin/utils/color_helper.dart';
 import 'package:dms_admin/utils/constants.dart';
+import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:get/get.dart';
+import 'order_detail_controller.dart';
 
 // ignore: must_be_immutable
-class OrderDetailPage extends GetView<OrderController> {
-  final String orderId;
+class OrderDetailContentDesktop extends StatelessWidget {
+  final OrderDetailController controller = Get.find();
+  final Function(NavigationCallBackModel data) onNavigationChanged;
+  final String id;
   bool enabled = true;
-  OrderDetailPage({Key key, this.orderId}) : super(key: key);
+
+  final SizedBox sizedBox = SizedBox(
+    width: 10,
+  );
+  OrderDetailContentDesktop({
+    Key key,
+    @required this.id,
+    @required this.onNavigationChanged,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
     return KeyboardDismisser(
-        child: GetX<OrderController>(
-            initState: (state) => Get.find<OrderController>().getId(orderId),
+        child: GetX<OrderDetailController>(
+            initState: (state) => controller.getId(id),
             // init: Get.find<OrderController>().getId(orderId),
-            builder: (_) {
-              return (_.order == null || _.order.products == null)
-                  ? Scaffold(
-                      appBar: AppBar(
-                        title: Text('Chi tiết đơn hàng'),
-                      ),
-                      body: LoadingControl())
-                  : Scaffold(
-                      appBar: AppBar(
-                        title: Text('Chi tiết đơn hàng'),
-                        actions: [
-                          AbsorbPointer(
-                            absorbing: !enabled,
-                            child: InkWell(
-                                onTap: () =>
-                                    Get.find<OrderController>().approved(),
-                                child: Icon(Icons.approval, size: 50)),
-                          )
-                        ],
-                      ),
-                      body: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Stack(children: [
-                          Column(
-                            children: [
-                              _buildInfoSection(_),
-                              _buildDivider,
-                              _buildHeaderListView,
-                              _buildDivider,
-                              Expanded(child: _buildListView(_.order.products))
-                            ],
-                          ),
-                          Positioned.fill(
-                              child: Align(
-                            alignment: Alignment.topRight,
-                            child: Opacity(
-                                opacity: 0.5,
-                                child: Image.asset(
-                                  _.order.isExportStock == true
-                                      ? ('assets/images/approved.jpg')
-                                      : ('assets/images/pending.jpg'),
-                                  height: 120,
-                                  width: 120,
-                                )),
-                          )),
-                        ]),
-                      ));
+            builder: (_c) {
+              return (controller.isBusy.value == true)
+                  ? LoadingControl()
+                  : Container(
+                      padding: EdgeInsets.all(10),
+                      child: Stack(children: [
+                        Column(
+                          children: [
+                            _buildHeaderBarSection(),
+                            _buildInfoSection(controller),
+                            _buildDivider,
+                            _buildHeaderListView,
+                            _buildDivider,
+                            Expanded(
+                                child: _buildListView(
+                                    controller.result.value.products))
+                          ],
+                        ),
+                        // Positioned.fill(
+                        //     child: Align(
+                        //         alignment: Alignment.topRight,
+                        //         child: AbsorbPointer(
+                        //           absorbing: !enabled,
+                        //           child: InkWell(
+                        //               onTap: () => controller.approved(),
+                        //               child: Icon(Icons.approval, size: 50)),
+                        //         ))),
+                      ]),
+                    );
             }));
   }
 
-  Widget _buildInfoSection(OrderController orderController) {
+  _buildHeaderBarSection() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'MÃ PHIẾU',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      child: Text(
+                        TextHelper.toSafeString(controller.result.value.no),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                sizedBox,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'TRẠNG THÁI',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2.5),
+                        color: ColorHelper.fromHex("#e8ae0e"),
+                      ),
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                        TextHelper.toSafeString(
+                            controller.result.value.isExportStock == true
+                                ? 'Đã xuất'
+                                : 'Chưa xuất'),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                sizedBox,
+              ],
+            ),
+          ),
+          controller.result.value.isExportStock == true
+              ? RaisedButton(
+                  color: Colors.blueAccent,
+                  child: Container(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Xuất hàng',
+                          // controller.result.value.status == 2
+                          //     ? 'Xác nhận nhập'
+                          //     : 'Hoàn nhập',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : RaisedButton(
+                  onPressed: () async {
+                    var data = await controller.save(id);
+                    if (data == true) {
+                      onNavigationChanged(NavigationCallBackModel(
+                          module: DrawModule.ORDERS,
+                          function: DrawFunction.INDEX,
+                          id: ''));
+                    }
+                  },
+                  color: Colors.blueAccent,
+                  child: Container(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Xuất hàng',
+                          // controller.result.value.status == 2
+                          //     ? 'Xác nhận nhập'
+                          //     : 'Hoàn nhập',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(OrderDetailController orderController) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +207,7 @@ class OrderDetailPage extends GetView<OrderController> {
                 ),
               ),
               Container(
-                child: Text(orderController.order.storeName),
+                child: Text(orderController.result.value.storeName),
               ),
               Container(
                 child: Icon(
@@ -95,7 +217,7 @@ class OrderDetailPage extends GetView<OrderController> {
               ),
               Expanded(
                 child: Container(
-                  child: Text('0936287592'),
+                  child: Text(orderController.result.value.contactPerson),
                 ),
               )
             ],
@@ -110,7 +232,7 @@ class OrderDetailPage extends GetView<OrderController> {
               ),
               Expanded(
                 child: Container(
-                  child: Text(orderController.order.storeAddress),
+                  child: Text(orderController.result.value.storeAddress),
                 ),
               )
             ],
@@ -124,7 +246,7 @@ class OrderDetailPage extends GetView<OrderController> {
                 ),
               ),
               Container(
-                child: Text(orderController.order.createdByName),
+                child: Text(orderController.result.value.createdByName),
               ),
               Container(
                 child: Icon(
@@ -133,7 +255,7 @@ class OrderDetailPage extends GetView<OrderController> {
                 ),
               ),
               Container(
-                child: Text(orderController.order.createdOn),
+                child: Text(orderController.result.value.createdOn),
               )
             ],
           ),
@@ -146,18 +268,7 @@ class OrderDetailPage extends GetView<OrderController> {
                 ),
               ),
               Container(
-                child: Text(orderController.order.exportStockId == kDefaultGuildId
-                    ? 'Chưa có kho xuất'
-                    : orderController.order.exportStockName),
-              ),
-              InkWell(
-                onTap: () => orderController.pickStock(),
-                child: Container(
-                  child: Icon(
-                    Icons.search,
-                    size: kIconSize,
-                  ),
-                ),
+                child: Text(orderController.result.value.exportStockName),
               ),
             ],
           ),

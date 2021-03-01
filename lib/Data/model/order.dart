@@ -1,7 +1,7 @@
 import 'package:dms_admin/data/model/product.dart';
 
 class Order {
-  String seq;
+  String no;
   String id;
   String storeId;
   String storeName;
@@ -16,7 +16,7 @@ class Order {
   List<Product> products;
 
   Order(
-      {this.seq,
+      {this.no,
       this.id,
       this.storeId,
       this.storeName,
@@ -31,7 +31,7 @@ class Order {
       this.products});
 
   Order.fromJson(Map<String, dynamic> json) {
-    seq = json['seq'];
+    no = json['no'];
     id = json['id'];
     storeId = json['store_id'];
     storeName = json['store_name'];
@@ -53,7 +53,7 @@ class Order {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['seq'] = this.seq;
+    data['no'] = this.no;
     data['id'] = this.id;
     data['store_id'] = this.storeId;
     data['store_name'] = this.storeName;

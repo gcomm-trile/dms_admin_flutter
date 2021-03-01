@@ -1,51 +1,45 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:dms_admin/data/model/visit.dart';
+import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
 import 'package:dms_admin/utils/constants.dart';
 import 'package:meta/meta.dart';
 
-const baseUrl = SERVER_URL + 'visits';
+// const baseUrl = 'inventory/transactions';
+const baseUrl = 'visits';
 
 class VisitApiClient {
-  final Dio dio;
-  VisitApiClient({@required this.dio});
+  final Dio httpClient;
+  VisitApiClient({@required this.httpClient});
 
-  getAll() async {
-    print('session id ${dio.options.headers['Session-ID']}');
+  getAll(FilterDataChange filterDataChange) async {
     try {
-      var response = await dio.get(baseUrl);
+      String url = SERVER_URL +
+          baseUrl +
+          '?searchText=${filterDataChange.searchText}&filter=' +
+          jsonEncode(filterDataChange.filterExpressions);
+      print(url);
+      var response = await httpClient.get(url);
       if (response.statusCode == 200) {
-        print('call getall api ${response.statusCode} ${response.data}');
         return (response.data as List).map((x) => Visit.fromJson(x)).toList();
-      } else {
-        print('call getall api ${response.statusCode}');
-        var res = "{\"status\":" +
-            response.statusCode.toString() +
-            ",\"message\":\"error\",\"response\":" +
-            response.data +
-            "}";
-        print('call getall api error $res');
-        throw new Exception(res);
-      }
-    } catch (ex) {
-      print('call getall api error ${ex.toString()}');
-      throw new Exception(ex.toString());
+      } else
+        throw Exception('Failed to load jobs from API');
+    } catch (_) {
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 
-  getId(id) async {
+  getId(String id) async {
     try {
-      var response = await dio.get(
-        baseUrl + '/' + id,
-      );
-      print(baseUrl + '/' + id);
+      print('call ' + SERVER_URL + baseUrl + '/' + id);
+      var response = await httpClient.get(SERVER_URL + baseUrl + '/' + id);
       if (response.statusCode == 200) {
-        print('call getall api ${response.statusCode} ${response.data}');
-        var map = Map<String, dynamic>.from(response.data);
-        return Visit.fromJson(map);
+        print(response.data);
+        return Visit.fromJson(response.data);
       } else
-        print('erro -get');
+        throw Exception('Failed to load jobs from API');
     } catch (_) {
-      print('erro -get ${_.toString()}');
+      throw Exception('Failed to load jobs from API ' + _.toString());
     }
   }
 }
