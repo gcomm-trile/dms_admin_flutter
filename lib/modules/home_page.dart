@@ -1,4 +1,5 @@
 import 'package:dms_admin/global_widgets/my_drawer.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_view.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders_view.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
@@ -26,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  String selectedModule = DrawModule.VISITS;
+  String selectedModule = DrawModule.DASHBOARD;
   String selectedFunction = DrawFunction.INDEX;
   String id = '';
   homePageMobile(BuildContext context) {
@@ -97,6 +98,14 @@ class _HomePageState extends State<HomePage> {
   mainSection(DeviceScreenType _deviceScreenType) {
     print(selectedModule + ' - ' + selectedFunction);
     switch (selectedModule) {
+      case DrawModule.DASHBOARD:
+        return selectedFunction == DrawFunction.INDEX
+            ? DashboardView(
+                onNavigationChanged: (data) {},
+              )
+            : DashboardView(
+                onNavigationChanged: (data) {},
+              );
       case DrawModule.INVENTORY_TRANSACTIONS:
         return selectedFunction == DrawFunction.INDEX
             ? InventoryTransactionsPage(

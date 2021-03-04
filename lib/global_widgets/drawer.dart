@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.dashboard,
             text: 'Báo cáo',
             onTap: () {
-              Get.to(DashboardPage());
+              // Get.to(DashboardPage());
             },
           ),
           _createDrawerItem(

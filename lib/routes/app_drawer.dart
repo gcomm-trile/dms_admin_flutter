@@ -5,6 +5,7 @@ abstract class DrawModule {
   static const INVENTORY_ADJUSTMENTS = 'Điều chỉnh';
   static const ORDERS = 'Đơn hàng';
   static const VISITS = 'Viếng thăm';
+  static const DASHBOARD = 'Báo cáo';
 }
 
 abstract class DrawFunction {
