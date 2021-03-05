@@ -346,11 +346,6 @@ class InventoryTransactionsPage extends StatelessWidget {
                                 : Colors.red;
                         return Row(
                           children: [
-                            Image.network(
-                              controller.result[index].imagePath,
-                              width: kSizeProductImageWidth,
-                              height: kSizeProductImageHeight,
-                            ),
                             Expanded(
                               child: Container(
                                 child: Text(

@@ -1,5 +1,5 @@
 import 'package:dms_admin/global_widgets/my_drawer.dart';
-import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_view.dart';
 import 'package:dms_admin/modules/inventory/adjustments/index/inventory_adjustments_view.dart';
 import 'package:dms_admin/modules/inventory/purchaseOrders/index/inventory_purchase_orders_view.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_page.dart';
@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  String selectedModule = DrawModule.DASHBOARD;
+  String selectedModule = DrawModule.VISITS;
   String selectedFunction = DrawFunction.INDEX;
   String id = '';
   homePageMobile(BuildContext context) {

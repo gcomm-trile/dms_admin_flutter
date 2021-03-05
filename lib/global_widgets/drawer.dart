@@ -1,4 +1,4 @@
-import 'package:dms_admin/modules/dashboard/dashboard_page.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_view.dart';
 import 'package:dms_admin/modules/stock/stock_decrease_page.dart';
 import 'package:dms_admin/routes/app_pages.dart';
 import 'package:dms_admin/utils/color_helper.dart';

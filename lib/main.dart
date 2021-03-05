@@ -1,15 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:dms_admin/data/provider/dashboard_api.dart';
 import 'package:dms_admin/data/provider/filter_api.dart';
 
 import 'package:dms_admin/data/provider/inventory_transactions_api.dart';
 import 'package:dms_admin/data/provider/inventory_transfers_api.dart';
 import 'package:dms_admin/data/provider/order_api.dart';
 import 'package:dms_admin/data/provider/product_api.dart';
+import 'package:dms_admin/data/repository/dashboard_repository.dart';
 import 'package:dms_admin/data/repository/filters_repository.dart';
 import 'package:dms_admin/data/repository/inventory_transactions_repository.dart';
 import 'package:dms_admin/data/repository/order_repository.dart';
 import 'package:dms_admin/data/repository/product_repository.dart';
 import 'package:dms_admin/global_widgets/filter_dialog/filter_controller.dart';
+import 'package:dms_admin/modules/dashboard/dashboard_controller.dart';
 import 'package:dms_admin/modules/inventory/transactions/inventory_transactions_controller.dart';
 import 'package:dms_admin/modules/inventory/transfers/new/inventory_transfer_new_controller.dart';
 import 'package:dms_admin/modules/order/index/order_controller.dart';
@@ -41,7 +44,9 @@ import 'routes/app_pages.dart';
 void main() {
   GoogleMap.init('AIzaSyCT1bnH6x0wAPaqG7PIdusRiTPNzqLqqeM');
   Get.lazyPut(() => Dio());
-
+  Get.lazyPut(() => DashboardApiClient(httpClient: Get.find()));
+  Get.lazyPut(() => DashboardRepository(apiClient: Get.find()));
+  Get.lazyPut(() => DashboardController(repository: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentsApiClient(httpClient: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentsRepository(apiClient: Get.find()));
   Get.lazyPut(() => InventoryAdjustmentsController(repository: Get.find()));

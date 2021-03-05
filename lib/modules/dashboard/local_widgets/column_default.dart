@@ -1,9 +1,9 @@
+import 'package:dms_admin/modules/dashboard/dashboard_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'chart_sample_data.dart';
-import 'custom_directional_buttons.dart';
 
 class ColumnSpacing extends StatefulWidget {
   /// Creates the column chart with columns width and space change option
@@ -14,22 +14,20 @@ class ColumnSpacing extends StatefulWidget {
 }
 
 class _ColumnSpacingState extends State {
-  dynamic chart;
-  bool isDrilledChart = false;
-  TooltipBehavior _tooltipBehavior;
-  double _columnWidth = 0.95;
-  double _columnSpacing = 0.05;
-  Color textColor = Colors.red;
-  bool isCardView = true;
   int level = 1;
+  dynamic chart;
+  TooltipBehavior _tooltipBehavior;
+  double _columnWidth = 0.8;
+  double _columnSpacing = 0.2;
+  String khuvuc = '';
+  String tuyen = '';
+  String nhanvien = '';
+
   _ColumnSpacingState();
 
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: false);
-
-    _columnWidth = 0.95;
-    _columnSpacing = 0.05;
     chart = getLevel1Chart();
     super.initState();
   }
@@ -39,10 +37,11 @@ class _ColumnSpacingState extends State {
       case 1:
         return getLevel1Chart();
       case 2:
-        return getLevel2Chart(0);
+        return getLevel2Chart();
       case 3:
-        return getLevel3Char(0, 0);
-
+        return getLevel3Char();
+      case 4:
+        return getLevel4Char();
       default:
         return Container(
           color: Colors.red,
@@ -52,13 +51,13 @@ class _ColumnSpacingState extends State {
 
   @override
   Widget build(BuildContext context) {
-    print('level ' + level.toString());
+    print('build chart master level ' + level.toString());
     return Stack(
       children: <Widget>[
         getChart(),
         Positioned(
-          left: 10,
-          top: 5,
+          left: 3,
+          top: 3,
           child: Visibility(
             visible: level > 1,
             child: IconButton(
@@ -80,8 +79,12 @@ class _ColumnSpacingState extends State {
       tooltipBehavior: _tooltipBehavior,
       plotAreaBorderWidth: 0,
       title: ChartTitle(text: 'Báo cáo khu vực'),
-      onPointTapped: (PointTapArgs args) {
+      onAxisLabelTapped: (axisLabelTapArgs) {
+        print('click onAxisLabelTapped ' + axisLabelTapArgs.text);
         setState(() {
+          khuvuc = axisLabelTapArgs.text;
+          tuyen = '';
+          nhanvien = '';
           level = 2;
         });
       },
@@ -99,13 +102,17 @@ class _ColumnSpacingState extends State {
     );
   }
 
-  getLevel2Chart(num index) {
+  getLevel2Chart() {
     return SfCartesianChart(
       tooltipBehavior: _tooltipBehavior,
       plotAreaBorderWidth: 0,
-      title: ChartTitle(text: 'Báo cáo tuyến'),
-      onPointTapped: (PointTapArgs args) {
+      title: ChartTitle(text: 'Khu vực ' + khuvuc),
+      onAxisLabelTapped: (axisLabelTapArgs) {
+        print('click onAxisLabelTapped ' + axisLabelTapArgs.text);
         setState(() {
+          khuvuc = khuvuc;
+          tuyen = axisLabelTapArgs.text;
+          nhanvien = '';
           level = 3;
         });
       },
@@ -123,11 +130,20 @@ class _ColumnSpacingState extends State {
     );
   }
 
-  getLevel3Char(int i, int j) {
+  getLevel3Char() {
     return chart = SfCartesianChart(
       tooltipBehavior: _tooltipBehavior,
       plotAreaBorderWidth: 0,
-      title: ChartTitle(text: 'Báo cáo nhân viên'),
+      onAxisLabelTapped: (axisLabelTapArgs) {
+        print('click onAxisLabelTapped ' + axisLabelTapArgs.text);
+        setState(() {
+          khuvuc = khuvuc;
+          tuyen = tuyen;
+          nhanvien = axisLabelTapArgs.text;
+          level = 4;
+        });
+      },
+      title: ChartTitle(text: 'Tuyến ' + tuyen),
       primaryXAxis: CategoryAxis(
         majorGridLines: MajorGridLines(width: 0),
       ),
@@ -138,6 +154,25 @@ class _ColumnSpacingState extends State {
           axisLine: AxisLine(width: 0),
           majorTickLines: MajorTickLines(size: 0)),
       series: _getLevel3Column(),
+      legend: Legend(isVisible: true),
+    );
+  }
+
+  getLevel4Char() {
+    return chart = SfCartesianChart(
+      tooltipBehavior: _tooltipBehavior,
+      plotAreaBorderWidth: 0,
+      title: ChartTitle(text: 'Nhân viên ' + nhanvien),
+      primaryXAxis: CategoryAxis(
+        majorGridLines: MajorGridLines(width: 0),
+      ),
+      primaryYAxis: NumericAxis(
+          maximum: 150,
+          minimum: 0,
+          interval: 25,
+          axisLine: AxisLine(width: 0),
+          majorTickLines: MajorTickLines(size: 0)),
+      series: _getLevel4Column(),
       legend: Legend(isVisible: true),
     );
   }
@@ -165,12 +200,8 @@ class _ColumnSpacingState extends State {
     ];
     return <ColumnSeries<ChartSampleData, String>>[
       ColumnSeries<ChartSampleData, String>(
-
-          /// To apply the column width here.
-          width: isCardView ? 0.8 : _columnWidth,
-
-          /// To apply the spacing betweeen to two columns here.
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           dataSource: chartData,
           color: const Color.fromRGBO(252, 216, 20, 1),
           xValueMapper: (ChartSampleData sales, _) => sales.x,
@@ -178,24 +209,24 @@ class _ColumnSpacingState extends State {
           name: 'Viếng thăm'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.blue,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Có đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.green,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Số đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.red,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
@@ -225,12 +256,8 @@ class _ColumnSpacingState extends State {
     ];
     return <ColumnSeries<ChartSampleData, String>>[
       ColumnSeries<ChartSampleData, String>(
-
-          /// To apply the column width here.
-          width: isCardView ? 0.8 : _columnWidth,
-
-          /// To apply the spacing betweeen to two columns here.
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           dataSource: chartData,
           color: const Color.fromRGBO(252, 216, 20, 1),
           xValueMapper: (ChartSampleData sales, _) => sales.x,
@@ -238,24 +265,24 @@ class _ColumnSpacingState extends State {
           name: 'Viếng thăm'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.blue,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Có đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.green,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Số đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.red,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
@@ -266,30 +293,37 @@ class _ColumnSpacingState extends State {
   List<ColumnSeries<ChartSampleData, String>> _getLevel3Column() {
     final List<ChartSampleData> chartData = <ChartSampleData>[
       ChartSampleData(
-          x: 'TUYẾN Q1',
+          x: 'NGUYỄN VĂN AN',
           y: 128,
           secondSeriesYValue: 129,
           thirdSeriesYValue: 101),
       ChartSampleData(
-          x: 'TUYẾN Q2', y: 123, secondSeriesYValue: 92, thirdSeriesYValue: 93),
+          x: 'ĐỖ XUÂN HIỆP',
+          y: 123,
+          secondSeriesYValue: 92,
+          thirdSeriesYValue: 93),
       ChartSampleData(
-          x: 'TUYẾN Q3',
+          x: 'TRẦN QUANG THẮNG',
           y: 107,
           secondSeriesYValue: 106,
           thirdSeriesYValue: 90),
       ChartSampleData(
-          x: 'TUYẾN Q4', y: 87, secondSeriesYValue: 95, thirdSeriesYValue: 71),
+          x: 'LÊ MINH TRÍ',
+          y: 87,
+          secondSeriesYValue: 95,
+          thirdSeriesYValue: 71),
       ChartSampleData(
-          x: 'TUYẾN Q5', y: 87, secondSeriesYValue: 95, thirdSeriesYValue: 71),
+          x: 'NGUYỄN TRƯƠNG KIM CHÂU',
+          y: 87,
+          secondSeriesYValue: 95,
+          thirdSeriesYValue: 71),
     ];
     return <ColumnSeries<ChartSampleData, String>>[
       ColumnSeries<ChartSampleData, String>(
 
           /// To apply the column width here.
-          width: isCardView ? 0.8 : _columnWidth,
-
-          /// To apply the spacing betweeen to two columns here.
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           dataSource: chartData,
           color: const Color.fromRGBO(252, 216, 20, 1),
           xValueMapper: (ChartSampleData sales, _) => sales.x,
@@ -297,24 +331,73 @@ class _ColumnSpacingState extends State {
           name: 'Viếng thăm'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.blue,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Có đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.green,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
           name: 'Số đơn'),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData,
-          width: isCardView ? 0.8 : _columnWidth,
-          spacing: isCardView ? 0.2 : _columnSpacing,
+          width: _columnWidth,
+          spacing: _columnSpacing,
+          color: Colors.red,
+          xValueMapper: (ChartSampleData sales, _) => sales.x,
+          yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
+          name: 'Doanh số'),
+    ];
+  }
+
+  List<ColumnSeries<ChartSampleData, String>> _getLevel4Column() {
+    final List<ChartSampleData> chartData = <ChartSampleData>[
+      ChartSampleData(
+          x: '01/03', y: 128, secondSeriesYValue: 129, thirdSeriesYValue: 101),
+      ChartSampleData(
+          x: '02/03', y: 123, secondSeriesYValue: 92, thirdSeriesYValue: 93),
+      ChartSampleData(
+          x: '03/03', y: 107, secondSeriesYValue: 106, thirdSeriesYValue: 90),
+      ChartSampleData(
+          x: '04/03', y: 87, secondSeriesYValue: 95, thirdSeriesYValue: 71),
+      ChartSampleData(
+          x: '05/03', y: 87, secondSeriesYValue: 95, thirdSeriesYValue: 71),
+    ];
+    return <ColumnSeries<ChartSampleData, String>>[
+      ColumnSeries<ChartSampleData, String>(
+          width: _columnWidth,
+          spacing: _columnSpacing,
+          dataSource: chartData,
+          color: const Color.fromRGBO(252, 216, 20, 1),
+          xValueMapper: (ChartSampleData sales, _) => sales.x,
+          yValueMapper: (ChartSampleData sales, _) => sales.y,
+          name: 'Viếng thăm'),
+      ColumnSeries<ChartSampleData, String>(
+          dataSource: chartData,
+          width: _columnWidth,
+          spacing: _columnSpacing,
+          color: Colors.blue,
+          xValueMapper: (ChartSampleData sales, _) => sales.x,
+          yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
+          name: 'Có đơn'),
+      ColumnSeries<ChartSampleData, String>(
+          dataSource: chartData,
+          width: _columnWidth,
+          spacing: _columnSpacing,
+          color: Colors.green,
+          xValueMapper: (ChartSampleData sales, _) => sales.x,
+          yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
+          name: 'Số đơn'),
+      ColumnSeries<ChartSampleData, String>(
+          dataSource: chartData,
+          width: _columnWidth,
+          spacing: _columnSpacing,
           color: Colors.red,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
