@@ -1,8 +1,10 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
+import 'package:dms_admin/global_widgets/header_appbar/header_appbar_mobile.dart';
 import 'package:dms_admin/modules/visit/index/visit_controller.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
+import 'package:dms_admin/utils/datetime_helper.dart';
 import 'package:dms_admin/utils/text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,22 +24,11 @@ class VisitContentMobile extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
-          Row(
-            children: [
-              Text(
-                'Viếng thăm',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
+          HeaderAppBarMobile(
+            title: 'Viếng thăm',
           ),
           SizedBox(
-            height: 15,
+            height: 10,
           ),
           FilterWidget(
             // filterExpressions: controller.filterExpressions,
@@ -202,7 +193,7 @@ class VisitContentMobile extends StatelessWidget {
           Container(
             width: 100,
             child: Text(
-              data.createdOn,
+              DateTimeHelper.day2Text(data.createdOn),
               style: TextStyle(
                 color: Colors.black,
               ),

@@ -15,7 +15,7 @@ class FilterTemplate {
   List<LogicTemplate> logics;
 
   static List<FilterTemplate> generateFilterTemplate(String module) {
-    var result = List<FilterTemplate>();
+    var result = <FilterTemplate>[];
 
     if (module == 'inventory_transactions') {
       result.add(
@@ -79,6 +79,21 @@ class FilterTemplate {
           module: module,
           fieldName: 'stock_id',
           fieldNameDisplay: 'Kho',
+          isList: true,
+          isTextBoxNumber: false,
+          logics: [
+            LogicTemplate(
+              logic: '=',
+              logicDisplay: 'là',
+            )
+          ],
+        ),
+      );
+      result.add(
+        FilterTemplate(
+          module: module,
+          fieldName: 'is_export_stock',
+          fieldNameDisplay: 'Tình trạng',
           isList: true,
           isTextBoxNumber: false,
           logics: [

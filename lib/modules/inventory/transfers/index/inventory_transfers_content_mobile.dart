@@ -1,5 +1,6 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/data/model/transfer.dart';
+import 'package:dms_admin/global_widgets/header_appbar/header_appbar_mobile.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:dms_admin/utils/constants.dart';
@@ -36,39 +37,9 @@ class InventoryTransfersContentMobile extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Điều chuyển',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                          RaisedButton(
-                            color: Colors.blue,
-                            onPressed: () {
-                              onNavigationChanged(NavigationCallBackModel(
-                                  module: DrawModule.INVENTORY_TRANSFERS,
-                                  function: DrawFunction.NEW,
-                                  id: Guid.newGuid.toString()));
-                            },
-                            child: Container(
-                              height: 37,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add_circle_outline,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      HeaderAppBarMobile(title: 'Điều chuyển'),
+                      SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
                         height: 15,

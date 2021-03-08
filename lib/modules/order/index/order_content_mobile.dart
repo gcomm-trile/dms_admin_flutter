@@ -1,5 +1,6 @@
 import 'package:dms_admin/Models/navagion_callback_model.dart';
 import 'package:dms_admin/global_widgets/filter_widget/filter.dart';
+import 'package:dms_admin/global_widgets/header_appbar/header_appbar_mobile.dart';
 import 'package:dms_admin/routes/app_drawer.dart';
 import 'package:dms_admin/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -19,28 +20,16 @@ class OrderContentMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              Text(
-                'Đặt hàng',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
+          HeaderAppBarMobile(
+            title: 'Đặt hàng',
           ),
           SizedBox(
             height: 15,
           ),
           FilterWidget(
-            // filterExpressions: controller.filterExpressions,
             module: 'orders',
             filterDataChange: (data) =>
                 controller.updateDataByFilterChange(data),

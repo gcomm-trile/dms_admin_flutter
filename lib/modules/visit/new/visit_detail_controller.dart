@@ -7,6 +7,8 @@ class VisitDetailController extends GetxController {
   final VisitRepository repository;
   final isBusy = true.obs;
   Rx<Visit> result = Rx<Visit>();
+
+  var activeStep = 0.obs;
   VisitDetailController({@required this.repository})
       : assert(repository != null);
 

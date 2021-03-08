@@ -43,6 +43,9 @@ class _ContentDesktopState extends State<ContentDesktop> {
             children: [
               Row(
                 children: [
+                  SizedBox(
+                    width: 30,
+                  ),
                   Text('Dashboard '),
                   Expanded(child: Container()),
                   _button(controller.textToday.value, 1),

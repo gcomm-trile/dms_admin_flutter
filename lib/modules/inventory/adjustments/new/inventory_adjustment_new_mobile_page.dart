@@ -33,16 +33,20 @@ class InventoryAdjustmentNewMobilePage extends StatelessWidget {
             : Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     color: Colors.white,
                     child: controller.isNew == true
                         ? Row(
                             children: [
+                              SizedBox(
+                                width: 30,
+                              ),
                               Text(
-                                'Tạo mới điều chỉnh',
+                                'Tạo điều chỉnh',
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: Colors.grey,
                                   fontSize: 20,
+                                  color: Colors.grey,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

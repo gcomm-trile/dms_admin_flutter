@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-const SERVER_URL = "http://localhost:58985/";
+// const SERVER_URL = "http://localhost:58985/";
+const SERVER_URL = "http://gcomm.online:9812/";
 // const SERVER_URL = "http://a482e47fe156.ngrok.io/api/";
 const kIconSize = 32.0;
 var kNumberFormat = new NumberFormat("#,###");

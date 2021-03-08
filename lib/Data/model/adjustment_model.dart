@@ -15,26 +15,26 @@ class AdjustmentListModel {
 
   AdjustmentListModel.fromJson(Map<String, dynamic> json) {
     if (json['adjustments'] != null) {
-      adjustments = new List<AdjustmentModel>();
+      adjustments = <AdjustmentModel>[];
       json['adjustments'].forEach((v) {
         adjustments.add(new AdjustmentModel.fromJson(v));
       });
     }
     if (json['filters'] != null) {
-      filters = new List<Filter>();
+      filters = <Filter>[];
       json['filters'].forEach((v) {
         filters.add(new Filter.fromJson(v));
       });
     }
 
     if (json['adjustment_reasons'] != null) {
-      adjustmentReasons = new List<CategoryModel>();
+      adjustmentReasons = <CategoryModel>[];
       json['adjustment_reasons'].forEach((v) {
         adjustmentReasons.add(new CategoryModel.fromJson(v));
       });
     }
     if (json['stocks'] != null) {
-      stocks = new List<Stock>();
+      stocks = <Stock>[];
       json['stocks'].forEach((v) {
         stocks.add(new Stock.fromJson(v));
       });

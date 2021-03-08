@@ -7,7 +7,7 @@ class FilterFieldNameValues {
   FilterFieldNameValues.fromJson(Map<String, dynamic> json) {
     fieldName = json['field_name'];
     if (json['filter_values'] != null) {
-      filterValues = new List<FilterValues>();
+      filterValues = <FilterValues>[];
       json['filter_values'].forEach((v) {
         filterValues.add(new FilterValues.fromJson(v));
       });

@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  String selectedModule = DrawModule.VISITS;
+  String selectedModule = DrawModule.DASHBOARD;
   String selectedFunction = DrawFunction.INDEX;
   String id = '';
   homePageMobile(BuildContext context) {

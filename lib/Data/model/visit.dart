@@ -21,7 +21,7 @@ class Visit {
   bool isOpened;
   String feedBack;
   int duration;
-  String createdOn;
+  DateTime createdOn;
   String createdByName;
   Order order;
   List<ImageS3> checkinImages;
@@ -79,7 +79,7 @@ class Visit {
     isOpened = json['is_opened'];
     feedBack = json['feed_back'];
     duration = json['duration'];
-    createdOn = json['created_on'];
+    createdOn = DateTime.parse(json['created_on'].toString().substring(0, 10));
     createdByName = json['created_by_name'];
     order = json['order'] != null ? new Order.fromJson(json['order']) : null;
     if (json['checkin_images'] != null) {
